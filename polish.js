@@ -1940,8 +1940,35 @@
       .toLowerCase();
 
 
+  const looksLikeLevel2 =
+    path === "level2.html" ||
+    Boolean(
+      document.querySelector(
+        'img[src*="level2_"], img[src*="/level2/"]'
+      )
+    );
+
+
+  const looksLikeLevel3 =
+    path === "level3.html" ||
+    Boolean(
+      document.getElementById(
+        "finaleOverlay"
+      )
+    );
+
+
+  const looksLikeLevel4 =
+    path === "level4.html" ||
+    Boolean(
+      document.getElementById(
+        "datePage"
+      )
+    );
+
+
   if (
-    path === "level2.html"
+    looksLikeLevel2
   ) {
 
     startLevel(
@@ -1950,7 +1977,7 @@
 
   }
   else if (
-    path === "level3.html"
+    looksLikeLevel3
   ) {
 
     startLevel(
@@ -1959,7 +1986,7 @@
 
   }
   else if (
-    path === "level4.html"
+    looksLikeLevel4
   ) {
 
     startLevel(

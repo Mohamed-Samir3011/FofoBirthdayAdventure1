@@ -4,10 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Level 4 — Brighter Horizons</title>
-  <link rel="stylesheet" href="level4.css?v=polish-1-2-3-4-5-6-8-v1">
-  <link rel="stylesheet" href="polish.css?v=polish-1-2-3-4-5-6-8-v1">
+  <link rel="stylesheet" href="level4.css?v=level34-loading-pause-fix-v2">
+  <link rel="stylesheet" href="polish.css?v=level34-loading-pause-fix-v2">
 </head>
 <body>
+
+  <div id="fofoBootLoader" style="
+    position:fixed;inset:0;z-index:99989;display:flex;align-items:center;
+    justify-content:center;background:linear-gradient(155deg,#2c0b18,#641b35 55%,#250713);
+    color:#fff0d7;font-family:Arial,sans-serif;text-align:center;">
+    <div>
+      <div style="font-size:40px;margin-bottom:10px;">♡</div>
+      <div style="font-size:24px;font-weight:800;">Loading our memories...</div>
+      <div style="margin-top:7px;color:#f5cfd5;font-size:13px;">Preparing Level 4 for Fofo ♡</div>
+    </div>
+  </div>
+
 
 <main id="game">
   <div id="world"></div>
@@ -65,8 +77,18 @@
 
 </section>
 
-<script src="fullscreen.js?v=mobile-speed-fullscreen-v3"></script>
-<script src="polish.js?v=polish-1-2-3-4-5-6-8-v1"></script>
-<script src="level4.js?v=polish-1-2-3-4-5-6-8-v1"></script>
+<script src="fullscreen.js?v=level34-loading-pause-fix-v2"></script>
+<script src="polish.js?v=level34-loading-pause-fix-v2"></script>
+<script src="level4.js?v=level34-loading-pause-fix-v2"></script>
+
+<script>
+window.addEventListener("DOMContentLoaded", function () {
+  setTimeout(function () {
+    var boot = document.getElementById("fofoBootLoader");
+    if (boot) boot.remove();
+  }, 450);
+});
+</script>
+
 </body>
 </html>
