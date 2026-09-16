@@ -665,3 +665,216 @@ button{
     background:#35101f;
   }
 }
+
+
+/* =========================================================
+   FINAL ENDING — PHONE LANDSCAPE FULLSCREEN FIT
+========================================================= */
+
+@media (pointer: coarse) and (orientation: landscape) {
+
+  #ending {
+    min-height:100dvh;
+    height:100dvh;
+    overflow:hidden;
+  }
+
+
+  .final-card {
+    width:min(88vw,980px);
+    max-height:calc(100dvh - 14px);
+    overflow:auto;
+
+    padding:
+      10px
+      clamp(24px,4vw,48px)
+      10px;
+
+    border-radius:30px;
+
+    scrollbar-width:none;
+  }
+
+
+  .final-card::-webkit-scrollbar {
+    display:none;
+  }
+
+
+  .final-ornament {
+    margin-bottom:0;
+    font-size:14px;
+  }
+
+
+  .final-card h1 {
+    margin:.08em 0 .08em;
+    font-size:clamp(32px,4.5vw,46px);
+    line-height:.94;
+  }
+
+
+  .gold-divider {
+    margin:4px auto 8px;
+  }
+
+
+  .final-love-copy {
+    max-width:830px;
+    margin:0 auto 6px;
+    font-size:clamp(11px,1.28vw,14px);
+    line-height:1.22;
+  }
+
+
+  .final-signature {
+    margin:2px auto 5px;
+    font-size:clamp(10px,1.2vw,13px);
+    line-height:1.18;
+  }
+
+
+  .main-menu-image-button {
+    width:min(31vw,300px);
+    margin:0 auto;
+  }
+
+
+  .bottom-ornament {
+    margin-top:-2px;
+    font-size:11px;
+  }
+
+
+  .corner-flower {
+    transform:scale(.78);
+    transform-origin:center;
+  }
+}
+
+
+@media (pointer: coarse) and (orientation: landscape) and (max-height:520px) {
+
+  .final-card {
+    width:min(90vw,1020px);
+    max-height:calc(100dvh - 8px);
+    padding:7px 22px;
+  }
+
+
+  .final-card h1 {
+    font-size:clamp(28px,4vw,38px);
+  }
+
+
+  .final-love-copy {
+    font-size:10px;
+    line-height:1.16;
+    margin-bottom:4px;
+  }
+
+
+  .final-signature {
+    font-size:9px;
+    margin-bottom:3px;
+  }
+
+
+  .main-menu-image-button {
+    width:min(26vw,245px);
+  }
+
+
+  .gold-divider {
+    margin:2px auto 5px;
+  }
+}
+
+
+/* =========================================================
+   ENDING — MOBILE FULLSCREEN START
+   The tap is required by Chrome to re-enter fullscreen after
+   navigating away from Level 4.
+========================================================= */
+
+@media (pointer:coarse) {
+
+  .music-start {
+    left:50%;
+    top:50%;
+    bottom:auto;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      );
+
+    min-width:
+      min(
+        420px,
+        76vw
+      );
+
+    justify-content:center;
+
+    padding:
+      15px
+      24px;
+
+    font-size:
+      clamp(
+        13px,
+        2.2vw,
+        18px
+      );
+
+    font-weight:800;
+
+    background:
+      linear-gradient(
+        180deg,
+        rgba(116,27,59,.94),
+        rgba(52,10,29,.96)
+      );
+
+    box-shadow:
+      0 14px 36px rgba(15,1,7,.48),
+      inset 0 1px 0 rgba(255,255,255,.16);
+
+    animation:
+      finaleTapPulse
+      1.8s
+      ease-in-out
+      infinite;
+  }
+
+
+  .music-start.hidden {
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(.92);
+
+    animation:none;
+  }
+
+
+  @keyframes finaleTapPulse {
+
+    0%,
+    100% {
+      box-shadow:
+        0 14px 36px rgba(15,1,7,.48),
+        0 0 0 0 rgba(245,202,131,.16);
+    }
+
+    50% {
+      box-shadow:
+        0 14px 36px rgba(15,1,7,.48),
+        0 0 0 12px rgba(245,202,131,0);
+    }
+  }
+}

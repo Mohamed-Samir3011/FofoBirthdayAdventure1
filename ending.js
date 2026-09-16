@@ -153,9 +153,28 @@ async function runEnding(){
 }
 
 musicStart.addEventListener("click", async () => {
+
+  /*
+    Mobile browsers leave fullscreen when Level 4 navigates to ending.html.
+    This click is the real user gesture Chrome requires, so restore fullscreen
+    BEFORE starting the finale.
+  */
+  try{
+
+    if(
+      window.FofoFullscreen &&
+      !window.FofoFullscreen.isActive()
+    ){
+      await window.FofoFullscreen.enter();
+    }
+
+  }catch(e){}
+
+
   try{
     await birthdayMusic.play();
   }catch(e){}
+
 
   if(!started){
     runEnding();
@@ -209,10 +228,30 @@ function launchConfetti(count=60){
 createSparks();
 
 /*
-  Try to start immediately.
-  Browsers may block audio autoplay, so the visible "Tap for the finale"
-  button remains as a fallback.
+  Desktop can still start automatically.
+
+  On touch/mobile devices we intentionally WAIT for the visible
+  "Tap for the finale" button. That single tap lets Chrome:
+  1) restore fullscreen after leaving Level 4,
+  2) unlock the finale music,
+  3) start the ending sequence.
+
+  Without a real tap, a new HTML document is not allowed to enter
+  fullscreen automatically on mobile browsers.
 */
-setTimeout(() => {
-  runEnding();
-}, 450);
+const isTouchFinale =
+  navigator.maxTouchPoints > 0 ||
+  window.matchMedia?.("(pointer:coarse)")?.matches;
+
+
+if(
+  !isTouchFinale ||
+  document.fullscreenElement ||
+  document.webkitFullscreenElement
+){
+
+  setTimeout(() => {
+    runEnding();
+  }, 450);
+
+}

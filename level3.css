@@ -725,77 +725,17 @@ button {
   z-index: 2;
   width: auto;
   height: auto;
-
-  /* Smaller than before */
-  max-width: 43%;
-  max-height: 52%;
-
+  max-width: 50%;
+  max-height: 60%;
   object-fit: contain;
-
-  /* Slightly higher */
-  transform: translateY(-30px);
-
+  transform: translateY(-18px);
   filter:
-    drop-shadow(0 22px 17px rgba(0,0,0,.45));
-
-  animation:
-    productFloat 2.8s ease-in-out infinite;
+    drop-shadow(0 25px 18px rgba(0,0,0,.48));
+  animation: productFloat 2.8s ease-in-out infinite;
 }
-
-
-/* Simple reveal before the normal float starts */
-#productImage.product-intro {
-  animation:
-    productIntro .72s cubic-bezier(.18,.82,.24,1) both;
-}
-
-
-@keyframes productIntro {
-  0% {
-    opacity: 0;
-    transform:
-      translateY(-10px)
-      scale(.82);
-    filter:
-      blur(6px)
-      drop-shadow(0 14px 12px rgba(0,0,0,.28));
-  }
-
-  68% {
-    opacity: 1;
-    transform:
-      translateY(-34px)
-      scale(1.035);
-    filter:
-      blur(0)
-      drop-shadow(0 22px 17px rgba(0,0,0,.45));
-  }
-
-  100% {
-    opacity: 1;
-    transform:
-      translateY(-30px)
-      scale(1);
-    filter:
-      blur(0)
-      drop-shadow(0 22px 17px rgba(0,0,0,.45));
-  }
-}
-
 
 @keyframes productFloat {
-  0%,
-  100% {
-    transform:
-      translateY(-30px)
-      rotate(0deg);
-  }
-
-  50% {
-    transform:
-      translateY(-36px)
-      rotate(.55deg);
-  }
+  50% { transform: translateY(-10px) rotate(.7deg); }
 }
 
 .gallery-arrow {
@@ -1248,60 +1188,257 @@ button {
 }
 
 
-/* =========================================================
-   LEVEL 3 — PHONE LANDSCAPE GIFT SIZE
-========================================================= */
-@media (pointer: coarse) and (orientation: landscape) and (max-height: 650px) {
+/* ========================================================
+   LEVEL 3 — FINAL JBL GALLERY TUNING
+   Only first 3 product views are used by level3.js.
+======================================================== */
 
-  .product-stage {
-    height: min(300px, 42vh);
+#giftPage .product-gallery {
+  margin:
+    -10px
+    auto
+    -8px;
+  transform:
+    translateY(-10px);
+}
+
+#giftPage .product-stage {
+  height:
+    min(
+      400px,
+      48vh
+    );
+  overflow:visible;
+}
+
+#giftPage #productImage {
+  max-width:56%;
+  max-height:70%;
+  transform:
+    translateY(-34px);
+  transform-origin:
+    center center;
+  will-change:
+    transform,
+    opacity,
+    filter;
+
+  animation:
+    productFloatFinal
+    2.65s
+    ease-in-out
+    infinite;
+}
+
+@keyframes productFloatFinal {
+  0%,
+  100% {
+    transform:
+      translateY(-34px)
+      rotate(-.35deg)
+      scale(1);
   }
 
-  #productImage {
-    max-width: 38%;
-    max-height: 48%;
-    transform: translateY(-34px);
+  50% {
+    transform:
+      translateY(-45px)
+      rotate(.7deg)
+      scale(1.018);
+  }
+}
+
+#giftPage .product-dots {
+  bottom:25px;
+}
+
+#giftPage .gift-message {
+  margin:
+    -12px
+    auto
+    3px;
+}
+
+#giftPage .gift-story-image-button {
+  margin-top:2px;
+}
+
+
+/* Phone fullscreen / short landscape */
+@media (pointer:coarse) and (orientation:landscape) {
+
+  #giftPage {
+    justify-content:center;
+    overflow:hidden;
+    padding:
+      max(5px,env(safe-area-inset-top))
+      18px
+      max(5px,env(safe-area-inset-bottom));
   }
 
-  @keyframes productIntro {
-    0% {
-      opacity: 0;
-      transform:
-        translateY(-14px)
-        scale(.82);
-      filter: blur(5px);
-    }
-
-    70% {
-      opacity: 1;
-      transform:
-        translateY(-38px)
-        scale(1.03);
-      filter: blur(0);
-    }
-
-    100% {
-      opacity: 1;
-      transform:
-        translateY(-34px)
-        scale(1);
-      filter: blur(0);
-    }
+  #giftPage .finale-kicker {
+    margin:
+      0
+      0
+      1px;
+    font-size:
+      clamp(
+        8px,
+        1.4vw,
+        11px
+      );
   }
 
-  @keyframes productFloat {
+  #giftPage h2 {
+    margin:
+      -3px
+      0
+      0;
+    font-size:
+      clamp(
+        31px,
+        5.6vw,
+        52px
+      );
+    line-height:.92;
+  }
+
+  #giftPage .gift-black {
+    margin:
+      0
+      0
+      1px;
+    font-size:11px;
+    letter-spacing:6px;
+  }
+
+  #giftPage .product-gallery {
+    width:
+      min(
+        760px,
+        94vw
+      );
+    grid-template-columns:
+      60px
+      1fr
+      60px;
+    margin:
+      -4px
+      auto
+      -16px;
+    transform:
+      translateY(-14px);
+  }
+
+  #giftPage .product-stage {
+    height:
+      min(
+        225px,
+        45dvh
+      );
+  }
+
+  #giftPage #productImage {
+    max-width:61%;
+    max-height:77%;
+    transform:
+      translateY(-28px);
+  }
+
+  @keyframes productFloatFinal {
     0%,
     100% {
       transform:
-        translateY(-34px)
-        rotate(0deg);
+        translateY(-28px)
+        rotate(-.35deg)
+        scale(1);
     }
 
     50% {
       transform:
-        translateY(-39px)
-        rotate(.5deg);
+        translateY(-37px)
+        rotate(.7deg)
+        scale(1.018);
     }
   }
 
+  #giftPage .gallery-arrow {
+    width:52px;
+    height:52px;
+    font-size:38px;
+    line-height:44px;
+  }
+
+  #giftPage .product-dots {
+    bottom:15px;
+  }
+
+  #giftPage .gift-message {
+    margin:
+      -16px
+      auto
+      0;
+    font-size:
+      clamp(
+        12px,
+        1.8vw,
+        15px
+      );
+    line-height:1.2;
+  }
+
+  #giftPage .gift-story-image-button {
+    width:
+      min(
+        330px,
+        43vw
+      );
+    height:70px;
+    margin-top:0;
+  }
+}
+
+
+/* Very short landscape phones */
+@media (pointer:coarse) and (orientation:landscape) and (max-height:520px) {
+
+  #giftPage h2 {
+    font-size:
+      clamp(
+        28px,
+        5.2vw,
+        44px
+      );
+  }
+
+  #giftPage .product-gallery {
+    transform:
+      translateY(-17px);
+    margin-bottom:-22px;
+  }
+
+  #giftPage .product-stage {
+    height:
+      min(
+        192px,
+        43dvh
+      );
+  }
+
+  #giftPage #productImage {
+    max-width:57%;
+    max-height:74%;
+  }
+
+  #giftPage .gift-message {
+    font-size:11px;
+  }
+
+  #giftPage .gift-story-image-button {
+    width:
+      min(
+        285px,
+        40vw
+      );
+    height:62px;
+  }
 }

@@ -576,11 +576,15 @@ let sfxVolume =
 // AUDIO
 // =========================================================
 
+const LEVEL3_MUSIC_FALLBACK =
+  "assets/level3_audio/level3_music.mp3?v=audio-l23-fullart-v1";
+
+
 const AUDIO = {
 
   music:
     new Audio(
-      "assets/level3_audio/modern-classical-piano-513745.mp3"
+      "assets/level3_audio/modern-classical-piano-513745.mp3?v=audio-l23-fullart-v1"
     ),
 
   jump:
@@ -683,6 +687,12 @@ AUDIO.music.preload =
   "auto";
 
 
+AUDIO.music.setAttribute(
+  "playsinline",
+  ""
+);
+
+
 Object.entries(
   AUDIO
 ).forEach(
@@ -704,9 +714,6 @@ Object.entries(
 let audioStarted =
   false;
 
-let audioStarting =
-  false;
-
 
 function syncAudioVolumes() {
 
@@ -721,60 +728,126 @@ function syncAudioVolumes() {
 }
 
 
+let musicStartInFlight =
+  false;
+
+
+let fallbackMusicTried =
+  false;
+
+
 async function startAudio() {
 
-  if (
-    audioStarted ||
-    audioStarting
-  ) {
+  /*
+    Keep SFX unlocked after the first gesture, but keep retrying music
+    whenever it is still paused. This is important after fullscreen
+    restoration on Android Chrome.
+  */
+  audioStarted =
+    true;
 
-    return;
 
-  }
+  musicEnabled =
+    readBool(
+      "fofoMusicEnabled",
+      true
+    );
+
+
+  musicVolume =
+    readVolume(
+      "fofoMusicVolume",
+      .86
+    );
+
+
+  syncAudioVolumes();
 
 
   if (
     !musicEnabled
   ) {
 
-    return;
+    AUDIO.music.pause();
+
+    return false;
 
   }
 
 
-  audioStarting =
+  if (
+    !AUDIO.music.paused
+  ) {
+
+    return true;
+
+  }
+
+
+  if (
+    musicStartInFlight
+  ) {
+
+    return false;
+
+  }
+
+
+  musicStartInFlight =
     true;
-
-
-  syncAudioVolumes();
 
 
   try {
 
     await AUDIO.music.play();
 
+    musicStartInFlight =
+      false;
 
-    /*
-      Mobile Chrome can reject the first play() while the new
-      level is restoring fullscreen / finishing its intro.
-      Mark audio as started ONLY after play() succeeds so a
-      later tap can retry.
-    */
-    audioStarted =
-      true;
+    return true;
 
   }
   catch (error) {
 
-    audioStarted =
+    /*
+      If the cinematic piano file itself fails on a browser/device,
+      Level 3 already has another MP3 in the project. Swap to it once
+      and retry on the same gesture when possible.
+    */
+    if (
+      !fallbackMusicTried
+    ) {
+
+      fallbackMusicTried =
+        true;
+
+
+      AUDIO.music.src =
+        LEVEL3_MUSIC_FALLBACK;
+
+
+      AUDIO.music.load();
+
+
+      try {
+
+        await AUDIO.music.play();
+
+        musicStartInFlight =
+          false;
+
+        return true;
+
+      }
+      catch (fallbackError) {}
+
+    }
+
+
+    musicStartInFlight =
       false;
 
-  }
-  finally {
-
-    audioStarting =
-      false;
-
+    return false;
   }
 
 }
@@ -862,6 +935,14 @@ function playSfx(
 }
 
 
+/*
+  fullscreen.js invokes this before requestFullscreen() consumes the
+  mobile activation. The normal listeners remain as retries.
+*/
+window.FofoAudioUnlock =
+  startAudio;
+
+
 [
   "pointerdown",
   "touchstart",
@@ -879,28 +960,6 @@ function playSfx(
           "touchstart"
       }
     );
-
-  }
-);
-
-
-document.addEventListener(
-  "visibilitychange",
-  () => {
-
-    if (
-      document.visibilityState ===
-      "visible" &&
-      AUDIO.music.paused
-    ) {
-
-      audioStarted =
-        false;
-
-
-      startAudio();
-
-    }
 
   }
 );
@@ -4952,13 +5011,7 @@ const productViews = [
 
   "assets/level3_product/jbl_black_view_2.png",
 
-  "assets/level3_product/jbl_black_view_3.png",
-
-  "assets/level3_product/jbl_black_view_4.png",
-
-  "assets/level3_product/jbl_black_view_5.png",
-
-  "assets/level3_product/jbl_black_view_6.png"
+  "assets/level3_product/jbl_black_view_3.png"
 
 ];
 
@@ -5016,28 +5069,54 @@ function showProductView(
     productViews.length;
 
 
+  productImage.animate(
+    [
+
+      {
+        opacity:
+          0,
+        transform:
+          "translateY(22px) scale(.76) rotate(-5deg)",
+        filter:
+          "blur(7px) drop-shadow(0 12px 14px rgba(0,0,0,.20))"
+      },
+
+      {
+        opacity:
+          1,
+        offset:
+          .68,
+        transform:
+          "translateY(-43px) scale(1.055) rotate(1deg)",
+        filter:
+          "blur(0) drop-shadow(0 25px 18px rgba(0,0,0,.48))"
+      },
+
+      {
+        opacity:
+          1,
+        transform:
+          "translateY(-34px) scale(1) rotate(0deg)",
+        filter:
+          "blur(0) drop-shadow(0 25px 18px rgba(0,0,0,.48))"
+      }
+
+    ],
+
+    {
+      duration:
+        520,
+
+      easing:
+        "cubic-bezier(.18,.82,.24,1)"
+    }
+  );
+
+
   productImage.src =
     productViews[
       productIndex
     ];
-
-
-  /*
-    A short reveal before the normal floating animation.
-    It keeps the headphones smaller and slightly higher,
-    especially in phone landscape.
-  */
-  productImage.classList.remove(
-    "product-intro"
-  );
-
-
-  void productImage.offsetWidth;
-
-
-  productImage.classList.add(
-    "product-intro"
-  );
 
 
   buildProductDots();
