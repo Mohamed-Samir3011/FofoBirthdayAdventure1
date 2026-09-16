@@ -1114,3 +1114,31 @@ button {
     height: 74px;
   }
 }
+
+
+/* =========================================================
+   PHONE LANDSCAPE PERFORMANCE
+   Keep gameplay responsive on lower-powered phones.
+========================================================= */
+@media (pointer: coarse) and (orientation: landscape) {
+
+  #world,
+  .world {
+    transform-origin: left bottom !important;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .player,
+  .fofo,
+  .platform,
+  .moving-platform,
+  .enemy,
+  .ground-enemy,
+  .flying-enemy {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+}

@@ -567,17 +567,104 @@ settingsMenuButton?.addEventListener("click", () => {
 levelBackButton?.addEventListener("click", () => showMenuView(mainMenuView));
 settingsBackButton?.addEventListener("click", () => showMenuView(mainMenuView));
 
-fullscreenButton?.addEventListener("click", async () => {
-  try {
-    if (!document.fullscreenElement) {
-      await document.documentElement.requestFullscreen();
-    } else {
-      await document.exitFullscreen();
-    }
-  } catch (error) {
-    showMenuToast("Fullscreen isn't available here.");
+function updateFullscreenButtonText() {
+
+  if (
+    !fullscreenButton
+  ) {
+
+    return;
   }
-});
+
+
+  const wanted =
+    window.FofoFullscreen
+      ? window.FofoFullscreen.isWanted()
+      : false;
+
+
+  fullscreenButton.innerHTML =
+    wanted
+      ? "⛶ &nbsp; FULLSCREEN: ON"
+      : "⛶ &nbsp; FULLSCREEN: OFF";
+}
+
+
+fullscreenButton?.addEventListener(
+  "click",
+  async () => {
+
+    if (
+      !window.FofoFullscreen
+    ) {
+
+      showMenuToast(
+        "Fullscreen isn't available here."
+      );
+
+      return;
+    }
+
+
+    const currentlyActive =
+      window.FofoFullscreen.isActive();
+
+
+    const currentlyWanted =
+      window.FofoFullscreen.isWanted();
+
+
+    /*
+      If fullscreen is active OR the saved option is ON,
+      clicking the setting turns it OFF.
+      Otherwise it turns it ON and enters immediately.
+    */
+    if (
+      currentlyActive ||
+      currentlyWanted
+    ) {
+
+      await window.FofoFullscreen.exit();
+
+      showMenuToast(
+        "Fullscreen off"
+      );
+
+    }
+    else {
+
+      window.FofoFullscreen.setWanted(
+        true
+      );
+
+
+      const entered =
+        await window.FofoFullscreen.enter();
+
+
+      showMenuToast(
+        entered
+          ? "Fullscreen on"
+          : "Fullscreen will start on your next tap."
+      );
+    }
+
+
+    updateFullscreenButtonText();
+  }
+);
+
+
+document.addEventListener(
+  "fullscreenchange",
+  updateFullscreenButtonText
+);
+
+
+document.addEventListener(
+  "webkitfullscreenchange",
+  updateFullscreenButtonText
+);
 
 // =========================================================
 // LEVEL 1 COMPLETION CALLBACK
@@ -616,6 +703,7 @@ window.completeLevelOneAndReturnToLevels = function () {
 // =========================================================
 
 function initializeMenu() {
+  updateFullscreenButtonText();
   installGiftCardStyles();
   ensureProgressDefaults();
   reconcileProgress();

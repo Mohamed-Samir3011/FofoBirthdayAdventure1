@@ -137,7 +137,7 @@ world.style.width =
 // =====================================================
 
 const GAME_REFERENCE_FPS =
-  75;
+  60;
 
 let frameFactor =
   1;
@@ -166,7 +166,7 @@ function updateFrameFactor(
 
   const delta =
     Math.min(
-      36,
+      90,
       Math.max(
         4,
         timestamp -
@@ -179,11 +179,17 @@ function updateFrameFactor(
     timestamp;
 
 
+  /*
+    At 60 FPS frameFactor = 1.
+    At 30 FPS frameFactor ≈ 2.
+    At 20 FPS frameFactor ≈ 3.
+    This keeps movement/game timing much closer between PC and phone.
+  */
   frameFactor =
     Math.min(
-      2.1,
+      5.4,
       Math.max(
-        0.35,
+        0.25,
         delta /
         (1000 / GAME_REFERENCE_FPS)
       )
@@ -191,9 +197,15 @@ function updateFrameFactor(
 }
 
 
-// Mobile landscape has much less vertical room than desktop.
-// Zoom only the WORLD (not the HUD/controls) so high platforms remain visible.
-function getWorldRenderScale(
+// =====================================================
+// MOBILE LANDSCAPE VERTICAL CAMERA
+// =====================================================
+
+let mobileCameraYOffset =
+  0;
+
+
+function getMobileCameraTargetY(
   viewportElement
 ) {
 
@@ -203,24 +215,85 @@ function getWorldRenderScale(
     600;
 
 
+  const isShortLandscape =
+    viewportHeight < 620 &&
+    window.innerWidth > viewportHeight;
+
+
   if (
-    viewportHeight >=
-    620
+    !isShortLandscape
   ) {
 
-    return 1;
+    return 0;
   }
 
 
+  /*
+    Keep high platforms visible without shrinking the whole world.
+    This preserves the same horizontal visual speed as desktop.
+  */
+  const preferredPlayerHeightFromBottom =
+    viewportHeight * 0.52;
+
+
+  const target =
+    playerY -
+    preferredPlayerHeightFromBottom;
+
+
   return Math.max(
-    0.68,
+    0,
     Math.min(
-      1,
-      viewportHeight /
-      590
+      viewportHeight * 0.78,
+      target
     )
   );
 }
+
+
+function updateMobileCameraY(
+  viewportElement
+) {
+
+  const target =
+    getMobileCameraTargetY(
+      viewportElement
+    );
+
+
+  const smoothing =
+    Math.min(
+      1,
+      0.11 *
+      Math.max(
+        0.6,
+        frameFactor
+      )
+    );
+
+
+  mobileCameraYOffset +=
+    (
+      target -
+      mobileCameraYOffset
+    ) *
+    smoothing;
+
+
+  if (
+    Math.abs(
+      mobileCameraYOffset
+    ) < 0.15
+  ) {
+
+    mobileCameraYOffset =
+      0;
+  }
+
+
+  return mobileCameraYOffset;
+}
+
 
 // =========================================================
 // PLAYER STATE
@@ -4929,15 +5002,8 @@ continueButton.addEventListener(
 
 function updateCamera() {
 
-  const renderScale =
-    getWorldRenderScale(
-      game
-    );
-
-
   const viewportWidth =
-    game.clientWidth /
-    renderScale;
+    game.clientWidth;
 
 
   let cameraX =
@@ -4949,18 +5015,20 @@ function updateCamera() {
   cameraX =
     Math.max(
       0,
-      cameraX
+      Math.min(
+        Math.max(
+          0,
+          WORLD_WIDTH -
+          viewportWidth
+        ),
+        cameraX
+      )
     );
 
 
-  cameraX =
-    Math.min(
-      cameraX,
-      Math.max(
-        0,
-        WORLD_WIDTH -
-        viewportWidth
-      )
+  const cameraY =
+    updateMobileCameraY(
+      game
     );
 
 
@@ -4969,11 +5037,13 @@ function updateCamera() {
 
 
   /*
-    Matrix keeps horizontal camera movement correct while scaling
-    the whole map vertically/horizontally for short phone screens.
+    IMPORTANT:
+    No horizontal scaling on mobile.
+    Previous uniform zoom made the character LOOK slower.
+    We now preserve 1:1 X scale and only pan vertically when needed.
   */
   world.style.transform =
-    `matrix(${renderScale}, 0, 0, ${renderScale}, ${-cameraX * renderScale}, 0)`;
+    `translate3d(${-cameraX}px, ${cameraY}px, 0)`;
 
 }
 
