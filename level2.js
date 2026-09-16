@@ -416,7 +416,7 @@ const ASSETS = {
 
 const levelMusic =
     new Audio(
-        "assets/level2_audio/level2_music.mp3?v=audio-l23-fullart-v1"
+        "assets/level2_audio/level2_music.mp3"
     );
 
 levelMusic.loop =
@@ -424,11 +424,6 @@ levelMusic.loop =
 
 levelMusic.preload =
     "auto";
-
-levelMusic.setAttribute(
-    "playsinline",
-    ""
-);
 
 levelMusic.volume =
     0.88;
@@ -474,8 +469,7 @@ bloomSound.volume =
 let audioStarted =
     false;
 
-
-let musicStartInFlight =
+let audioStarting =
     false;
 
 
@@ -483,123 +477,78 @@ let musicStartInFlight =
 // AUDIO FUNCTIONS
 // =========================================================
 
-function level2MusicEnabled() {
-
-    return (
-        localStorage.getItem(
-            "fofoMusicEnabled"
-        ) !== "false"
-    );
-}
-
-
-function level2MusicVolume() {
-
-    const saved =
-        Number(
-            localStorage.getItem(
-                "fofoMusicVolume"
-            )
-        );
-
-
-    if (
-        Number.isFinite(saved)
-    ) {
-
-        return Math.max(
-            0,
-            Math.min(
-                1,
-                saved / 100
-            )
-        ) * .88;
-    }
-
-
-    return .88;
-}
-
-
 async function startAudio() {
 
-    /*
-      IMPORTANT:
-      Never permanently mark the music as started after a rejected
-      play(). Android may reject the first call when fullscreen is
-      being restored. Every real tap is allowed to retry.
-    */
-    audioStarted =
-        true;
-
-
     if (
-        !level2MusicEnabled()
+        audioStarted ||
+        audioStarting
     ) {
-
-        levelMusic.pause();
-
-        return false;
+        return;
     }
 
 
-    levelMusic.volume =
-        level2MusicVolume();
+    const musicAllowed =
+        localStorage.getItem(
+            "fofoMusicEnabled"
+        ) !== "false";
 
 
-    if (
-        !levelMusic.paused
-    ) {
-
-        return true;
+    if (!musicAllowed) {
+        return;
     }
 
 
-    if (
-        musicStartInFlight
-    ) {
-
-        return false;
-    }
-
-
-    musicStartInFlight =
+    audioStarting =
         true;
 
 
     try {
 
+        levelMusic.volume =
+            0.88;
+
+
         await levelMusic.play();
 
-        musicStartInFlight =
-            false;
 
-        return true;
+        /*
+            IMPORTANT:
+            Do not lock audioStarted before play() succeeds.
+            On mobile Chrome the first request can fail while
+            fullscreen/loading is changing. The next real tap
+            must be allowed to retry.
+        */
+        audioStarted =
+            true;
 
     }
     catch (error) {
 
-        musicStartInFlight =
+        audioStarted =
             false;
 
-        return false;
+    }
+    finally {
+
+        audioStarting =
+            false;
+
     }
 }
 
 
 function playSound(sound) {
 
-    if (!audioStarted) {
-        return;
-    }
+    const sfxAllowed =
+        localStorage.getItem(
+            "fofoSfxEnabled"
+        ) !== "false";
 
 
     if (
-        localStorage.getItem(
-            "fofoSfxEnabled"
-        ) === "false"
+        !audioStarted ||
+        !sfxAllowed
     ) {
-
         return;
     }
 
@@ -608,34 +557,8 @@ function playSound(sound) {
         sound.cloneNode();
 
 
-    const savedVolume =
-        Number(
-            localStorage.getItem(
-                "fofoSfxVolume"
-            )
-        );
-
-
-    const volumeMultiplier =
-        Number.isFinite(
-            savedVolume
-        )
-            ? Math.max(
-                0,
-                Math.min(
-                    1,
-                    savedVolume / 100
-                )
-            )
-            : 1;
-
-
     copy.volume =
-        Math.min(
-            1,
-            sound.volume *
-            volumeMultiplier
-        );
+        sound.volume;
 
 
     copy
@@ -645,13 +568,10 @@ function playSound(sound) {
 
 
 /*
-  fullscreen.js calls this in capture phase BEFORE entering fullscreen.
-  That keeps the audio call inside the original mobile user gesture.
+    Keep retry listeners active.
+    If the first mobile gesture is consumed by loading/fullscreen,
+    a later tap on the game controls can still start the music.
 */
-window.FofoAudioUnlock =
-    startAudio;
-
-
 [
     "pointerdown",
     "touchstart",
@@ -669,6 +589,36 @@ window.FofoAudioUnlock =
                     "touchstart"
             }
         );
+
+    }
+);
+
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (
+            document.visibilityState ===
+            "visible" &&
+            !levelMusic.paused
+        ) {
+            return;
+        }
+
+
+        if (
+            document.visibilityState ===
+            "visible"
+        ) {
+
+            audioStarted =
+                false;
+
+
+            startAudio();
+
+        }
 
     }
 );

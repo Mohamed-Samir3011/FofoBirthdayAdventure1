@@ -444,17 +444,25 @@ button{border:0;font:inherit}
   position:relative;
   width:100vw;
   height:100vh;
+  height:100dvh;
   overflow:hidden;
   background:#561c27;
+  isolation:isolate;
 }
 
 .reveal-background{
   position:absolute;
   inset:0;
+  z-index:0;
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center 48%;
+
+  /*
+    Portrait artwork cropped intentionally for landscape:
+    keeps "Some gifts..." + pyramids visible together.
+  */
+  object-position:center 46%;
 }
 
 .reveal-page::after,
@@ -462,18 +470,28 @@ button{border:0;font:inherit}
   content:"";
   position:absolute;
   inset:0;
+  z-index:1;
   pointer-events:none;
-  background:linear-gradient(180deg,transparent 58%,rgba(40,10,16,.28) 100%);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(32,7,16,.04) 0%,
+      transparent 54%,
+      rgba(40,10,16,.25) 100%
+    );
 }
 
 .reveal-date-art{
   position:absolute;
   left:50%;
-  bottom:24px;
-  transform:translateX(-50%);
+  bottom:max(8px,env(safe-area-inset-bottom));
   z-index:4;
-  width:min(610px,82vw);
-  height:126px;
+
+  width:clamp(330px,34vw,520px);
+  height:auto;
+  aspect-ratio:2172 / 724;
+
+  transform:translateX(-50%);
 }
 
 .reveal-date-art:hover{
@@ -481,24 +499,34 @@ button{border:0;font:inherit}
 }
 
 .reveal-date-art:active{
-  transform:translateX(-50%) translateY(4px) scale(.98);
+  transform:translateX(-50%) translateY(3px) scale(.985);
 }
+
 
 .date-page{
   position:relative;
   width:100vw;
   height:100vh;
+  height:100dvh;
   overflow:hidden;
   background:#4b1c20;
+  isolation:isolate;
 }
 
 .date-background{
   position:absolute;
   inset:0;
+  z-index:0;
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center 46%;
+
+  /*
+    Crop lower than the previous version so the landscape phone view
+    keeps Fofo, the pyramids, table and cat — matching the intended
+    Gift Story screen instead of showing the portrait top section.
+  */
+  object-position:center 57%;
 }
 
 .final-image-button{
@@ -507,6 +535,7 @@ button{border:0;font:inherit}
   background:transparent;
   cursor:pointer;
   transition:.12s ease;
+  -webkit-tap-highlight-color:transparent;
 }
 
 .final-image-button img{
@@ -523,18 +552,21 @@ button{border:0;font:inherit}
 }
 
 .final-image-button:active{
-  translate:0 4px;
-  scale:.98;
+  translate:0 3px;
+  scale:.985;
 }
 
 .date-gift-story{
   position:absolute;
   left:50%;
-  bottom:18px;
-  transform:translateX(-50%);
+  bottom:max(7px,env(safe-area-inset-bottom));
   z-index:4;
-  width:min(470px,72vw);
-  height:112px;
+
+  width:clamp(300px,30vw,455px);
+  height:auto;
+  aspect-ratio:2172 / 724;
+
+  transform:translateX(-50%);
 }
 
 .date-gift-story:hover{
@@ -542,8 +574,37 @@ button{border:0;font:inherit}
 }
 
 .date-gift-story:active{
-  transform:translateX(-50%) translateY(4px) scale(.98);
+  transform:translateX(-50%) translateY(3px) scale(.985);
 }
+
+
+@media (pointer:coarse) and (orientation:landscape){
+
+  .reveal-page,
+  .date-page{
+    height:100dvh;
+  }
+
+  .reveal-background{
+    object-position:center 46%;
+  }
+
+  .date-background{
+    object-position:center 57%;
+  }
+
+  .reveal-date-art{
+    bottom:max(6px,env(safe-area-inset-bottom));
+    width:clamp(320px,35vw,500px);
+  }
+
+  .date-gift-story{
+    bottom:max(5px,env(safe-area-inset-bottom));
+    width:clamp(290px,31vw,440px);
+  }
+
+}
+
 
 .story-page{
   width:100vw;
@@ -602,17 +663,7 @@ button{border:0;font:inherit}
   .finale h1{font-size:43px}
   .final-copy{font-size:15px}
 
-  .date-background{
-    object-position:center 48%;
-  }
-
-  .date-gift-story{
-    bottom:8px;
-    width:min(400px,60vw);
-    height:88px;
-  }
-
-  .story-page{
+.story-page{
     padding-top:10px;
   }
 
@@ -624,26 +675,6 @@ button{border:0;font:inherit}
   .story-continue{
     width:min(330px,48vw);
     height:74px;
-  }
-}
-
-
-@media (orientation:landscape) and (max-height:650px){
-  .reveal-background,
-  .date-background{
-    object-position:center 46%;
-  }
-
-  .reveal-date-art{
-    bottom:6px;
-    width:min(430px,64vw);
-    height:82px;
-  }
-
-  .date-gift-story{
-    bottom:5px;
-    width:min(365px,55vw);
-    height:80px;
   }
 }
 
@@ -717,192 +748,4 @@ button{border:0;font:inherit}
   user-drag: none !important;
 
   draggable: false;
-}
-
-
-/* =========================================================
-   LEVEL 4 — PHONE LANDSCAPE FULLSCREEN ART FIT
-   The reveal/date artwork is portrait (941x1672). A normal
-   object-fit:cover crop hides most of the text in landscape.
-   Keep the entire portrait artwork visible and use a blurred
-   version behind it to fill the wide phone screen.
-========================================================= */
-
-@media (pointer: coarse) and (orientation: landscape) {
-
-  .reveal-page,
-  .date-page {
-    height:100dvh;
-    min-height:100dvh;
-    isolation:isolate;
-    overflow:hidden;
-  }
-
-
-  .reveal-page {
-    background:
-      #4a1722
-      url("assets/level4/world/reveal_background.png")
-      center 48% / cover
-      no-repeat;
-  }
-
-
-  .date-page {
-    background:
-      #5a2a22
-      url("assets/level4/world/date_fullscreen.png")
-      center 58% / cover
-      no-repeat;
-  }
-
-
-  /*
-    Blur/darken only the page background. The foreground <img>
-    stays sharp and shows the COMPLETE portrait composition.
-  */
-  .reveal-page::before,
-  .date-page::before {
-    content:"";
-    position:absolute;
-    inset:-28px;
-    z-index:0;
-    pointer-events:none;
-    background:inherit;
-    filter:
-      blur(19px)
-      brightness(.62)
-      saturate(.92);
-    transform:scale(1.07);
-  }
-
-
-  .reveal-background,
-  .date-background {
-    z-index:1;
-    left:50%;
-    top:50%;
-    inset:auto;
-    width:auto;
-    height:calc(100dvh - 8px);
-    max-width:72vw;
-    object-fit:contain;
-    object-position:center;
-    transform:translate(-50%,-50%);
-    filter:
-      drop-shadow(0 0 26px rgba(30,4,12,.62));
-  }
-
-
-  .reveal-page::after,
-  .date-page::after {
-    z-index:2;
-    background:
-      linear-gradient(
-        90deg,
-        rgba(35,6,16,.24),
-        transparent 20%,
-        transparent 80%,
-        rgba(35,6,16,.24)
-      ),
-      linear-gradient(
-        180deg,
-        transparent 64%,
-        rgba(37,7,14,.22)
-      );
-  }
-
-
-  .reveal-date-art {
-    z-index:4;
-    bottom:
-      max(
-        5px,
-        env(safe-area-inset-bottom)
-      );
-    width:min(350px,49vw);
-    height:auto;
-    aspect-ratio:3 / 1;
-  }
-
-
-  .date-gift-story {
-    z-index:4;
-    bottom:
-      max(
-        4px,
-        env(safe-area-inset-bottom)
-      );
-    width:min(320px,44vw);
-    height:auto;
-    aspect-ratio:3 / 1;
-  }
-
-
-  /*
-    Gift Story page should also fit much better inside one
-    landscape phone screen instead of feeling extremely tall.
-  */
-  .story-page {
-    height:100dvh;
-    min-height:100dvh;
-    overflow:auto;
-    padding:
-      max(6px,env(safe-area-inset-top))
-      12px
-      max(8px,env(safe-area-inset-bottom));
-  }
-
-
-  .story-scroll {
-    width:min(390px,52vw);
-    padding-bottom:62px;
-  }
-
-
-  .story-image {
-    width:100%;
-    height:auto;
-    max-height:calc(100dvh - 70px);
-    object-fit:contain;
-  }
-
-
-  .story-continue {
-    width:min(270px,38vw);
-    height:auto;
-    aspect-ratio:3 / 1;
-  }
-}
-
-
-/* Very short landscape phones */
-@media (pointer: coarse) and (orientation: landscape) and (max-height:520px) {
-
-  .reveal-background,
-  .date-background {
-    height:calc(100dvh - 4px);
-    max-width:66vw;
-  }
-
-
-  .reveal-date-art {
-    width:min(285px,43vw);
-  }
-
-
-  .date-gift-story {
-    width:min(260px,39vw);
-  }
-
-
-  .story-scroll {
-    width:min(315px,46vw);
-    padding-bottom:52px;
-  }
-
-
-  .story-continue {
-    width:min(220px,34vw);
-  }
 }

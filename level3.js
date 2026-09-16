@@ -576,15 +576,11 @@ let sfxVolume =
 // AUDIO
 // =========================================================
 
-const LEVEL3_MUSIC_FALLBACK =
-  "assets/level3_audio/level3_music.mp3?v=audio-l23-fullart-v1";
-
-
 const AUDIO = {
 
   music:
     new Audio(
-      "assets/level3_audio/modern-classical-piano-513745.mp3?v=audio-l23-fullart-v1"
+      "assets/level3_audio/modern-classical-piano-513745.mp3"
     ),
 
   jump:
@@ -687,12 +683,6 @@ AUDIO.music.preload =
   "auto";
 
 
-AUDIO.music.setAttribute(
-  "playsinline",
-  ""
-);
-
-
 Object.entries(
   AUDIO
 ).forEach(
@@ -714,6 +704,9 @@ Object.entries(
 let audioStarted =
   false;
 
+let audioStarting =
+  false;
+
 
 function syncAudioVolumes() {
 
@@ -728,126 +721,60 @@ function syncAudioVolumes() {
 }
 
 
-let musicStartInFlight =
-  false;
-
-
-let fallbackMusicTried =
-  false;
-
-
 async function startAudio() {
 
-  /*
-    Keep SFX unlocked after the first gesture, but keep retrying music
-    whenever it is still paused. This is important after fullscreen
-    restoration on Android Chrome.
-  */
-  audioStarted =
-    true;
+  if (
+    audioStarted ||
+    audioStarting
+  ) {
 
+    return;
 
-  musicEnabled =
-    readBool(
-      "fofoMusicEnabled",
-      true
-    );
-
-
-  musicVolume =
-    readVolume(
-      "fofoMusicVolume",
-      .86
-    );
-
-
-  syncAudioVolumes();
+  }
 
 
   if (
     !musicEnabled
   ) {
 
-    AUDIO.music.pause();
-
-    return false;
+    return;
 
   }
 
 
-  if (
-    !AUDIO.music.paused
-  ) {
-
-    return true;
-
-  }
-
-
-  if (
-    musicStartInFlight
-  ) {
-
-    return false;
-
-  }
-
-
-  musicStartInFlight =
+  audioStarting =
     true;
+
+
+  syncAudioVolumes();
 
 
   try {
 
     await AUDIO.music.play();
 
-    musicStartInFlight =
-      false;
 
-    return true;
+    /*
+      Mobile Chrome can reject the first play() while the new
+      level is restoring fullscreen / finishing its intro.
+      Mark audio as started ONLY after play() succeeds so a
+      later tap can retry.
+    */
+    audioStarted =
+      true;
 
   }
   catch (error) {
 
-    /*
-      If the cinematic piano file itself fails on a browser/device,
-      Level 3 already has another MP3 in the project. Swap to it once
-      and retry on the same gesture when possible.
-    */
-    if (
-      !fallbackMusicTried
-    ) {
-
-      fallbackMusicTried =
-        true;
-
-
-      AUDIO.music.src =
-        LEVEL3_MUSIC_FALLBACK;
-
-
-      AUDIO.music.load();
-
-
-      try {
-
-        await AUDIO.music.play();
-
-        musicStartInFlight =
-          false;
-
-        return true;
-
-      }
-      catch (fallbackError) {}
-
-    }
-
-
-    musicStartInFlight =
+    audioStarted =
       false;
 
-    return false;
+  }
+  finally {
+
+    audioStarting =
+      false;
+
   }
 
 }
@@ -935,14 +862,6 @@ function playSfx(
 }
 
 
-/*
-  fullscreen.js invokes this before requestFullscreen() consumes the
-  mobile activation. The normal listeners remain as retries.
-*/
-window.FofoAudioUnlock =
-  startAudio;
-
-
 [
   "pointerdown",
   "touchstart",
@@ -960,6 +879,28 @@ window.FofoAudioUnlock =
           "touchstart"
       }
     );
+
+  }
+);
+
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+
+    if (
+      document.visibilityState ===
+      "visible" &&
+      AUDIO.music.paused
+    ) {
+
+      audioStarted =
+        false;
+
+
+      startAudio();
+
+    }
 
   }
 );
@@ -5075,39 +5016,28 @@ function showProductView(
     productViews.length;
 
 
-  productImage.animate(
-    [
-
-      {
-        opacity:
-          .2,
-        transform:
-          "scale(.88) rotate(-2deg)"
-      },
-
-      {
-        opacity:
-          1,
-        transform:
-          "scale(1) rotate(0deg)"
-      }
-
-    ],
-
-    {
-      duration:
-        340,
-
-      easing:
-        "ease-out"
-    }
-  );
-
-
   productImage.src =
     productViews[
       productIndex
     ];
+
+
+  /*
+    A short reveal before the normal floating animation.
+    It keeps the headphones smaller and slightly higher,
+    especially in phone landscape.
+  */
+  productImage.classList.remove(
+    "product-intro"
+  );
+
+
+  void productImage.offsetWidth;
+
+
+  productImage.classList.add(
+    "product-intro"
+  );
 
 
   buildProductDots();

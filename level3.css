@@ -725,17 +725,77 @@ button {
   z-index: 2;
   width: auto;
   height: auto;
-  max-width: 50%;
-  max-height: 60%;
+
+  /* Smaller than before */
+  max-width: 43%;
+  max-height: 52%;
+
   object-fit: contain;
-  transform: translateY(-18px);
+
+  /* Slightly higher */
+  transform: translateY(-30px);
+
   filter:
-    drop-shadow(0 25px 18px rgba(0,0,0,.48));
-  animation: productFloat 2.8s ease-in-out infinite;
+    drop-shadow(0 22px 17px rgba(0,0,0,.45));
+
+  animation:
+    productFloat 2.8s ease-in-out infinite;
 }
 
+
+/* Simple reveal before the normal float starts */
+#productImage.product-intro {
+  animation:
+    productIntro .72s cubic-bezier(.18,.82,.24,1) both;
+}
+
+
+@keyframes productIntro {
+  0% {
+    opacity: 0;
+    transform:
+      translateY(-10px)
+      scale(.82);
+    filter:
+      blur(6px)
+      drop-shadow(0 14px 12px rgba(0,0,0,.28));
+  }
+
+  68% {
+    opacity: 1;
+    transform:
+      translateY(-34px)
+      scale(1.035);
+    filter:
+      blur(0)
+      drop-shadow(0 22px 17px rgba(0,0,0,.45));
+  }
+
+  100% {
+    opacity: 1;
+    transform:
+      translateY(-30px)
+      scale(1);
+    filter:
+      blur(0)
+      drop-shadow(0 22px 17px rgba(0,0,0,.45));
+  }
+}
+
+
 @keyframes productFloat {
-  50% { transform: translateY(-10px) rotate(.7deg); }
+  0%,
+  100% {
+    transform:
+      translateY(-30px)
+      rotate(0deg);
+  }
+
+  50% {
+    transform:
+      translateY(-36px)
+      rotate(.55deg);
+  }
 }
 
 .gallery-arrow {
@@ -1185,4 +1245,63 @@ button {
   user-drag: none !important;
 
   draggable: false;
+}
+
+
+/* =========================================================
+   LEVEL 3 — PHONE LANDSCAPE GIFT SIZE
+========================================================= */
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 650px) {
+
+  .product-stage {
+    height: min(300px, 42vh);
+  }
+
+  #productImage {
+    max-width: 38%;
+    max-height: 48%;
+    transform: translateY(-34px);
+  }
+
+  @keyframes productIntro {
+    0% {
+      opacity: 0;
+      transform:
+        translateY(-14px)
+        scale(.82);
+      filter: blur(5px);
+    }
+
+    70% {
+      opacity: 1;
+      transform:
+        translateY(-38px)
+        scale(1.03);
+      filter: blur(0);
+    }
+
+    100% {
+      opacity: 1;
+      transform:
+        translateY(-34px)
+        scale(1);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes productFloat {
+    0%,
+    100% {
+      transform:
+        translateY(-34px)
+        rotate(0deg);
+    }
+
+    50% {
+      transform:
+        translateY(-39px)
+        rotate(.5deg);
+    }
+  }
+
 }
