@@ -472,7 +472,7 @@ window.addEventListener(
 
 const menuBirthdayMusic =
   new Audio(
-    "assets/Audio/menu_birthday.mp3"
+    "./assets/Audio/menu_birthday.mp3?v=menu-audio-v2"
   );
 
 
@@ -486,6 +486,54 @@ menuBirthdayMusic.preload =
 
 menuBirthdayMusic.volume =
   0.75;
+
+
+menuBirthdayMusic.setAttribute(
+  "playsinline",
+  ""
+);
+
+
+/*
+  GitHub Pages / mobile browsers may block audio until a real user gesture.
+  This helper retries safely after the first tap/click/key press.
+*/
+let menuMusicUnlocked =
+  false;
+
+
+async function playMenuBirthdayMusic() {
+
+  if (
+    !audioMusicEnabled ||
+    currentAudioScene !== "menu"
+  ) {
+    return;
+  }
+
+
+  menuBirthdayMusic.volume =
+    0.75 *
+    audioMusicVolume;
+
+
+  try {
+
+    await menuBirthdayMusic.play();
+
+    menuMusicUnlocked =
+      true;
+
+  }
+  catch (error) {
+
+    /*
+      Autoplay blocking is expected before the user's first gesture.
+      We intentionally wait for the next real interaction.
+    */
+
+  }
+}
 
 
 // =====================================================
@@ -757,11 +805,7 @@ function setAudioScene(
         audioMusicVolume;
 
 
-      menuBirthdayMusic
-        .play()
-        .catch(
-          () => {}
-        );
+      playMenuBirthdayMusic();
 
     }
 
@@ -834,11 +878,7 @@ function refreshAudioMix() {
     audioStarted
   ) {
 
-    menuBirthdayMusic
-      .play()
-      .catch(
-        () => {}
-      );
+    playMenuBirthdayMusic();
 
   }
 
@@ -968,11 +1008,7 @@ function startGameAudio() {
       audioMusicVolume;
 
 
-    menuBirthdayMusic
-      .play()
-      .catch(
-        () => {}
-      );
+    playMenuBirthdayMusic();
 
   }
 
@@ -1752,29 +1788,62 @@ if (
 // Browsers don't allow autoplay with sound before this.
 // =====================================================
 
-function firstAudioInteraction() {
+async function firstAudioInteraction() {
 
   startGameAudio();
+
+  if (
+    currentAudioScene === "menu"
+  ) {
+
+    await playMenuBirthdayMusic();
+
+  }
 
 }
 
 
-document.addEventListener(
+[
   "pointerdown",
-  firstAudioInteraction,
-  {
-    once:
-      true
+  "touchstart",
+  "click",
+  "keydown"
+].forEach(
+  eventName => {
+
+    document.addEventListener(
+      eventName,
+      firstAudioInteraction,
+      {
+        once:true,
+        passive:
+          eventName === "touchstart"
+      }
+    );
+
   }
 );
 
 
+
+/*
+  If the browser temporarily pauses media while the tab/app is hidden,
+  restore the menu track when the page becomes visible again.
+*/
 document.addEventListener(
-  "keydown",
-  firstAudioInteraction,
-  {
-    once:
-      true
+  "visibilitychange",
+  () => {
+
+    if (
+      document.visibilityState === "visible" &&
+      currentAudioScene === "menu" &&
+      audioStarted
+    ) {
+
+      playMenuBirthdayMusic();
+
+    }
+
   }
 );
 
@@ -1821,11 +1890,7 @@ document.addEventListener(
         audioMusicEnabled
       ) {
 
-        menuBirthdayMusic
-          .play()
-          .catch(
-            () => {}
-          );
+        playMenuBirthdayMusic();
 
       }
 
