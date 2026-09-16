@@ -1116,13 +1116,33 @@ function openGate() {
         true;
 
 
+      /*
+        Remove any stale reveal animation class first, then show
+        the completion screen. The shared polish system now has a
+        recursion lock, so this remains safe on mobile browsers.
+      */
+      finishScreen.classList.remove(
+        "fofo-scene-reveal"
+      );
+
+
       finishScreen.classList.add(
         "show"
       );
 
+
+      window.FofoPolish?.sceneReveal?.(
+        finishScreen
+      );
+
+
+      window.FofoPolish?.haptic?.(
+        "finale"
+      );
+
     },
 
-    950
+    650
   );
 
 }
@@ -4444,8 +4464,23 @@ function checkGate() {
     );
 
 
+  /*
+    The visible gate becomes narrower on short phone screens.
+    Use a slightly wider logical trigger zone so Fofo cannot stop
+    visually at the door while being a few pixels outside the old
+    desktop-centered collision range.
+  */
+  const gateTriggerDistance =
+    window.matchMedia?.(
+      "(pointer: coarse)"
+    ).matches
+      ? 125
+      : 92;
+
+
   if (
-    distance > 92
+    distance >
+    gateTriggerDistance
   ) {
 
     return;

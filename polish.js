@@ -1752,12 +1752,23 @@
   ) {
 
     if (
-      !element
+      !element ||
+      element.dataset.fofoSceneRevealRunning === "1"
     ) {
 
       return;
 
     }
+
+
+    /*
+      IMPORTANT:
+      sceneObserver watches class changes. Without this lock,
+      adding the reveal class can trigger the observer again,
+      which can create a class-mutation loop on slower phones.
+    */
+    element.dataset.fofoSceneRevealRunning =
+      "1";
 
 
     element.classList.remove(
@@ -1770,6 +1781,17 @@
 
     element.classList.add(
       "fofo-scene-reveal"
+    );
+
+
+    setTimeout(
+      () => {
+
+        element.dataset.fofoSceneRevealRunning =
+          "0";
+
+      },
+      520
     );
 
   }
@@ -1862,6 +1884,15 @@
 
             const element =
               mutation.target;
+
+
+            if (
+              element.dataset.fofoSceneRevealRunning === "1"
+            ) {
+
+              return;
+
+            }
 
 
             if (
