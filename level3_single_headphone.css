@@ -1,0 +1,373 @@
+
+/* =========================================================
+   LEVEL 3 — SINGLE JBL IMAGE / PHONE FIT
+   UI-only override. Does not touch gameplay/player animation.
+========================================================= */
+
+/* Only one product image now: no arrows and no dots. */
+#giftPage .gallery-arrow,
+#giftPage .product-dots {
+  display:none !important;
+}
+
+/* Remove old 3-column gallery layout and all negative positioning. */
+#giftPage .product-gallery {
+  display:block !important;
+  width:100% !important;
+  max-width:760px !important;
+
+  margin:
+    2px
+    auto
+    5px !important;
+
+  transform:none !important;
+}
+
+/*
+  This stage is the ONLY vertical space reserved for the headphones.
+  It sits naturally between BLACK and the sentence above GIFT STORY.
+*/
+#giftPage .product-stage {
+  position:relative !important;
+
+  width:100% !important;
+  height:
+    clamp(
+      155px,
+      27dvh,
+      205px
+    ) !important;
+
+  min-height:0 !important;
+  max-height:205px !important;
+
+  display:grid !important;
+  place-items:center !important;
+
+  overflow:visible !important;
+}
+
+/*
+  Force an actual image HEIGHT rather than max-height percentages.
+  This prevents previous rules from allowing the PNG to become huge.
+*/
+#giftPage #productImage {
+  position:relative !important;
+
+  width:auto !important;
+  height:
+    clamp(
+      140px,
+      24dvh,
+      180px
+    ) !important;
+
+  max-width:
+    min(
+      28vw,
+      155px
+    ) !important;
+
+  max-height:180px !important;
+
+  object-fit:contain !important;
+
+  margin:0 !important;
+
+  transform:
+    translateY(-3px) !important;
+
+  transform-origin:center center !important;
+
+  filter:
+    drop-shadow(
+      0
+      15px
+      13px
+      rgba(0,0,0,.42)
+    ) !important;
+
+  animation:
+    jblSinglePhoneFloat
+    2.8s
+    ease-in-out
+    infinite !important;
+}
+
+
+@keyframes jblSinglePhoneFloat {
+
+  0%,
+  100% {
+    transform:
+      translateY(-3px)
+      rotate(-.3deg) !important;
+  }
+
+  50% {
+    transform:
+      translateY(-10px)
+      rotate(.45deg) !important;
+  }
+}
+
+
+/* Keep the sentence and button separate from the image. */
+#giftPage .gift-message {
+  position:relative !important;
+  z-index:5 !important;
+
+  margin:
+    0
+    auto
+    5px !important;
+
+  max-width:680px !important;
+}
+
+
+#giftPage .gift-story-image-button {
+  position:relative !important;
+  z-index:6 !important;
+
+  margin-top:
+    0 !important;
+}
+
+
+/* =========================================================
+   PHONE LANDSCAPE — PRIMARY TARGET
+========================================================= */
+
+@media (pointer:coarse) and (orientation:landscape) {
+
+  #giftPage {
+    justify-content:center !important;
+
+    height:100dvh !important;
+    min-height:100dvh !important;
+
+    overflow:hidden !important;
+
+    padding:
+      max(5px,env(safe-area-inset-top))
+      16px
+      max(5px,env(safe-area-inset-bottom))
+      !important;
+  }
+
+
+  #giftPage .finale-kicker {
+    margin:
+      0
+      0
+      1px !important;
+
+    font-size:
+      clamp(
+        8px,
+        1.15vw,
+        11px
+      ) !important;
+
+    line-height:1 !important;
+  }
+
+
+  #giftPage h2 {
+    margin:
+      0
+      0
+      0 !important;
+
+    font-size:
+      clamp(
+        31px,
+        5vw,
+        49px
+      ) !important;
+
+    line-height:.94 !important;
+  }
+
+
+  #giftPage .gift-black {
+    margin:
+      1px
+      0
+      3px !important;
+
+    font-size:
+      clamp(
+        9px,
+        1.3vw,
+        12px
+      ) !important;
+
+    line-height:1 !important;
+
+    letter-spacing:
+      6px !important;
+  }
+
+
+  /*
+    On a typical 650–720px landscape phone:
+      title section   ~ 85–100px
+      headphones     ~ 160–180px
+      sentence       ~ 20px
+      button         ~ 60–70px
+    Nothing overlaps.
+  */
+  #giftPage .product-gallery {
+    width:
+      min(
+        560px,
+        76vw
+      ) !important;
+
+    margin:
+      1px
+      auto
+      3px !important;
+  }
+
+
+  #giftPage .product-stage {
+    height:
+      clamp(
+        145px,
+        27dvh,
+        195px
+      ) !important;
+
+    max-height:
+      195px !important;
+  }
+
+
+  #giftPage #productImage {
+    width:auto !important;
+
+    height:
+      clamp(
+        132px,
+        24dvh,
+        176px
+      ) !important;
+
+    max-width:
+      min(
+        24vw,
+        142px
+      ) !important;
+
+    max-height:
+      176px !important;
+  }
+
+
+  #giftPage .gift-message {
+    margin:
+      0
+      auto
+      4px !important;
+
+    font-size:
+      clamp(
+        11px,
+        1.55vw,
+        14px
+      ) !important;
+
+    line-height:1.2 !important;
+  }
+
+
+  #giftPage .gift-story-image-button {
+    width:
+      min(
+        300px,
+        39vw
+      ) !important;
+
+    height:
+      64px !important;
+
+    margin:
+      0
+      auto !important;
+  }
+}
+
+
+/* Very short phones / browser bars still visible */
+@media (pointer:coarse) and (orientation:landscape) and (max-height:560px) {
+
+  #giftPage h2 {
+    font-size:
+      clamp(
+        27px,
+        4.7vw,
+        41px
+      ) !important;
+  }
+
+
+  #giftPage .product-stage {
+    height:
+      clamp(
+        118px,
+        25dvh,
+        145px
+      ) !important;
+
+    max-height:
+      145px !important;
+  }
+
+
+  #giftPage #productImage {
+    height:
+      clamp(
+        108px,
+        22dvh,
+        132px
+      ) !important;
+
+    max-width:
+      min(
+        22vw,
+        108px
+      ) !important;
+
+    max-height:
+      132px !important;
+  }
+
+
+  #giftPage .gift-message {
+    font-size:
+      clamp(
+        10px,
+        1.35vw,
+        12px
+      ) !important;
+
+    margin-bottom:
+      3px !important;
+  }
+
+
+  #giftPage .gift-story-image-button {
+    width:
+      min(
+        255px,
+        35vw
+      ) !important;
+
+    height:
+      55px !important;
+  }
+}
