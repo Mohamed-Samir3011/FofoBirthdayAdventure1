@@ -1,4 +1,5 @@
 * {
+  -webkit-text-size-adjust: 100%;
     box-sizing: border-box;
     user-select: none;
     -webkit-user-drag: none;
@@ -27,7 +28,7 @@ body {
     position: relative;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+  height: 100dvh;overflow: hidden;
 
     background:
         radial-gradient(
@@ -45,6 +46,8 @@ body {
 }
 
 #world {
+  transform-origin: left bottom;
+
     position: absolute;
     left: 0;
     bottom: 0;

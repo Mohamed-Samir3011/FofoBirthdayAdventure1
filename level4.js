@@ -86,6 +86,97 @@ const TOTAL = 25;
 let puzzleSolved = false;
 let portal = null;
 
+
+// =====================================================
+// MOBILE / REFRESH-RATE NORMALIZATION
+// =====================================================
+
+const GAME_REFERENCE_FPS =
+  75;
+
+let frameFactor =
+  1;
+
+let lastFrameTimestamp =
+  0;
+
+
+function updateFrameFactor(
+  timestamp
+) {
+
+  if (
+    !lastFrameTimestamp
+  ) {
+
+    lastFrameTimestamp =
+      timestamp;
+
+    frameFactor =
+      1;
+
+    return;
+  }
+
+
+  const delta =
+    Math.min(
+      36,
+      Math.max(
+        4,
+        timestamp -
+        lastFrameTimestamp
+      )
+    );
+
+
+  lastFrameTimestamp =
+    timestamp;
+
+
+  frameFactor =
+    Math.min(
+      2.1,
+      Math.max(
+        0.35,
+        delta /
+        (1000 / GAME_REFERENCE_FPS)
+      )
+    );
+}
+
+
+// Mobile landscape has much less vertical room than desktop.
+// Zoom only the WORLD (not the HUD/controls) so high platforms remain visible.
+function getWorldRenderScale(
+  viewportElement
+) {
+
+  const viewportHeight =
+    viewportElement.clientHeight ||
+    window.innerHeight ||
+    600;
+
+
+  if (
+    viewportHeight >=
+    620
+  ) {
+
+    return 1;
+  }
+
+
+  return Math.max(
+    0.68,
+    Math.min(
+      1,
+      viewportHeight /
+      590
+    )
+  );
+}
+
 // =========================================================
 // PLAYER
 // =========================================================
@@ -1452,7 +1543,8 @@ function updateMovingPlatforms(){
       ){
         platform.x +=
           platform.speed *
-          platform.direction;
+          platform.direction *
+          frameFactor;
 
         if(
           platform.x >=
@@ -1480,7 +1572,8 @@ function updateMovingPlatforms(){
 
         platform.y +=
           platform.speed *
-          platform.direction;
+          platform.direction *
+          frameFactor;
 
         if(
           platform.y >=
@@ -1540,12 +1633,16 @@ function updateHorizontal(){
   }
 
   if(keys.right){
-    playerX += SPEED;
+    playerX +=
+      SPEED *
+      frameFactor;
     facingRight = true;
   }
 
   if(keys.left){
-    playerX -= SPEED;
+    playerX -=
+      SPEED *
+      frameFactor;
     facingRight = false;
   }
 
@@ -1569,7 +1666,8 @@ function updateVertical(){
     playerY;
 
   velocityY -=
-    GRAVITY;
+    GRAVITY *
+    frameFactor;
 
   velocityY =
     Math.max(
@@ -1582,7 +1680,8 @@ function updateVertical(){
 
   let nextY =
     playerY +
-    velocityY;
+    velocityY *
+    frameFactor;
 
   currentSurface =
     null;
@@ -1814,7 +1913,8 @@ function updateEnemies(
 
       enemy.x +=
         enemy.speed *
-        enemy.direction;
+        enemy.direction *
+          frameFactor;
 
       if(
         enemy.x >=
@@ -2602,27 +2702,54 @@ continueButton.addEventListener(
 // CAMERA
 // =========================================================
 
-function updateCamera(){
+function updateCamera() {
+
+  const renderScale =
+    getWorldRenderScale(
+      game
+    );
+
 
   const viewportWidth =
-    game.clientWidth;
+    game.clientWidth /
+    renderScale;
+
 
   let cameraX =
     playerX -
-    viewportWidth*.34;
+    viewportWidth *
+    0.34;
+
 
   cameraX =
     Math.max(
       0,
-      Math.min(
-        WORLD_WIDTH-
-        viewportWidth,
-        cameraX
+      cameraX
+    );
+
+
+  cameraX =
+    Math.min(
+      cameraX,
+      Math.max(
+        0,
+        WORLD_WIDTH -
+        viewportWidth
       )
     );
 
+
+  world.style.transformOrigin =
+    "left bottom";
+
+
+  /*
+    Matrix keeps horizontal camera movement correct while scaling
+    the whole map vertically/horizontally for short phone screens.
+  */
   world.style.transform =
-    `translateX(${-cameraX}px)`;
+    `matrix(${renderScale}, 0, 0, ${renderScale}, ${-cameraX * renderScale}, 0)`;
+
 }
 
 // =========================================================
@@ -2632,6 +2759,10 @@ function updateCamera(){
 function loop(
   timestamp
 ){
+
+  updateFrameFactor(
+    timestamp
+  );
 
   if(!finished){
 

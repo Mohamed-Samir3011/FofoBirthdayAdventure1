@@ -1,4 +1,5 @@
 * {
+  -webkit-text-size-adjust: 100%;
   box-sizing: border-box;
   user-select: none;
   -webkit-user-select: none;
@@ -43,7 +44,7 @@ button {
   position: relative;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  height: 100dvh;overflow: hidden;
   background:
     radial-gradient(circle at 14% 28%, rgba(215, 72, 126, .10), transparent 21%),
     linear-gradient(180deg, #0b1022 0%, #17132d 46%, #351225 100%);
@@ -60,6 +61,8 @@ button {
 }
 
 #world {
+  transform-origin: left bottom;
+
   position: absolute;
   left: 0;
   bottom: 0;

@@ -1,4 +1,5 @@
 *{
+  -webkit-text-size-adjust:100%;
   box-sizing:border-box;
   user-select:none;
   -webkit-user-select:none;
@@ -20,8 +21,8 @@ button{border:0;font:inherit}
 #game{
   position:relative;
   width:100vw;
-  height:100vh;
-  overflow:hidden;
+  height: 100vh;
+  height: 100dvh;overflow:hidden;
 
   background:
     linear-gradient(
@@ -47,6 +48,8 @@ button{border:0;font:inherit}
 }
 
 #world{
+  transform-origin: left bottom;
+
   position:absolute;
   left:0;
   bottom:0;

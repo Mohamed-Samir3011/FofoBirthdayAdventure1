@@ -1,4 +1,5 @@
 * {
+  -webkit-text-size-adjust: 100%;
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
@@ -71,6 +72,8 @@ button {
 
 
 .world {
+  transform-origin: left bottom;
+
   position: absolute;
 
   left: 0;

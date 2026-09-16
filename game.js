@@ -193,6 +193,97 @@ const MAX_JUMP_HOLD =
   12;
 
 
+
+// =====================================================
+// MOBILE / REFRESH-RATE NORMALIZATION
+// =====================================================
+
+const GAME_REFERENCE_FPS =
+  75;
+
+let frameFactor =
+  1;
+
+let lastFrameTimestamp =
+  0;
+
+
+function updateFrameFactor(
+  timestamp
+) {
+
+  if (
+    !lastFrameTimestamp
+  ) {
+
+    lastFrameTimestamp =
+      timestamp;
+
+    frameFactor =
+      1;
+
+    return;
+  }
+
+
+  const delta =
+    Math.min(
+      36,
+      Math.max(
+        4,
+        timestamp -
+        lastFrameTimestamp
+      )
+    );
+
+
+  lastFrameTimestamp =
+    timestamp;
+
+
+  frameFactor =
+    Math.min(
+      2.1,
+      Math.max(
+        0.35,
+        delta /
+        (1000 / GAME_REFERENCE_FPS)
+      )
+    );
+}
+
+
+// Mobile landscape has much less vertical room than desktop.
+// Zoom only the WORLD (not the HUD/controls) so high platforms remain visible.
+function getWorldRenderScale(
+  viewportElement
+) {
+
+  const viewportHeight =
+    viewportElement.clientHeight ||
+    window.innerHeight ||
+    600;
+
+
+  if (
+    viewportHeight >=
+    620
+  ) {
+
+    return 1;
+  }
+
+
+  return Math.max(
+    0.68,
+    Math.min(
+      1,
+      viewportHeight /
+      590
+    )
+  );
+}
+
 // =====================================================
 // FOFO IMAGES
 // =====================================================
@@ -2584,7 +2675,8 @@ function updateMovingPlatforms() {
 
         platform.x +=
           platform.speed *
-          platform.direction;
+          platform.direction *
+          frameFactor;
 
 
         if (
@@ -2620,7 +2712,8 @@ function updateMovingPlatforms() {
 
         platform.y +=
           platform.speed *
-          platform.direction;
+          platform.direction *
+          frameFactor;
 
 
         if (
@@ -2712,7 +2805,8 @@ function updateHorizontal() {
   ) {
 
     playerX +=
-      SPEED;
+      SPEED *
+      frameFactor;
 
     facingRight =
       true;
@@ -2725,7 +2819,8 @@ function updateHorizontal() {
   ) {
 
     playerX -=
-      SPEED;
+      SPEED *
+      frameFactor;
 
     facingRight =
       false;
@@ -2813,16 +2908,19 @@ function updateVertical() {
   ) {
 
     velocityY +=
-      0.07;
+      0.07 *
+      frameFactor;
 
 
-    jumpHoldFrames--;
+    jumpHoldFrames -=
+      frameFactor;
 
   }
 
 
   velocityY -=
-    GRAVITY;
+    GRAVITY *
+    frameFactor;
 
 
   /*
@@ -2851,7 +2949,8 @@ function updateVertical() {
 
   let nextY =
     playerY +
-    velocityY;
+    velocityY *
+    frameFactor;
 
 
   let landed =
@@ -3179,7 +3278,8 @@ function updateGroundEnemies(timestamp) {
 
         enemy.x +=
           enemy.speed *
-          enemy.direction;
+          enemy.direction *
+          frameFactor;
 
 
         if (
@@ -4257,8 +4357,15 @@ function checkGate() {
 
 function updateCamera() {
 
+  const renderScale =
+    getWorldRenderScale(
+      gameArea
+    );
+
+
   const viewportWidth =
-    gameArea.clientWidth;
+    gameArea.clientWidth /
+    renderScale;
 
 
   let cameraX =
@@ -4277,13 +4384,24 @@ function updateCamera() {
   cameraX =
     Math.min(
       cameraX,
-      WORLD_WIDTH -
-      viewportWidth
+      Math.max(
+        0,
+        WORLD_WIDTH -
+        viewportWidth
+      )
     );
 
 
+  world.style.transformOrigin =
+    "left bottom";
+
+
+  /*
+    Matrix keeps horizontal camera movement correct while scaling
+    the whole map vertically/horizontally for short phone screens.
+  */
   world.style.transform =
-    `translateX(${-cameraX}px)`;
+    `matrix(${renderScale}, 0, 0, ${renderScale}, ${-cameraX * renderScale}, 0)`;
 
 }
 
@@ -4568,6 +4686,10 @@ function initializeGame() {
 // =====================================================
 
 function gameLoop(timestamp) {
+
+  updateFrameFactor(
+    timestamp
+  );
 
   updateMovingPlatforms();
 
