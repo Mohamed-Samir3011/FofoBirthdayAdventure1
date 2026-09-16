@@ -1,0 +1,502 @@
+
+/* =========================================================
+   FOFO BIRTHDAY ADVENTURE — EXTRA GAMEPLAY FEATURES
+   Respawn / Interactive Decor / Compliments / Replay / Secret Note
+========================================================= */
+
+/* ---------- Respawn ---------- */
+
+.player.fofo-respawn-pop,
+#fofo.fofo-respawn-pop {
+  animation: fofoRespawnPop .62s cubic-bezier(.17,.84,.28,1.2) both !important;
+  filter:
+    drop-shadow(0 0 10px rgba(255,190,210,.75))
+    drop-shadow(0 0 24px rgba(239,194,126,.45));
+}
+
+@keyframes fofoRespawnPop {
+  0% {
+    opacity:0;
+    transform:translateY(12px) scale(.76);
+  }
+  42% {
+    opacity:1;
+    transform:translateY(-4px) scale(1.08);
+  }
+  72% {
+    transform:translateY(1px) scale(.97);
+  }
+  100% {
+    opacity:1;
+  }
+}
+
+.fofo-respawn-particle {
+  position:fixed;
+  z-index:9950;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  pointer-events:none;
+  background:#f6c982;
+  box-shadow:
+    0 0 8px rgba(246,201,130,.95),
+    0 0 18px rgba(228,84,124,.42);
+  animation:fofoRespawnParticle .72s ease-out forwards;
+}
+
+@keyframes fofoRespawnParticle {
+  from {
+    opacity:1;
+    transform:translate3d(0,0,0) scale(1);
+  }
+  to {
+    opacity:0;
+    transform:
+      translate3d(var(--rx),var(--ry),0)
+      scale(.12);
+  }
+}
+
+
+/* ---------- Interactive world decorations ---------- */
+
+.fofo-interactive-decor {
+  position:absolute;
+  z-index:16;
+  display:grid;
+  place-items:center;
+  width:32px;
+  height:32px;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-select:none;
+  opacity:.52;
+  color:#ffd7df;
+  font-family:Georgia,serif;
+  font-size:25px;
+  line-height:1;
+  text-shadow:
+    0 0 8px rgba(255,170,193,.55),
+    0 0 18px rgba(239,194,126,.25);
+  transform:
+    translate(-50%,0)
+    scale(.82)
+    rotate(-6deg);
+  transition:
+    opacity .28s ease,
+    transform .34s cubic-bezier(.2,.8,.25,1.2),
+    filter .28s ease;
+  animation:fofoDecorIdle 3.6s ease-in-out infinite;
+  contain:layout paint style;
+}
+
+.fofo-interactive-decor.fofo-decor-level-2 {
+  color:#ffd7c2;
+}
+
+.fofo-interactive-decor.fofo-decor-level-3 {
+  color:#cfceff;
+  text-shadow:
+    0 0 8px rgba(173,161,255,.7),
+    0 0 20px rgba(255,201,224,.25);
+}
+
+.fofo-interactive-decor.fofo-decor-level-4 {
+  color:#f8d99a;
+  text-shadow:
+    0 0 8px rgba(248,217,154,.75),
+    0 0 22px rgba(206,114,61,.32);
+}
+
+.fofo-interactive-decor.fofo-near {
+  opacity:1;
+  filter:brightness(1.18);
+  transform:
+    translate(-50%,-8px)
+    scale(1.34)
+    rotate(7deg);
+  animation:
+    fofoDecorReact .68s cubic-bezier(.2,.85,.25,1.2) both,
+    fofoDecorIdle 3.2s .68s ease-in-out infinite;
+}
+
+@keyframes fofoDecorIdle {
+  0%,100% {
+    translate:0 0;
+  }
+  50% {
+    translate:0 -5px;
+  }
+}
+
+@keyframes fofoDecorReact {
+  0% {
+    scale:.82;
+  }
+  48% {
+    scale:1.55;
+  }
+  100% {
+    scale:1.34;
+  }
+}
+
+.fofo-decor-spark {
+  position:fixed;
+  z-index:9951;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  pointer-events:none;
+  background:#ffd59c;
+  box-shadow:0 0 8px #ffd59c;
+  animation:fofoDecorSpark .6s ease-out forwards;
+}
+
+@keyframes fofoDecorSpark {
+  to {
+    opacity:0;
+    transform:
+      translate3d(var(--dx),var(--dy),0)
+      scale(.1);
+  }
+}
+
+
+/* ---------- Random compliment ---------- */
+
+.fofo-compliment-popup {
+  position:fixed;
+  z-index:9700;
+  left:50%;
+  top:max(74px,calc(env(safe-area-inset-top) + 58px));
+  width:max-content;
+  max-width:min(82vw,620px);
+  padding:11px 22px 12px;
+  border:1px solid rgba(239,194,126,.55);
+  border-radius:999px;
+  color:#fff0dd;
+  text-align:center;
+  font-size:clamp(12px,1.7vw,16px);
+  font-weight:800;
+  letter-spacing:.02em;
+  background:rgba(80,18,43,.88);
+  box-shadow:0 11px 28px rgba(31,3,16,.28);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,-9px) scale(.96);
+}
+
+.fofo-compliment-popup.fofo-show {
+  animation:fofoCompliment 3.15s ease both;
+}
+
+@keyframes fofoCompliment {
+  0% {
+    opacity:0;
+    transform:translate(-50%,-9px) scale(.96);
+  }
+  12%,78% {
+    opacity:1;
+    transform:translate(-50%,0) scale(1);
+  }
+  100% {
+    opacity:0;
+    transform:translate(-50%,-7px) scale(.98);
+  }
+}
+
+
+/* ---------- Replay modifier badge ---------- */
+
+.fofo-replay-badge {
+  position:fixed;
+  z-index:8750;
+  left:max(12px,env(safe-area-inset-left));
+  top:max(72px,calc(env(safe-area-inset-top) + 58px));
+  display:none;
+  align-items:center;
+  gap:7px;
+  padding:7px 12px;
+  border:1px solid rgba(239,194,126,.62);
+  border-radius:999px;
+  color:#fff0d8;
+  background:rgba(66,14,35,.82);
+  box-shadow:0 8px 20px rgba(25,2,12,.22);
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.08em;
+  pointer-events:none;
+}
+
+.fofo-replay-badge.fofo-visible {
+  display:flex;
+}
+
+.fofo-replay-badge.fofo-failed {
+  border-color:rgba(255,154,164,.75);
+  color:#ffd5db;
+}
+
+
+/* ---------- Replay chooser ---------- */
+
+.fofo-replay-overlay,
+.fofo-secret-note-overlay {
+  position:fixed;
+  inset:0;
+  z-index:100150;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(20,3,11,.74);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+
+.fofo-replay-overlay.fofo-show,
+.fofo-secret-note-overlay.fofo-show {
+  display:flex;
+  animation:fofoOverlayIn .25s ease both;
+}
+
+@keyframes fofoOverlayIn {
+  from { opacity:0; }
+  to { opacity:1; }
+}
+
+.fofo-replay-card,
+.fofo-secret-note-card {
+  width:min(91vw,620px);
+  max-height:88vh;
+  overflow:auto;
+  padding:26px;
+  border:1.5px solid rgba(239,194,126,.72);
+  border-radius:30px;
+  color:#fff1dc;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 0,rgba(207,72,109,.17),transparent 36%),
+    linear-gradient(180deg,rgba(102,23,52,.98),rgba(42,8,24,.98));
+  box-shadow:0 24px 70px rgba(11,1,6,.55);
+}
+
+.fofo-replay-kicker,
+.fofo-note-kicker {
+  color:#efc27e;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.2em;
+}
+
+.fofo-replay-card h2,
+.fofo-secret-note-card h2 {
+  margin:7px 0 7px;
+  font-size:clamp(27px,5vw,44px);
+}
+
+.fofo-replay-card > p,
+.fofo-secret-note-card > p {
+  margin:0 auto 19px;
+  max-width:510px;
+  color:#f4cdd5;
+  line-height:1.55;
+  font-size:13px;
+}
+
+.fofo-replay-options {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.fofo-replay-option {
+  min-height:118px;
+  padding:14px 12px;
+  border:1px solid rgba(239,194,126,.42);
+  border-radius:19px;
+  color:#fff0dc;
+  text-align:left;
+  background:rgba(115,31,61,.52);
+  transition:transform .18s ease,border-color .18s ease,background .18s ease;
+}
+
+.fofo-replay-option:active {
+  transform:scale(.97);
+}
+
+.fofo-replay-option strong {
+  display:block;
+  margin-bottom:7px;
+  color:#ffd9a0;
+  font-size:13px;
+}
+
+.fofo-replay-option span {
+  display:block;
+  color:#f1d2d7;
+  font-size:11px;
+  line-height:1.42;
+}
+
+.fofo-replay-cancel,
+.fofo-note-close {
+  margin-top:14px;
+  min-height:42px;
+  padding:8px 20px;
+  border:1px solid rgba(239,194,126,.4);
+  border-radius:999px;
+  color:#fff1dd;
+  background:rgba(31,6,18,.34);
+  font-weight:800;
+}
+
+
+/* ---------- Secret developer note ---------- */
+
+.fofo-secret-note {
+  position:absolute;
+  z-index:21;
+  display:grid;
+  place-items:center;
+  width:36px;
+  height:36px;
+  border:1px solid rgba(245,206,136,.35);
+  border-radius:11px;
+  color:#f6d08d;
+  background:rgba(90,47,23,.26);
+  box-shadow:0 0 0 rgba(247,205,134,0);
+  font-size:20px;
+  cursor:pointer;
+  opacity:.27;
+  transform:translate(-50%,0) rotate(-8deg) scale(.84);
+  transition:
+    opacity .35s ease,
+    transform .35s ease,
+    box-shadow .35s ease,
+    background .35s ease;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+
+.fofo-secret-note.fofo-near,
+.fofo-secret-note.fofo-found {
+  opacity:1;
+  transform:translate(-50%,-5px) rotate(2deg) scale(1.12);
+  background:rgba(108,55,24,.74);
+  box-shadow:
+    0 0 16px rgba(247,205,134,.48),
+    0 0 38px rgba(202,105,53,.22);
+}
+
+.fofo-note-signature {
+  margin-top:12px;
+  color:#efc27e;
+  font-family:Georgia,serif;
+  font-size:17px;
+  font-style:italic;
+}
+
+
+/* ---------- Small achievement toast ---------- */
+
+.fofo-extra-toast {
+  position:fixed;
+  z-index:100100;
+  left:50%;
+  top:21%;
+  max-width:min(84vw,560px);
+  padding:12px 22px;
+  border:1.5px solid rgba(239,194,126,.7);
+  border-radius:999px;
+  color:#fff0d9;
+  text-align:center;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.05em;
+  background:rgba(91,23,49,.94);
+  box-shadow:0 12px 28px rgba(25,2,12,.34);
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,-10px) scale(.96);
+}
+
+.fofo-extra-toast.fofo-show {
+  animation:fofoExtraToast 2.6s ease both;
+}
+
+@keyframes fofoExtraToast {
+  0% {
+    opacity:0;
+    transform:translate(-50%,-10px) scale(.96);
+  }
+  14%,77% {
+    opacity:1;
+    transform:translate(-50%,0) scale(1);
+  }
+  100% {
+    opacity:0;
+    transform:translate(-50%,-7px) scale(.98);
+  }
+}
+
+
+@media (orientation:landscape) and (max-height:650px) {
+  .fofo-compliment-popup {
+    top:54px;
+    padding:8px 17px;
+    font-size:11px;
+  }
+
+  .fofo-replay-badge {
+    top:52px;
+    padding:5px 9px;
+    font-size:8px;
+  }
+
+  .fofo-replay-card,
+  .fofo-secret-note-card {
+    width:min(78vw,650px);
+    padding:18px 22px;
+  }
+
+  .fofo-replay-card h2,
+  .fofo-secret-note-card h2 {
+    font-size:27px;
+  }
+
+  .fofo-replay-card > p,
+  .fofo-secret-note-card > p {
+    margin-bottom:12px;
+    font-size:11px;
+  }
+
+  .fofo-replay-option {
+    min-height:91px;
+    padding:10px;
+  }
+
+  .fofo-replay-option strong {
+    font-size:11px;
+  }
+
+  .fofo-replay-option span {
+    font-size:9px;
+  }
+}
+
+@media (max-width:700px) and (orientation:portrait) {
+  .fofo-replay-options {
+    grid-template-columns:1fr;
+  }
+
+  .fofo-replay-option {
+    min-height:auto;
+  }
+}

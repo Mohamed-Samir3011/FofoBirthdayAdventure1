@@ -1116,6 +1116,11 @@ function openGate() {
         true;
 
 
+      window.FofoExtras?.completeReplay?.(
+        1
+      );
+
+
       /*
         Remove any stale reveal animation class first, then show
         the completion screen. The shared polish system now has a
@@ -1186,6 +1191,11 @@ function resetPlayerToCheckpoint() {
   standingOnMovingPlatform =
     null;
 
+
+  window.FofoExtras?.respawn?.(
+    fofo
+  );
+
 }
 
 
@@ -1205,6 +1215,10 @@ function damagePlayerFromEnemy(sourceX) {
 
   }
 
+
+  window.FofoExtras?.registerDamage?.(
+    1
+  );
 
   health--;
 
@@ -1283,6 +1297,10 @@ function damagePlayerFromFall() {
 
   }
 
+
+  window.FofoExtras?.registerDamage?.(
+    1
+  );
 
   health--;
 
@@ -2795,6 +2813,10 @@ function updateMovingPlatforms() {
 
         platform.x +=
           platform.speed *
+          (
+            window.FofoExtras?.platformSpeedMultiplier?.(1) ||
+            1
+          ) *
           platform.direction *
           frameFactor;
 
@@ -2832,6 +2854,10 @@ function updateMovingPlatforms() {
 
         platform.y +=
           platform.speed *
+          (
+            window.FofoExtras?.platformSpeedMultiplier?.(1) ||
+            1
+          ) *
           platform.direction *
           frameFactor;
 
@@ -3426,6 +3452,10 @@ function updateGroundEnemies(timestamp) {
 
         enemy.x +=
           enemy.speed *
+          (
+            window.FofoExtras?.enemySpeedMultiplier?.(1) ||
+            1
+          ) *
           enemy.direction *
           frameFactor;
 

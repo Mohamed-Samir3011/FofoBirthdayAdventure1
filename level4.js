@@ -1638,6 +1638,10 @@ function updateMovingPlatforms(){
       ){
         platform.x +=
           platform.speed *
+          (
+            window.FofoExtras?.platformSpeedMultiplier?.(4) ||
+            1
+          ) *
           platform.direction *
           frameFactor;
 
@@ -1667,6 +1671,10 @@ function updateMovingPlatforms(){
 
         platform.y +=
           platform.speed *
+          (
+            window.FofoExtras?.platformSpeedMultiplier?.(4) ||
+            1
+          ) *
           platform.direction *
           frameFactor;
 
@@ -2029,6 +2037,10 @@ function updateEnemies(
 
       enemy.x +=
         enemy.speed *
+          (
+            window.FofoExtras?.enemySpeedMultiplier?.(4) ||
+            1
+          ) *
         enemy.direction *
           frameFactor;
 
@@ -2307,6 +2319,10 @@ function damagePlayer(){
     return;
   }
 
+  window.FofoExtras?.registerDamage?.(
+    4
+  );
+
   health--;
 
   window.FofoPolish?.haptic(
@@ -2345,6 +2361,11 @@ function damagePlayer(){
 
   playerY =
     respawnY;
+
+
+  window.FofoExtras?.respawn?.(
+    player
+  );
 
   velocityY =
     0;
@@ -2730,6 +2751,11 @@ function finishLevel(){
 
   finished =
     true;
+
+
+  window.FofoExtras?.completeReplay?.(
+    4
+  );
 
   keys.left =
     false;

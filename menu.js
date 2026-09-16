@@ -402,6 +402,10 @@ function enterLevelOne() {
   menuRoot?.classList.add("hidden");
   applyAudioSettings();
 
+  window.FofoExtras?.activateLevel?.(
+    1
+  );
+
   if (
     window.FofoPolish
   ) {
@@ -416,13 +420,46 @@ function enterLevelOne() {
   }
 }
 
-function openLevel(level) {
+function openLevel(
+  level,
+  replayConfirmed = false
+) {
   const highestUnlocked = getHighestUnlockedLevel();
 
   if (level > highestUnlocked) {
     showMenuToast("Complete the previous adventure first 💖");
     return;
   }
+
+
+  /*
+    A completed level now offers optional replay modifiers.
+    New/uncompleted levels always use the original Classic rules.
+  */
+  if (
+    isLevelCompleted(level) &&
+    !replayConfirmed &&
+    window.FofoExtras
+  ) {
+
+    window.FofoExtras.chooseReplayModifier(
+      level,
+      () => openLevel(level, true)
+    );
+
+    return;
+  }
+
+
+  if (
+    !isLevelCompleted(level)
+  ) {
+
+    window.FofoExtras?.clearReplayModifier?.(
+      level
+    );
+  }
+
 
   if (level === 1) {
     enterLevelOne();
@@ -432,9 +469,9 @@ function openLevel(level) {
   if (level === 2) {
     localStorage.setItem(STORAGE.lastLevel, "2");
     if (window.FofoPolish) {
-      window.FofoPolish.navigate("level2.html?v=smooth-all-v1");
+      window.FofoPolish.navigate("level2.html?v=extra-features-v1");
     } else {
-      window.location.href = "level2.html?v=smooth-all-v1";
+      window.location.href = "level2.html?v=extra-features-v1";
     }
     return;
   }
@@ -442,9 +479,9 @@ function openLevel(level) {
   if (level === 3) {
     localStorage.setItem(STORAGE.lastLevel, "3");
     if (window.FofoPolish) {
-      window.FofoPolish.navigate("level3.html?v=smooth-all-v1");
+      window.FofoPolish.navigate("level3.html?v=extra-features-v1");
     } else {
-      window.location.href = "level3.html?v=smooth-all-v1";
+      window.location.href = "level3.html?v=extra-features-v1";
     }
     return;
   }
@@ -452,9 +489,9 @@ function openLevel(level) {
   if (level === 4) {
     localStorage.setItem(STORAGE.lastLevel, "4");
     if (window.FofoPolish) {
-      window.FofoPolish.navigate("level4.html?v=smooth-all-v1");
+      window.FofoPolish.navigate("level4.html?v=extra-features-v1");
     } else {
-      window.location.href = "level4.html?v=smooth-all-v1";
+      window.location.href = "level4.html?v=extra-features-v1";
     }
     return;
   }

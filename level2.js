@@ -2085,6 +2085,10 @@ function updateMovingPlatforms() {
 
                 platform.x +=
                     platform.speed *
+          (
+            window.FofoExtras?.platformSpeedMultiplier?.(2) ||
+            1
+          ) *
                     platform.direction *
           frameFactor;
 
@@ -2119,6 +2123,10 @@ function updateMovingPlatforms() {
 
                 platform.y +=
                     platform.speed *
+          (
+            window.FofoExtras?.platformSpeedMultiplier?.(2) ||
+            1
+          ) *
                     platform.direction *
           frameFactor;
 
@@ -2201,6 +2209,10 @@ function updateRoses() {
 
             enemy.x +=
                 enemy.speed *
+          (
+            window.FofoExtras?.enemySpeedMultiplier?.(2) ||
+            1
+          ) *
                 enemy.direction *
           frameFactor;
 
@@ -3066,7 +3078,11 @@ function damagePlayer() {
         health;
 
 
-    health--;
+    window.FofoExtras?.registerDamage?.(
+    2
+  );
+
+  health--;
 
     window.FofoPolish?.haptic(
         "hurt"
@@ -3111,6 +3127,11 @@ function damagePlayer() {
 
     playerY =
         respawnY;
+
+
+    window.FofoExtras?.respawn?.(
+        fofo
+    );
 
 
     velocityY =
@@ -3825,6 +3846,11 @@ function startFinale() {
 
     gameFinished =
         true;
+
+
+    window.FofoExtras?.completeReplay?.(
+        2
+    );
 
 
     keys.left =
