@@ -453,13 +453,7 @@ const requestedMusic =
     "assets/level4/audio/egypt-egyptian-desert-music-511853.mp3"
   );
 
-const fallbackMusic =
-  new Audio(
-    "assets/level4/audio/fallback_music.mp3"
-  );
-
 requestedMusic.loop = true;
-fallbackMusic.loop = true;
 
 const sounds = {
   jump:new Audio("assets/level4/audio/jump.wav"),
@@ -473,7 +467,6 @@ const sounds = {
 };
 
 let audioStarted = false;
-let activeMusic = requestedMusic;
 
 const musicEnabled =
   localStorage.getItem("fofoMusicEnabled") !== "false";
@@ -500,23 +493,17 @@ function startAudio(){
       ? Math.min(1,musicVolume * .94)
       : 0;
 
-  fallbackMusic.volume =
-    musicEnabled
-      ? Math.min(1,musicVolume * .56)
-      : 0;
-
   if(!musicEnabled){
     return;
   }
 
+  /*
+    Level 4 uses ONLY the requested Egyptian desert track.
+    If it fails to play, no fallback track is used.
+  */
   requestedMusic
     .play()
-    .catch(() => {
-      activeMusic = fallbackMusic;
-      fallbackMusic
-        .play()
-        .catch(() => {});
-    });
+    .catch(() => {});
 }
 
 function sfx(name,gain=1){
@@ -2767,8 +2754,6 @@ function finishLevel(){
     false;
 
   requestedMusic.pause();
-  fallbackMusic.pause();
-  activeMusic.pause();
 
   sfx(
     "finale",

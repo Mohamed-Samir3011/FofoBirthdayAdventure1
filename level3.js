@@ -389,6 +389,50 @@ const jumpFrames = [
 ];
 
 
+/*
+  Decode the player artwork before it is needed.
+  This is especially important on phones: swapping a large PNG for the
+  first time during a jump/run can otherwise look like a frozen frame.
+*/
+const playerAnimationSources = [
+  idleImage,
+  ...runFrames,
+  ...jumpFrames
+];
+
+
+playerAnimationSources.forEach(
+  src => {
+
+    const image =
+      new Image();
+
+
+    image.decoding =
+      "async";
+
+
+    image.src =
+      src;
+
+
+    if (
+      typeof image.decode ===
+      "function"
+    ) {
+
+      image
+        .decode()
+        .catch(
+          () => {}
+        );
+
+    }
+
+  }
+);
+
+
 const POSES = {
 
   idle: {
@@ -401,9 +445,14 @@ const POSES = {
     visualOffset: -34
   },
 
+  /*
+    Keep jump visually aligned with the running feet.
+    The previous -15 offset made Fofo visually pop upward
+    before the physics jump had actually moved her.
+  */
   jump: {
     scale: .95,
-    visualOffset: -15
+    visualOffset: -33
   }
 
 };
@@ -417,6 +466,18 @@ let runFrame =
 
 let lastRunFrameTime =
   0;
+
+
+/*
+  Track pose transitions explicitly so the first run/jump frame appears
+  immediately instead of leaving the previous pose on screen.
+*/
+let lastAnimationPose =
+  "idle";
+
+
+const RUN_FRAME_BASE_MS =
+  104;
 
 
 const fofo =
@@ -3609,6 +3670,10 @@ function updatePlayerAnimation(
   timestamp
 ) {
 
+  // =====================================================
+  // JUMP / FALL
+  // =====================================================
+
   if (
     jumping
   ) {
@@ -3617,57 +3682,75 @@ function updatePlayerAnimation(
       "jump";
 
 
+    /*
+      Use all six jump frames.
+      The frame follows the real vertical velocity, so the pose stays
+      synchronized with the physics even if the phone drops frames.
+    */
+    let jumpFrameIndex =
+      5;
+
+
     if (
       velocityY >
-      6
+      8.0
     ) {
 
-      setPlayerImage(
-        jumpFrames[1]
-      );
+      jumpFrameIndex =
+        0;
 
     }
 
     else if (
       velocityY >
-      2
+      5.0
     ) {
 
-      setPlayerImage(
-        jumpFrames[2]
-      );
+      jumpFrameIndex =
+        1;
 
     }
 
     else if (
       velocityY >
-      -1
+      2.0
     ) {
 
-      setPlayerImage(
-        jumpFrames[3]
-      );
+      jumpFrameIndex =
+        2;
 
     }
 
     else if (
       velocityY >
-      -4
+      -0.8
     ) {
 
-      setPlayerImage(
-        jumpFrames[4]
-      );
+      jumpFrameIndex =
+        3;
 
     }
 
-    else {
+    else if (
+      velocityY >
+      -3.8
+    ) {
 
-      setPlayerImage(
-        jumpFrames[5]
-      );
+      jumpFrameIndex =
+        4;
 
     }
+
+
+    setPlayerImage(
+      jumpFrames[
+        jumpFrameIndex
+      ]
+    );
+
+
+    lastAnimationPose =
+      "jump";
 
 
     return;
@@ -3675,9 +3758,17 @@ function updatePlayerAnimation(
   }
 
 
+  // =====================================================
+  // IDLE
+  // =====================================================
+
+  const moving =
+    keys.left ||
+    keys.right;
+
+
   if (
-    !keys.left &&
-    !keys.right
+    !moving
   ) {
 
     currentPose =
@@ -3689,29 +3780,44 @@ function updatePlayerAnimation(
     );
 
 
+    runFrame =
+      0;
+
+
+    lastRunFrameTime =
+      timestamp;
+
+
+    lastAnimationPose =
+      "idle";
+
+
     return;
 
   }
 
 
+  // =====================================================
+  // RUN
+  // =====================================================
+
   currentPose =
     "run";
 
 
+  /*
+    Show the first running frame immediately when:
+    - starting to move from idle
+    - landing while the movement button is still held
+    This removes the short frozen jump/idle frame that was visible before.
+  */
   if (
-    timestamp -
-    lastRunFrameTime >=
-    115
+    lastAnimationPose !==
+    "run"
   ) {
 
     runFrame =
-
-      (
-        runFrame +
-        1
-      ) %
-
-      runFrames.length;
+      0;
 
 
     setPlayerImage(
@@ -3723,6 +3829,85 @@ function updatePlayerAnimation(
 
     lastRunFrameTime =
       timestamp;
+
+
+    lastAnimationPose =
+      "run";
+
+
+    return;
+
+  }
+
+
+  /*
+    Faster phone movement should also animate a little faster.
+    Desktop stays near the original animation speed.
+  */
+  const movementMultiplier =
+    window.FofoPolish
+      ?.getMoveMultiplier
+      ?.() ||
+    1;
+
+
+  const runFrameDuration =
+    Math.max(
+      72,
+      Math.min(
+        108,
+        RUN_FRAME_BASE_MS /
+        movementMultiplier
+      )
+    );
+
+
+  const elapsed =
+    timestamp -
+    lastRunFrameTime;
+
+
+  if (
+    elapsed >=
+    runFrameDuration
+  ) {
+
+    /*
+      If a phone misses a render frame, advance by the elapsed amount
+      rather than slowing the animation down.
+      Cap the catch-up so the animation never visibly teleports.
+    */
+    const steps =
+      Math.min(
+        3,
+        Math.max(
+          1,
+          Math.floor(
+            elapsed /
+            runFrameDuration
+          )
+        )
+      );
+
+
+    runFrame =
+      (
+        runFrame +
+        steps
+      ) %
+      runFrames.length;
+
+
+    setPlayerImage(
+      runFrames[
+        runFrame
+      ]
+    );
+
+
+    lastRunFrameTime +=
+      steps *
+      runFrameDuration;
 
   }
 
