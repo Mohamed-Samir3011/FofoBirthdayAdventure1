@@ -416,11 +416,19 @@ const ASSETS = {
 
 const levelMusic =
     new Audio(
-        "assets/level2_audio/level2_music.mp3"
+        "assets/level2_audio/level2_music.mp3?v=audio-l23-fullart-v1"
     );
 
 levelMusic.loop =
     true;
+
+levelMusic.preload =
+    "auto";
+
+levelMusic.setAttribute(
+    "playsinline",
+    ""
+);
 
 levelMusic.volume =
     0.88;
@@ -467,22 +475,115 @@ let audioStarted =
     false;
 
 
+let musicStartInFlight =
+    false;
+
+
 // =========================================================
 // AUDIO FUNCTIONS
 // =========================================================
 
-function startAudio() {
+function level2MusicEnabled() {
 
-    if (audioStarted) {
-        return;
+    return (
+        localStorage.getItem(
+            "fofoMusicEnabled"
+        ) !== "false"
+    );
+}
+
+
+function level2MusicVolume() {
+
+    const saved =
+        Number(
+            localStorage.getItem(
+                "fofoMusicVolume"
+            )
+        );
+
+
+    if (
+        Number.isFinite(saved)
+    ) {
+
+        return Math.max(
+            0,
+            Math.min(
+                1,
+                saved / 100
+            )
+        ) * .88;
     }
 
+
+    return .88;
+}
+
+
+async function startAudio() {
+
+    /*
+      IMPORTANT:
+      Never permanently mark the music as started after a rejected
+      play(). Android may reject the first call when fullscreen is
+      being restored. Every real tap is allowed to retry.
+    */
     audioStarted =
         true;
 
-    levelMusic
-        .play()
-        .catch(() => {});
+
+    if (
+        !level2MusicEnabled()
+    ) {
+
+        levelMusic.pause();
+
+        return false;
+    }
+
+
+    levelMusic.volume =
+        level2MusicVolume();
+
+
+    if (
+        !levelMusic.paused
+    ) {
+
+        return true;
+    }
+
+
+    if (
+        musicStartInFlight
+    ) {
+
+        return false;
+    }
+
+
+    musicStartInFlight =
+        true;
+
+
+    try {
+
+        await levelMusic.play();
+
+        musicStartInFlight =
+            false;
+
+        return true;
+
+    }
+    catch (error) {
+
+        musicStartInFlight =
+            false;
+
+        return false;
+    }
 }
 
 
@@ -492,11 +593,50 @@ function playSound(sound) {
         return;
     }
 
+
+    if (
+        localStorage.getItem(
+            "fofoSfxEnabled"
+        ) === "false"
+    ) {
+
+        return;
+    }
+
+
     const copy =
         sound.cloneNode();
 
+
+    const savedVolume =
+        Number(
+            localStorage.getItem(
+                "fofoSfxVolume"
+            )
+        );
+
+
+    const volumeMultiplier =
+        Number.isFinite(
+            savedVolume
+        )
+            ? Math.max(
+                0,
+                Math.min(
+                    1,
+                    savedVolume / 100
+                )
+            )
+            : 1;
+
+
     copy.volume =
-        sound.volume;
+        Math.min(
+            1,
+            sound.volume *
+            volumeMultiplier
+        );
+
 
     copy
         .play()
@@ -504,20 +644,32 @@ function playSound(sound) {
 }
 
 
-document.addEventListener(
+/*
+  fullscreen.js calls this in capture phase BEFORE entering fullscreen.
+  That keeps the audio call inside the original mobile user gesture.
+*/
+window.FofoAudioUnlock =
+    startAudio;
+
+
+[
     "pointerdown",
-    startAudio,
-    {
-        once: true
-    }
-);
+    "touchstart",
+    "click",
+    "keydown"
+].forEach(
+    eventName => {
 
+        document.addEventListener(
+            eventName,
+            startAudio,
+            {
+                passive:
+                    eventName ===
+                    "touchstart"
+            }
+        );
 
-document.addEventListener(
-    "keydown",
-    startAudio,
-    {
-        once: true
     }
 );
 

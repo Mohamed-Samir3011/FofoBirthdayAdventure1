@@ -200,6 +200,21 @@
   */
   async function restoreOnGesture() {
 
+    /*
+      On Android Chrome, requestFullscreen() can consume the transient
+      user activation that audio.play() also needs.
+
+      Levels 2 and 3 expose FofoAudioUnlock. Call it FIRST, while this
+      capture-phase pointer/touch event still owns the user gesture.
+    */
+    try {
+
+      window.FofoAudioUnlock?.();
+
+    }
+    catch (error) {}
+
+
     if (
       isWanted() &&
       !isActive()

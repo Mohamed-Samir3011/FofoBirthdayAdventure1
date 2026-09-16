@@ -576,11 +576,15 @@ let sfxVolume =
 // AUDIO
 // =========================================================
 
+const LEVEL3_MUSIC_FALLBACK =
+  "assets/level3_audio/level3_music.mp3?v=audio-l23-fullart-v1";
+
+
 const AUDIO = {
 
   music:
     new Audio(
-      "assets/level3_audio/modern-classical-piano-513745.mp3"
+      "assets/level3_audio/modern-classical-piano-513745.mp3?v=audio-l23-fullart-v1"
     ),
 
   jump:
@@ -683,6 +687,12 @@ AUDIO.music.preload =
   "auto";
 
 
+AUDIO.music.setAttribute(
+  "playsinline",
+  ""
+);
+
+
 Object.entries(
   AUDIO
 ).forEach(
@@ -718,34 +728,126 @@ function syncAudioVolumes() {
 }
 
 
-function startAudio() {
-
-  if (
-    audioStarted
-  ) {
-
-    return;
-
-  }
+let musicStartInFlight =
+  false;
 
 
+let fallbackMusicTried =
+  false;
+
+
+async function startAudio() {
+
+  /*
+    Keep SFX unlocked after the first gesture, but keep retrying music
+    whenever it is still paused. This is important after fullscreen
+    restoration on Android Chrome.
+  */
   audioStarted =
     true;
+
+
+  musicEnabled =
+    readBool(
+      "fofoMusicEnabled",
+      true
+    );
+
+
+  musicVolume =
+    readVolume(
+      "fofoMusicVolume",
+      .86
+    );
 
 
   syncAudioVolumes();
 
 
   if (
-    musicEnabled
+    !musicEnabled
   ) {
 
-    AUDIO.music
-      .play()
-      .catch(
-        () => {}
-      );
+    AUDIO.music.pause();
 
+    return false;
+
+  }
+
+
+  if (
+    !AUDIO.music.paused
+  ) {
+
+    return true;
+
+  }
+
+
+  if (
+    musicStartInFlight
+  ) {
+
+    return false;
+
+  }
+
+
+  musicStartInFlight =
+    true;
+
+
+  try {
+
+    await AUDIO.music.play();
+
+    musicStartInFlight =
+      false;
+
+    return true;
+
+  }
+  catch (error) {
+
+    /*
+      If the cinematic piano file itself fails on a browser/device,
+      Level 3 already has another MP3 in the project. Swap to it once
+      and retry on the same gesture when possible.
+    */
+    if (
+      !fallbackMusicTried
+    ) {
+
+      fallbackMusicTried =
+        true;
+
+
+      AUDIO.music.src =
+        LEVEL3_MUSIC_FALLBACK;
+
+
+      AUDIO.music.load();
+
+
+      try {
+
+        await AUDIO.music.play();
+
+        musicStartInFlight =
+          false;
+
+        return true;
+
+      }
+      catch (fallbackError) {}
+
+    }
+
+
+    musicStartInFlight =
+      false;
+
+    return false;
   }
 
 }
@@ -833,20 +935,32 @@ function playSfx(
 }
 
 
-document.addEventListener(
+/*
+  fullscreen.js invokes this before requestFullscreen() consumes the
+  mobile activation. The normal listeners remain as retries.
+*/
+window.FofoAudioUnlock =
+  startAudio;
+
+
+[
   "pointerdown",
-  startAudio,
-  {
-    once: true
-  }
-);
+  "touchstart",
+  "click",
+  "keydown"
+].forEach(
+  eventName => {
 
+    document.addEventListener(
+      eventName,
+      startAudio,
+      {
+        passive:
+          eventName ===
+          "touchstart"
+      }
+    );
 
-document.addEventListener(
-  "keydown",
-  startAudio,
-  {
-    once: true
   }
 );
 
