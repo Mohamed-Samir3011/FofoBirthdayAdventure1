@@ -2253,6 +2253,10 @@ function damagePlayer(){
 
   health--;
 
+  window.FofoPolish?.haptic(
+    "hurt"
+  );
+
   updateHUD();
 
   sfx(
@@ -2366,6 +2370,10 @@ function checkShards(){
         "none";
 
       collected++;
+
+      window.FofoPolish?.haptic(
+        "collect"
+      );
 
       updateHUD();
       popCounter();
@@ -2571,6 +2579,8 @@ function checkCheckpoints(){
         .72
       );
 
+      window.FofoPolish?.checkpoint();
+
       showMessage(
         "Checkpoint — one memory closer to our date. ✨",
         900
@@ -2683,6 +2693,10 @@ function finishLevel(){
     1
   );
 
+  window.FofoPolish?.haptic(
+    "finale"
+  );
+
   localStorage.setItem(
     "fofoLevel4Completed",
     "true"
@@ -2766,8 +2780,14 @@ continueButton.addEventListener(
       the birthday ending sequence first.
     */
 
-    window.location.href =
-      "ending.html";
+    if (window.FofoPolish) {
+      window.FofoPolish.navigate(
+        "ending.html"
+      );
+    } else {
+      window.location.href =
+        "ending.html";
+    }
   }
 );
 
@@ -2833,6 +2853,23 @@ function loop(
   updateFrameFactor(
     timestamp
   );
+
+  if (
+    window.FofoPolish &&
+    window.FofoPolish.isPaused()
+  ) {
+
+    lastFrameTimestamp =
+      timestamp;
+
+    requestAnimationFrame(
+      loop
+    );
+
+    return;
+
+  }
+
 
   if(!finished){
 

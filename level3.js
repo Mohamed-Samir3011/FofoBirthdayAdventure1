@@ -4054,6 +4054,10 @@ function damagePlayer() {
 
   health--;
 
+  window.FofoPolish?.haptic(
+    "hurt"
+  );
+
 
   updateHUD(
     previousHealth -
@@ -4500,6 +4504,10 @@ function checkNotes() {
 
       collectedNotes++;
 
+      window.FofoPolish?.haptic(
+        "collect"
+      );
+
 
       playSfx(
 
@@ -4589,6 +4597,8 @@ function updateCheckpoints() {
         "checkpoint",
         .75
       );
+
+      window.FofoPolish?.checkpoint();
 
 
       showMessage(
@@ -4989,8 +4999,14 @@ continueButton.addEventListener(
   "click",
   () => {
 
-    window.location.href =
-      "index.html";
+    if (window.FofoPolish) {
+      window.FofoPolish.navigate(
+        "index.html"
+      );
+    } else {
+      window.location.href =
+        "index.html";
+    }
 
   }
 );
@@ -5082,6 +5098,23 @@ function gameLoop(
   updateFrameFactor(
     timestamp
   );
+
+  if (
+    window.FofoPolish &&
+    window.FofoPolish.isPaused()
+  ) {
+
+    lastFrameTimestamp =
+      timestamp;
+
+    requestAnimationFrame(
+      gameLoop
+    );
+
+    return;
+
+  }
+
 
   if (
     !gameFinished

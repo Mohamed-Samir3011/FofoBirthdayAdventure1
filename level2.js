@@ -3015,6 +3015,10 @@ function damagePlayer() {
 
     health--;
 
+    window.FofoPolish?.haptic(
+        "hurt"
+    );
+
 
     updateHUD(
         previousHealth -
@@ -3563,6 +3567,10 @@ function checkBlooms() {
 
             collectedBlooms++;
 
+            window.FofoPolish?.haptic(
+                "collect"
+            );
+
 
             playSound(
                 bloomSound
@@ -3636,6 +3644,8 @@ function updateCheckpoints() {
                 "Checkpoint reached ✨",
                 700
             );
+
+            window.FofoPolish?.checkpoint();
         }
     );
 }
@@ -3985,8 +3995,14 @@ continueButton.addEventListener(
             0;
 
 
-        window.location.href =
-            "index.html";
+        if (window.FofoPolish) {
+            window.FofoPolish.navigate(
+                "index.html"
+            );
+        } else {
+            window.location.href =
+                "index.html";
+        }
     }
 );
 
@@ -4074,6 +4090,23 @@ function gameLoop(timestamp) {
   updateFrameFactor(
     timestamp
   );
+
+  if (
+    window.FofoPolish &&
+    window.FofoPolish.isPaused()
+  ) {
+
+    lastFrameTimestamp =
+      timestamp;
+
+    requestAnimationFrame(
+      gameLoop
+    );
+
+    return;
+
+  }
+
 
     if (
         !gameFinished

@@ -401,6 +401,19 @@ function enterLevelOne() {
 
   menuRoot?.classList.add("hidden");
   applyAudioSettings();
+
+  if (
+    window.FofoPolish
+  ) {
+
+    window.FofoPolish.startLevel(
+      1,
+      {
+        fast:true
+      }
+    );
+
+  }
 }
 
 function openLevel(level) {
@@ -418,19 +431,31 @@ function openLevel(level) {
 
   if (level === 2) {
     localStorage.setItem(STORAGE.lastLevel, "2");
-    window.location.href = "level2.html";
+    if (window.FofoPolish) {
+      window.FofoPolish.navigate("level2.html");
+    } else {
+      window.location.href = "level2.html";
+    }
     return;
   }
 
   if (level === 3) {
     localStorage.setItem(STORAGE.lastLevel, "3");
-    window.location.href = "level3.html";
+    if (window.FofoPolish) {
+      window.FofoPolish.navigate("level3.html");
+    } else {
+      window.location.href = "level3.html";
+    }
     return;
   }
 
   if (level === 4) {
     localStorage.setItem(STORAGE.lastLevel, "4");
-    window.location.href = "level4.html";
+    if (window.FofoPolish) {
+      window.FofoPolish.navigate("level4.html");
+    } else {
+      window.location.href = "level4.html";
+    }
     return;
   }
 }

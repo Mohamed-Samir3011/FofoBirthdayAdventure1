@@ -1169,6 +1169,10 @@ function damagePlayerFromEnemy(sourceX) {
 
   health--;
 
+  window.FofoPolish?.haptic(
+    "hurt"
+  );
+
 
   health =
     Math.max(
@@ -1242,6 +1246,10 @@ function damagePlayerFromFall() {
 
 
   health--;
+
+  window.FofoPolish?.haptic(
+    "hurt"
+  );
 
 
   health =
@@ -4294,6 +4302,9 @@ function checkTreats() {
 
 
         collectedTreats++;
+        window.FofoPolish?.haptic(
+          "collect"
+        );
 
 
         updateTreatHud();
@@ -4344,6 +4355,8 @@ function updateCheckpoint() {
 
         message.textContent =
           "Checkpoint reached! 💖";
+
+        window.FofoPolish?.checkpoint();
 
       }
 
@@ -4760,6 +4773,23 @@ function gameLoop(timestamp) {
   updateFrameFactor(
     timestamp
   );
+
+  if (
+    window.FofoPolish &&
+    window.FofoPolish.isPaused()
+  ) {
+
+    lastFrameTimestamp =
+      timestamp;
+
+    requestAnimationFrame(
+      gameLoop
+    );
+
+    return;
+
+  }
+
 
   updateMovingPlatforms();
 
