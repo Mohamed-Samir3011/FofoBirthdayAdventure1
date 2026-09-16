@@ -472,7 +472,7 @@ window.addEventListener(
 
 const menuBirthdayMusic =
   new Audio(
-    "assets/audio/menu_birthday.mp3"
+    "assets/Audio/menu_birthday.mp3"
   );
 
 
