@@ -193,6 +193,7 @@
         <button type="button" class="fofo-toggle" data-pause-action="sfx"></button>
         <button type="button" class="fofo-toggle" data-pause-action="fullscreen"></button>
         <button type="button" class="fofo-toggle" data-pause-action="performance"></button>
+        <button type="button" class="fofo-toggle" data-pause-action="speed"></button>
       </div>
     </div>
   `;
@@ -968,6 +969,108 @@
   }
 
 
+
+  // -------------------------------------------------------
+  // Mobile character speed
+  // -------------------------------------------------------
+
+  function getMobileSpeedMode() {
+
+    return (
+      localStorage.getItem(
+        "fofoMobileSpeed"
+      ) ||
+      "fast"
+    );
+
+  }
+
+
+  function getMoveMultiplier() {
+
+    const isTouchPhone =
+      (
+        navigator.maxTouchPoints > 0 ||
+        matchMedia(
+          "(pointer:coarse)"
+        ).matches
+      ) &&
+      Math.min(
+        window.innerWidth,
+        window.innerHeight
+      ) <= 760;
+
+
+    if (
+      !isTouchPhone
+    ) {
+
+      return 1;
+
+    }
+
+
+    const mode =
+      getMobileSpeedMode();
+
+
+    if (
+      mode === "turbo"
+    ) {
+
+      return 1.55;
+
+    }
+
+
+    if (
+      mode === "normal"
+    ) {
+
+      return 1.15;
+
+    }
+
+
+    /*
+      Default on phones.
+      Gives Fofo a noticeably faster feel without making
+      collisions or platforming unstable.
+    */
+    return 1.38;
+  }
+
+
+  function cycleMobileSpeed() {
+
+    const current =
+      getMobileSpeedMode();
+
+
+    const next =
+      current === "normal"
+        ? "fast"
+        : current === "fast"
+          ? "turbo"
+          : "normal";
+
+
+    localStorage.setItem(
+      "fofoMobileSpeed",
+      next
+    );
+
+
+    updatePauseLabels();
+
+
+    haptic(
+      "light"
+    );
+
+  }
+
+
   function updatePauseLabels() {
 
     const musicEnabled =
@@ -1018,6 +1121,12 @@
       );
 
 
+    const speedButton =
+      pauseOverlay.querySelector(
+        '[data-pause-action="speed"]'
+      );
+
+
     if (
       musicButton
     ) {
@@ -1054,6 +1163,21 @@
 
       performanceButton.textContent =
         `PERFORMANCE: ${performance ? "ON" : "AUTO"}`;
+
+    }
+
+
+    if (
+      speedButton
+    ) {
+
+      const speedMode =
+        getMobileSpeedMode()
+          .toUpperCase();
+
+
+      speedButton.textContent =
+        `PHONE SPEED: ${speedMode}`;
 
     }
 
@@ -1377,6 +1501,17 @@
           !currentlyOn,
           true
         );
+
+      }
+
+
+      if (
+        action === "speed"
+      ) {
+
+        cycleMobileSpeed();
+
+        return;
 
       }
 
@@ -1854,7 +1989,9 @@
     haptic,
     navigate,
     sceneReveal,
-    setPerformanceMode
+    setPerformanceMode,
+    getMoveMultiplier,
+    getMobileSpeedMode
   };
 
 

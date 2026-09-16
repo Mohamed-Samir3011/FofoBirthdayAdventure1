@@ -491,3 +491,11 @@ body.fofo-performance-mode .fofo-petal:nth-child(n+13){
     width:min(67vw,500px);
   }
 }
+
+
+/* Phone movement speed selector */
+.fofo-toggle[data-pause-action="speed"]{
+  grid-column:1/-1;
+  border-color:rgba(239,194,126,.58);
+  background:rgba(128,35,66,.46);
+}

@@ -2887,6 +2887,10 @@ function updateHorizontal() {
 
     playerX +=
       SPEED *
+      (
+        window.FofoPolish?.getMoveMultiplier?.() ||
+        1
+      ) *
       frameFactor;
 
     facingRight =
@@ -2901,6 +2905,10 @@ function updateHorizontal() {
 
     playerX -=
       SPEED *
+      (
+        window.FofoPolish?.getMoveMultiplier?.() ||
+        1
+      ) *
       frameFactor;
 
     facingRight =

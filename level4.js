@@ -1708,6 +1708,10 @@ function updateHorizontal(){
   if(keys.right){
     playerX +=
       SPEED *
+      (
+        window.FofoPolish?.getMoveMultiplier?.() ||
+        1
+      ) *
       frameFactor;
     facingRight = true;
   }
@@ -1715,6 +1719,10 @@ function updateHorizontal(){
   if(keys.left){
     playerX -=
       SPEED *
+      (
+        window.FofoPolish?.getMoveMultiplier?.() ||
+        1
+      ) *
       frameFactor;
     facingRight = false;
   }
