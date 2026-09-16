@@ -1,0 +1,1187 @@
+* {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #47102d;
+    font-family: "BenchNine", Arial, sans-serif;
+}
+
+body {
+    touch-action: none;
+}
+
+/* ======================================================
+   GAME
+====================================================== */
+
+#game {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 78% 11%,
+            #ffe0ad 0 42px,
+            rgba(255,224,173,.18) 43px 82px,
+            transparent 83px
+        ),
+        linear-gradient(
+            180deg,
+            #8f3f5e 0%,
+            #be7488 52%,
+            #dfa7af 100%
+        );
+}
+
+#world {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 7800px;
+    height: 100%;
+
+    will-change: transform;
+}
+
+/* ======================================================
+   BACKGROUND
+====================================================== */
+
+.background-hill {
+    position: absolute;
+    bottom: 110px;
+
+    border-radius: 52% 52% 0 0;
+
+    background:
+        rgba(69, 86, 65, .42);
+
+    z-index: 1;
+}
+
+.background-hill.far {
+    opacity: .42;
+}
+
+.background-hill.near {
+    opacity: .58;
+}
+
+.background-light {
+    position: absolute;
+
+    width: 9px;
+    height: 9px;
+
+    border-radius: 50%;
+
+    background: #ffe3a0;
+
+    box-shadow:
+        0 0 12px #ffe3a0,
+        0 0 22px rgba(255,218,141,.45);
+
+    z-index: 2;
+
+    animation:
+        floatingLight 2.8s ease-in-out infinite;
+}
+
+@keyframes floatingLight {
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: .32;
+    }
+
+    50% {
+        transform: translateY(-11px);
+        opacity: 1;
+    }
+}
+
+/* ======================================================
+   GROUND
+====================================================== */
+
+.ground-strip {
+    position: absolute;
+
+    bottom: 0;
+
+    height: 110px;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: 12;
+}
+
+.ground-tile {
+    position: absolute;
+
+    bottom: -35px;
+
+    height: 145px;
+
+    max-width: none;
+
+    object-fit: contain;
+
+    pointer-events: none;
+}
+
+/* ======================================================
+   PLAYER
+====================================================== */
+
+.player {
+    position: absolute;
+
+    width: 88px;
+    height: 112px;
+
+    object-fit: contain;
+    object-position: center bottom;
+
+    transform-origin: bottom center;
+
+    pointer-events: none;
+
+    z-index: 70;
+
+    filter:
+        drop-shadow(
+            0 5px 5px rgba(40,5,24,.22)
+        );
+}
+
+.player.hurt {
+    animation:
+        hurtFlash .13s linear infinite;
+}
+
+@keyframes hurtFlash {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .22;
+    }
+}
+
+/* ======================================================
+   PLATFORMS
+====================================================== */
+
+.garden-platform,
+.flower-platform {
+    position: absolute;
+
+    object-fit: fill;
+
+    pointer-events: none;
+
+    z-index: 30;
+
+    filter:
+        drop-shadow(
+            0 7px 7px rgba(42,5,24,.24)
+        );
+}
+
+.bounce-platform {
+    animation:
+        bounceIdle 1.7s ease-in-out infinite;
+}
+
+@keyframes bounceIdle {
+    0%,
+    100% {
+        translate: 0 0;
+    }
+
+    50% {
+        translate: 0 -3px;
+    }
+}
+
+.bounce-platform.bounced {
+    animation:
+        bouncePress .23s ease !important;
+}
+
+@keyframes bouncePress {
+    0% {
+        transform: scaleY(1);
+    }
+
+    48% {
+        transform: scaleY(.7);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+/* ======================================================
+   COLUMN DECOR
+====================================================== */
+
+.garden-column {
+    position: absolute;
+
+    object-fit: contain;
+
+    pointer-events: none;
+
+    z-index: 9;
+
+    opacity: .88;
+
+    filter:
+        drop-shadow(
+            0 8px 8px rgba(42,5,24,.2)
+        );
+}
+
+/* ======================================================
+   THORNS
+====================================================== */
+
+.thorn-hazard {
+    position: absolute;
+
+    object-fit: contain;
+
+    object-position: center bottom;
+
+    pointer-events: none;
+
+    z-index: 38;
+}
+
+/* ======================================================
+   ENEMIES
+====================================================== */
+
+.level2-enemy {
+    position: absolute;
+
+    object-fit: contain;
+
+    pointer-events: none;
+
+    transform-origin: center center;
+
+    z-index: 44;
+
+    filter:
+        drop-shadow(
+            0 6px 6px rgba(38,4,21,.24)
+        );
+}
+
+.bee-enemy {
+    animation:
+        beeWobble .43s ease-in-out infinite alternate;
+}
+
+@keyframes beeWobble {
+    from {
+        rotate: -3deg;
+    }
+
+    to {
+        rotate: 3deg;
+    }
+}
+
+.enemy-dead {
+    animation:
+        enemyDeath .34s ease forwards !important;
+}
+
+@keyframes enemyDeath {
+    0% {
+        opacity: 1;
+        scale: 1;
+    }
+
+    55% {
+        scale: 1.18 .58;
+    }
+
+    100% {
+        opacity: 0;
+        scale: .2;
+    }
+}
+
+/* ======================================================
+   BLOOMS
+====================================================== */
+
+.baby-bloom {
+    position: absolute;
+
+    width: 54px;
+    height: 54px;
+
+    z-index: 43;
+
+    animation:
+        bloomFloat 1.3s ease-in-out infinite;
+
+    filter:
+        drop-shadow(
+            0 0 8px rgba(255,255,255,.85)
+        );
+}
+
+.baby-bloom::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 4px;
+
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            #e3ae3e 0 12%,
+            transparent 13%
+        ),
+
+        radial-gradient(
+            circle at 50% 17%,
+            #fffef7 0 23%,
+            transparent 24%
+        ),
+
+        radial-gradient(
+            circle at 81% 41%,
+            #fffef7 0 22%,
+            transparent 23%
+        ),
+
+        radial-gradient(
+            circle at 69% 77%,
+            #fffef7 0 22%,
+            transparent 23%
+        ),
+
+        radial-gradient(
+            circle at 30% 77%,
+            #fffef7 0 22%,
+            transparent 23%
+        ),
+
+        radial-gradient(
+            circle at 19% 41%,
+            #fffef7 0 22%,
+            transparent 23%
+        );
+}
+
+@keyframes bloomFloat {
+    0%,
+    100% {
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translateY(-7px)
+            scale(1.04);
+    }
+}
+
+/* ======================================================
+   GATE
+====================================================== */
+
+.secret-garden-gate {
+    position: absolute;
+
+    object-fit: contain;
+    object-position: bottom center;
+
+    transform-origin: bottom center;
+
+    pointer-events: none;
+
+    z-index: 55;
+}
+
+.secret-garden-gate.locked {
+    opacity: .7;
+
+    filter:
+        grayscale(.7)
+        brightness(.68);
+}
+
+.secret-garden-gate.unlocked {
+    opacity: 1;
+
+    filter:
+        drop-shadow(
+            0 0 18px rgba(255,221,143,.8)
+        );
+
+    animation:
+        gatePulse 1.45s ease-in-out infinite alternate;
+}
+
+@keyframes gatePulse {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.018);
+    }
+}
+
+/* ======================================================
+   HUD
+====================================================== */
+
+#hud {
+    position: fixed;
+
+    top: 9px;
+    left: 12px;
+    right: 12px;
+
+    z-index: 300;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr auto 1fr;
+
+    align-items: start;
+
+    pointer-events: none;
+}
+
+/*
+   Level badge was too small.
+*/
+
+.level-badge {
+    justify-self: start;
+
+    width: 178px;
+    height: auto;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(
+            0 6px 8px rgba(40,5,22,.3)
+        );
+}
+
+/*
+   Hearts stay exactly the same style.
+*/
+
+#heartsHud {
+    justify-self: center;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    padding: 7px 13px;
+
+    border-radius: 25px;
+
+    border:
+        2px solid rgba(255,226,193,.8);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(107,20,56,.94),
+            rgba(60,8,35,.96)
+        );
+
+    box-shadow:
+        0 6px 12px rgba(40,4,22,.25);
+}
+
+.heart-image {
+    width: 54px;
+    height: 54px;
+
+    object-fit: contain;
+}
+
+.heart-image.heart-hit {
+    animation:
+        heartHit .34s ease;
+}
+
+@keyframes heartHit {
+    0% {
+        scale: 1;
+    }
+
+    40% {
+        scale: .66;
+    }
+
+    70% {
+        scale: 1.15;
+    }
+
+    100% {
+        scale: 1;
+    }
+}
+
+/*
+   Counter enlarged to visually balance the heart bar.
+*/
+
+.counter-image {
+    justify-self: end;
+
+    width: 195px;
+    height: auto;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(
+            0 6px 8px rgba(40,5,22,.3)
+        );
+}
+
+.counter-image.pop {
+    animation:
+        counterPop .3s ease;
+}
+
+@keyframes counterPop {
+    0% {
+        scale: 1;
+    }
+
+    45% {
+        scale: 1.13;
+    }
+
+    100% {
+        scale: 1;
+    }
+}
+
+/* ======================================================
+   MESSAGE
+====================================================== */
+
+.message-box {
+    position: fixed;
+
+    top: 88px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 280;
+
+    min-width: 255px;
+
+    padding:
+        7px 18px;
+
+    border-radius: 18px;
+
+    border:
+        2px solid rgba(255,255,255,.8);
+
+    background:
+        rgba(255,247,239,.94);
+
+    color: #742047;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    text-align: center;
+
+    box-shadow:
+        0 7px 14px rgba(44,5,25,.2);
+
+    transition:
+        opacity .3s ease;
+}
+
+.message-box.hidden {
+    opacity: 0;
+}
+
+/* ======================================================
+   CONTROLS — UNCHANGED
+====================================================== */
+
+#controls {
+    position: fixed;
+
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+
+    z-index: 400;
+
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: space-between;
+
+    pointer-events: none;
+}
+
+.left-controls {
+    display: flex;
+
+    gap: 8px;
+
+    pointer-events: auto;
+}
+
+.game-control {
+    width: 88px;
+    height: 88px;
+
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+}
+
+.jump-control {
+    width: 104px;
+    height: 104px;
+}
+
+.game-control img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    pointer-events: none;
+
+    filter:
+        drop-shadow(
+            0 7px 7px rgba(40,5,23,.34)
+        );
+}
+
+.game-control.pressed img {
+    transform:
+        translateY(4px)
+        scale(.94);
+}
+
+/* ======================================================
+   FINALE — SAME SYSTEM
+====================================================== */
+
+.hidden {
+    display: none !important;
+}
+
+.finale-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #862e54,
+            #420a29
+        );
+}
+
+.finale-screen {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+}
+
+.finale-screen h1 {
+    margin:
+        0 0 5px;
+
+    color: #fff3e2;
+
+    font-size:
+        clamp(
+            32px,
+            5vw,
+            53px
+        );
+}
+
+.finale-screen h2 {
+    position: relative;
+
+    z-index: 4;
+
+    margin:
+        3px 0;
+
+    color: #fff1d5;
+
+    font-size:
+        clamp(
+            30px,
+            4.5vw,
+            48px
+        );
+
+    text-align: center;
+}
+
+.finale-screen p {
+    position: relative;
+
+    z-index: 4;
+
+    margin:
+        4px 0 10px;
+
+    color: #f7d7df;
+
+    font-size:
+        clamp(
+            18px,
+            2.8vw,
+            27px
+        );
+}
+
+.plant-area {
+    position: relative;
+
+    width:
+        min(
+            560px,
+            80vw
+        );
+
+    height: 225px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.soil-image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(
+            0 14px 17px rgba(25,2,14,.4)
+        );
+}
+
+.plant-smoke {
+    position: absolute;
+
+    left: 50%;
+    top: 40%;
+
+    translate:
+        -50% -50%;
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.plant-smoke.active {
+    animation:
+        plantMagic 1.25s ease-out forwards;
+}
+
+@keyframes plantMagic {
+    0% {
+        opacity: 1;
+
+        width: 20px;
+        height: 20px;
+
+        background: white;
+
+        box-shadow:
+            0 0 20px #fff,
+            0 0 45px #ffd783;
+    }
+
+    40% {
+        opacity: .9;
+
+        width: 150px;
+        height: 150px;
+
+        filter: blur(12px);
+    }
+
+    100% {
+        opacity: 0;
+
+        width: 440px;
+        height: 440px;
+
+        filter: blur(45px);
+    }
+}
+
+.finale-image-button {
+    border: 0;
+
+    padding: 0;
+
+    background: transparent;
+
+    cursor: pointer;
+}
+
+.finale-image-button img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    object-fit: contain;
+
+    pointer-events: none;
+}
+
+.plant-button {
+    width:
+        min(
+            440px,
+            70vw
+        );
+
+    margin-top: -18px;
+}
+
+.gift-light {
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,225,161,.32),
+            transparent 67%
+        );
+
+    animation:
+        giftLight 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes giftLight {
+    from {
+        opacity: .4;
+        scale: .82;
+    }
+
+    to {
+        opacity: 1;
+        scale: 1.1;
+    }
+}
+
+.floating-gift {
+    position: relative;
+
+    z-index: 3;
+
+    width:
+        min(
+            390px,
+            68vw
+        );
+
+    max-height: 57vh;
+
+    object-fit: contain;
+
+    opacity: 0;
+
+    filter:
+        drop-shadow(
+            0 23px 25px rgba(24,2,13,.4)
+        );
+}
+
+.floating-gift.show {
+    animation:
+        giftEnter .85s ease forwards,
+        giftFloating 3s ease-in-out .9s infinite;
+}
+
+@keyframes giftEnter {
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(50px)
+            scale(.6);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+@keyframes giftFloating {
+    0%,
+    100% {
+        transform:
+            translateY(0)
+            rotate(-1.2deg);
+    }
+
+    50% {
+        transform:
+            translateY(-15px)
+            rotate(1.2deg);
+    }
+}
+
+.gift-story-button {
+    position: relative;
+
+    z-index: 4;
+
+    width:
+        min(
+            350px,
+            60vw
+        );
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    translate:
+        0 15px;
+
+    transition:
+        opacity .45s ease,
+        translate .45s ease;
+}
+
+.gift-story-button.show {
+    opacity: 1;
+
+    pointer-events: auto;
+
+    translate:
+        0 0;
+}
+
+.story-screen {
+    gap: 10px;
+}
+
+.story-letter {
+    width: auto;
+
+    height:
+        min(
+            76vh,
+            650px
+        );
+
+    max-width: 89vw;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(
+            0 18px 22px rgba(23,2,13,.42)
+        );
+}
+
+.story-button-area {
+    display: flex;
+
+    gap: 15px;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.story-footer-button {
+    width:
+        min(
+            310px,
+            38vw
+        );
+}
+
+/* ======================================================
+   MOBILE LANDSCAPE
+====================================================== */
+
+@media
+(
+    orientation: landscape
+)
+and
+(
+    max-height: 600px
+) {
+
+    .level-badge {
+        width: 138px;
+    }
+
+    .counter-image {
+        width: 150px;
+    }
+
+    .heart-image {
+        width: 40px;
+        height: 40px;
+    }
+
+    #heartsHud {
+        padding:
+            4px 8px;
+    }
+
+    .message-box {
+        top: 64px;
+
+        padding:
+            4px 13px;
+
+        font-size: 16px;
+    }
+
+    .game-control {
+        width: 72px;
+        height: 72px;
+    }
+
+    .jump-control {
+        width: 88px;
+        height: 88px;
+    }
+
+    .plant-area {
+        height: 140px;
+
+        width: 350px;
+    }
+
+    .plant-button {
+        width: 330px;
+    }
+
+    .floating-gift {
+        width: 250px;
+
+        max-height: 53vh;
+    }
+
+    .gift-story-button {
+        position: absolute;
+
+        right: 18px;
+        bottom: 10px;
+
+        width: 220px;
+    }
+
+    .story-screen {
+        flex-direction: row;
+    }
+
+    .story-letter {
+        height: 87vh;
+
+        max-width: 70vw;
+    }
+
+    .story-button-area {
+        flex-direction: column;
+    }
+
+    .story-footer-button {
+        width: 190px;
+    }
+}

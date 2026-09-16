@@ -1,0 +1,809 @@
+/* =====================================================
+   LEVEL 1 GIFT REVEAL
+===================================================== */
+
+.gift-reveal-screen,
+.gift-story-screen {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 30000;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  padding: 20px;
+}
+
+
+.gift-reveal-screen.show,
+.gift-story-screen.show {
+  display: flex;
+}
+
+
+/* =====================================================
+   GIFT REVEAL BACKGROUND
+===================================================== */
+
+.gift-reveal-screen {
+  background:
+
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(255,225,239,0.96) 0%,
+      rgba(237,154,194,0.93) 36%,
+      rgba(115,35,77,0.97) 100%
+    );
+}
+
+
+.gift-reveal-bg-glow {
+  position: absolute;
+
+  width: 70vmin;
+  height: 70vmin;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255,245,208,0.22);
+
+  filter: blur(45px);
+
+  animation:
+    rewardGlow
+    1.9s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+@keyframes rewardGlow {
+
+  from {
+    transform: scale(0.92);
+    opacity: 0.58;
+  }
+
+  to {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+}
+
+
+/* =====================================================
+   GIFT STAGE
+===================================================== */
+
+.gift-stage {
+  position: relative;
+
+  z-index: 4;
+
+  width:
+    min(
+      760px,
+      95vw
+    );
+
+  height:
+    min(
+      560px,
+      88vh
+    );
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  color: white;
+}
+
+
+.gift-reward-pill {
+  padding:
+    8px
+    18px;
+
+  border-radius: 999px;
+
+  color: #fff0f7;
+
+  font-size: 13px;
+
+  font-weight: 900;
+
+  letter-spacing: 1.4px;
+
+  background:
+    rgba(95,24,62,0.56);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.5);
+
+  box-shadow:
+    inset 0 1px 0
+    rgba(255,255,255,0.2);
+}
+
+
+.gift-stage h1 {
+  margin:
+    12px 0
+    4px;
+
+  font-size:
+    clamp(
+      25px,
+      4vw,
+      42px
+    );
+
+  line-height: 1.05;
+
+  text-shadow:
+    0 4px 12px
+    rgba(62,13,42,0.34);
+}
+
+
+.gift-hint {
+  margin:
+    4px 0;
+
+  color: #fff3f8;
+
+  font-size:
+    clamp(
+      12px,
+      1.7vw,
+      16px
+    );
+
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   GIFT BOX
+===================================================== */
+
+.gift-box-button {
+  position: relative;
+
+  width:
+    min(
+      360px,
+      44vw
+    );
+
+  height:
+    min(
+      330px,
+      47vh
+    );
+
+  margin: 0;
+
+  padding: 0;
+
+  border: 0;
+
+  outline: none;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transform-origin: center bottom;
+
+  animation:
+    giftFloat
+    1.7s
+    ease-in-out
+    infinite;
+}
+
+
+.gift-box-button img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  filter:
+    drop-shadow(
+      0 22px 18px
+      rgba(59,15,38,0.3)
+    );
+}
+
+
+@keyframes giftFloat {
+
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(-1deg);
+  }
+
+  50% {
+    transform:
+      translateY(-10px)
+      rotate(1deg);
+  }
+
+}
+
+
+.gift-box-button.opened {
+  animation:
+    giftOpened
+    0.75s
+    cubic-bezier(
+      .16,
+      .84,
+      .34,
+      1.25
+    )
+    forwards;
+}
+
+
+@keyframes giftOpened {
+
+  0% {
+    transform:
+      scale(1)
+      rotate(0deg);
+  }
+
+  35% {
+    transform:
+      scale(1.08)
+      rotate(-2deg);
+  }
+
+  70% {
+    transform:
+      scale(1.12)
+      rotate(2deg);
+  }
+
+  100% {
+    transform:
+      scale(1.03)
+      rotate(0deg);
+  }
+
+}
+
+
+/* =====================================================
+   OPEN BUTTON
+===================================================== */
+
+.open-gift-button {
+  margin-top: -10px;
+
+  min-width: 190px;
+
+  padding:
+    13px
+    26px;
+
+  border:
+    2px solid
+    rgba(255,255,255,0.78);
+
+  border-radius: 22px;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 900;
+
+  letter-spacing: 0.6px;
+
+  cursor: pointer;
+
+  background:
+    linear-gradient(
+      180deg,
+      #c95791 0%,
+      #8d2f62 100%
+    );
+
+  box-shadow:
+    0 7px 0 #5d1b42,
+    0 12px 22px rgba(60,15,39,0.25),
+    inset 0 2px 0 rgba(255,255,255,0.3);
+}
+
+
+.open-gift-button:active {
+  transform:
+    translateY(5px);
+
+  box-shadow:
+    0 2px 0 #5d1b42,
+    0 7px 13px rgba(60,15,39,0.22);
+}
+
+
+/* =====================================================
+   GIFT STORY BUTTON
+===================================================== */
+
+.gift-story-button {
+  display: none;
+
+  width:
+    min(
+      220px,
+      35vw
+    );
+
+  margin-top: 8px;
+
+  padding: 0;
+
+  border: 0;
+
+  outline: none;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  animation:
+    storyButtonIn
+    0.55s
+    ease
+    both;
+}
+
+
+.gift-story-button.show {
+  display: block;
+}
+
+
+.gift-story-button img {
+  display: block;
+
+  width: 100%;
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(
+      0 8px 10px
+      rgba(57,13,36,0.29)
+    );
+}
+
+
+@keyframes storyButtonIn {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px)
+      scale(0.88);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =====================================================
+   CONFETTI
+===================================================== */
+
+.gift-particles {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  overflow: hidden;
+}
+
+
+.gift-particle {
+  position: absolute;
+
+  width: 12px;
+  height: 12px;
+
+  border-radius: 4px;
+
+  animation:
+    giftParticleFall
+    var(--duration)
+    linear
+    forwards;
+
+  transform:
+    rotate(
+      var(--rotation)
+    );
+}
+
+
+@keyframes giftParticleFall {
+
+  0% {
+    transform:
+      translateY(-10vh)
+      rotate(0deg)
+      scale(0.6);
+
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      translateY(115vh)
+      rotate(720deg)
+      scale(1);
+
+    opacity: 0.9;
+  }
+
+}
+
+
+/* =====================================================
+   STORY SCREEN
+===================================================== */
+
+.gift-story-screen {
+  background:
+
+    radial-gradient(
+      circle at center,
+      rgba(91,28,62,0.66),
+      rgba(36,7,25,0.93)
+    );
+
+  backdrop-filter:
+    blur(7px);
+}
+
+
+.story-shell {
+  position: relative;
+
+  width:
+    min(
+      590px,
+      94vw
+    );
+
+  height:
+    min(
+      680px,
+      94vh
+    );
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* =====================================================
+   FULL PARCHMENT
+===================================================== */
+
+.story-scroll-art {
+  position: relative;
+
+  z-index: 2;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  user-select: none;
+
+  pointer-events: none;
+
+  -webkit-user-drag: none;
+
+  filter:
+    drop-shadow(
+      0 22px 28px
+      rgba(0,0,0,0.38)
+    );
+}
+
+
+/* =====================================================
+   CLOSE BUTTON
+===================================================== */
+
+.story-close {
+  position: absolute;
+
+  z-index: 8;
+
+  top: 5%;
+
+  right: 5%;
+
+  width: 42px;
+  height: 42px;
+
+  border:
+    2px solid
+    rgba(255,255,255,0.8);
+
+  border-radius: 50%;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      180deg,
+      #b64f7e,
+      #84305e
+    );
+
+  font-size: 28px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 0 #5d2147,
+    0 7px 12px rgba(38,10,27,0.25);
+}
+
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+.back-to-gift-button {
+  position: absolute;
+
+  z-index: 8;
+
+  bottom: 2.5%;
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  min-width: 190px;
+
+  padding:
+    11px
+    18px;
+
+  border:
+    2px solid
+    rgba(255,255,255,0.8);
+
+  border-radius: 20px;
+
+  color: white;
+
+  font-size: 13px;
+
+  font-weight: 900;
+
+  cursor: pointer;
+
+  background:
+    linear-gradient(
+      180deg,
+      #c95791,
+      #8b2e61
+    );
+
+  box-shadow:
+    0 6px 0 #5f1d43,
+    0 9px 16px rgba(47,10,32,0.25);
+}
+
+
+/* =====================================================
+   HIDE DEFAULT FINISH
+===================================================== */
+
+#finishScreen {
+  visibility: hidden;
+
+  pointer-events: none;
+}
+
+
+/* =====================================================
+   LANDSCAPE PHONE
+===================================================== */
+
+@media
+(
+  orientation: landscape
+)
+and
+(
+  max-height: 600px
+) {
+
+  .gift-reveal-screen,
+  .gift-story-screen {
+    padding:
+      5px
+      12px;
+  }
+
+
+  .gift-stage {
+    width:
+      min(
+        720px,
+        96vw
+      );
+
+    height: 96vh;
+  }
+
+
+  .gift-reward-pill {
+    padding:
+      5px
+      14px;
+
+    font-size: 10px;
+  }
+
+
+  .gift-stage h1 {
+    margin:
+      6px 0
+      2px;
+
+    font-size:
+      clamp(
+        21px,
+        4.8vh,
+        31px
+      );
+  }
+
+
+  .gift-hint {
+    margin: 1px 0;
+
+    font-size: 11px;
+  }
+
+
+  .gift-box-button {
+    width:
+      min(
+        265px,
+        31vw
+      );
+
+    height:
+      min(
+        235px,
+        55vh
+      );
+  }
+
+
+  .open-gift-button {
+    margin-top: -5px;
+
+    padding:
+      9px
+      20px;
+
+    min-width: 150px;
+
+    font-size: 12px;
+  }
+
+
+  .gift-story-button {
+    width:
+      min(
+        170px,
+        24vw
+      );
+
+    margin-top: 4px;
+  }
+
+
+  .story-shell {
+    width:
+      min(
+        440px,
+        70vw
+      );
+
+    height: 97vh;
+  }
+
+
+  .story-close {
+    width: 31px;
+    height: 31px;
+
+    font-size: 21px;
+
+    top: 5%;
+
+    right: 5%;
+  }
+
+
+  .back-to-gift-button {
+    bottom: 1.5%;
+
+    min-width: 155px;
+
+    padding:
+      7px
+      13px;
+
+    font-size: 10px;
+  }
+
+}

@@ -1,0 +1,1517 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background: #bceaff;
+
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+
+/* =====================================================
+   GAME
+===================================================== */
+
+#gameViewport {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100vw;
+
+  height: 100vh;
+  height: 100dvh;
+
+  overflow: hidden;
+
+  background: #bceaff;
+}
+
+
+.game-area {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      #abe4fa 0%,
+      #c9effe 68%,
+      #e3f8ff 100%
+    );
+}
+
+
+.world {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  height: 100%;
+
+  transform: translateX(0);
+
+  will-change: transform;
+}
+
+
+/* =====================================================
+   FOFO
+===================================================== */
+
+#fofo {
+  position: absolute;
+
+  width: 88px;
+  height: 112px;
+
+  z-index: 220;
+
+  object-fit: contain;
+  object-position: center bottom;
+
+  transform-origin: bottom center;
+
+  user-select: none;
+  pointer-events: none;
+
+  -webkit-user-drag: none;
+
+  filter:
+
+    drop-shadow(
+      0 6px 7px
+      rgba(0, 0, 0, 0.17)
+    );
+}
+
+
+#fofo.hurt {
+
+  animation:
+
+    fofoHurt
+    0.15s
+    linear
+    infinite;
+
+}
+
+
+@keyframes fofoHurt {
+
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.25;
+  }
+
+  100% {
+    opacity: 1;
+  }
+
+}
+
+
+/* =====================================================
+   GROUND
+===================================================== */
+
+.ground {
+
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 7600px;
+
+  height: 110px;
+
+  z-index: 40;
+
+  border-top:
+
+    7px solid
+    #ffd4e9;
+
+  background:
+
+    radial-gradient(
+      circle at 38px 47px,
+      #ed8954 0 12px,
+      transparent 13px
+    ),
+
+    radial-gradient(
+      circle at 105px 84px,
+      #844220 0 10px,
+      transparent 11px
+    ),
+
+    linear-gradient(
+      to bottom,
+      #ff70b0 0,
+      #ff70b0 24px,
+      #ae5c31 24px,
+      #884322 100%
+    );
+
+  background-size:
+    135px 100px,
+    170px 100px,
+    auto;
+}
+
+
+/* =====================================================
+   PLATFORMS
+===================================================== */
+
+.platform-image,
+.moving-platform,
+.stair-platform {
+
+  position: absolute;
+
+  z-index: 120;
+
+  object-fit: fill;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  filter:
+
+    drop-shadow(
+      0 6px 5px
+      rgba(76, 34, 15, 0.19)
+    );
+}
+
+
+/* =====================================================
+   PIPE
+===================================================== */
+
+.candy-pipe {
+
+  position: absolute;
+
+  z-index: 180;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  filter:
+
+    drop-shadow(
+      0 8px 7px
+      rgba(76, 29, 9, 0.24)
+    );
+}
+
+
+/* =====================================================
+   ENEMIES
+===================================================== */
+
+.enemy {
+
+  position: absolute;
+
+  z-index: 175;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  transform-origin: center bottom;
+
+  filter:
+
+    drop-shadow(
+      0 6px 5px
+      rgba(0, 0, 0, 0.19)
+    );
+}
+
+
+.pipe-monster {
+
+  position: absolute;
+
+  z-index: 170;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  transform-origin: center bottom;
+
+  filter:
+
+    drop-shadow(
+      0 6px 5px
+      rgba(0, 0, 0, 0.2)
+    );
+}
+
+
+/* =====================================================
+   TREATS
+===================================================== */
+
+.collectible {
+
+  position: absolute;
+
+  z-index: 155;
+
+  display: block;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  animation:
+
+    treatFloat
+    1.35s
+    ease-in-out
+    infinite;
+
+  filter:
+
+    drop-shadow(
+      0 7px 7px
+      rgba(81, 31, 52, 0.2)
+    );
+}
+
+
+.collectible.golden {
+
+  filter:
+
+    drop-shadow(
+      0 0 10px
+      rgba(255, 224, 105, 0.85)
+    )
+
+    drop-shadow(
+      0 7px 7px
+      rgba(81, 31, 52, 0.2)
+    );
+}
+
+
+@keyframes treatFloat {
+
+  0%,
+  100% {
+
+    transform:
+      translateY(0)
+      rotate(-2deg);
+
+  }
+
+  50% {
+
+    transform:
+      translateY(-9px)
+      rotate(2deg);
+
+  }
+
+}
+
+
+/* =====================================================
+   CLOUDS
+===================================================== */
+
+.cloud {
+
+  position: absolute;
+
+  width: 150px;
+  height: 45px;
+
+  z-index: 5;
+
+  border-radius: 100px;
+
+  background:
+    rgba(255, 255, 255, 0.78);
+}
+
+
+.cloud::before,
+.cloud::after {
+
+  content: "";
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.93);
+}
+
+
+.cloud::before {
+
+  width: 62px;
+  height: 62px;
+
+  left: 25px;
+  top: -28px;
+}
+
+
+.cloud::after {
+
+  width: 76px;
+  height: 76px;
+
+  right: 20px;
+  top: -38px;
+}
+
+
+.cloud1 {
+  left: 250px;
+  top: 150px;
+}
+
+.cloud2 {
+  left: 1050px;
+  top: 100px;
+}
+
+.cloud3 {
+  left: 1900px;
+  top: 145px;
+}
+
+.cloud4 {
+  left: 2900px;
+  top: 100px;
+}
+
+.cloud5 {
+  left: 4000px;
+  top: 145px;
+}
+
+.cloud6 {
+  left: 5350px;
+  top: 100px;
+}
+
+.cloud7 {
+  left: 6800px;
+  top: 135px;
+}
+
+
+/* =====================================================
+   NEW EXIT GATE
+===================================================== */
+
+.exit-gate {
+
+  position: absolute;
+
+  bottom: 88px;
+
+  width: 155px;
+  height: 185px;
+
+  z-index: 195;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: flex-end;
+
+  pointer-events: none;
+}
+
+
+#gateImage {
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  object-position: center bottom;
+
+  user-select: none;
+
+  pointer-events: none;
+
+  -webkit-user-drag: none;
+
+  transform-origin: center bottom;
+
+  filter:
+
+    drop-shadow(
+      0 10px 10px
+      rgba(73, 23, 45, 0.22)
+    );
+
+  transition:
+
+    transform
+    0.3s
+    ease,
+
+    filter
+    0.3s
+    ease;
+}
+
+
+/* لما البوابة تتفتح بعد 12/12 */
+
+.exit-gate.unlocked #gateImage {
+
+  animation:
+
+    gateReady
+    1.1s
+    ease-in-out
+    infinite
+    alternate;
+
+}
+
+
+@keyframes gateReady {
+
+  from {
+
+    transform:
+      translateY(0)
+      scale(1);
+
+    filter:
+
+      drop-shadow(
+        0 10px 10px
+        rgba(73, 23, 45, 0.22)
+      );
+
+  }
+
+  to {
+
+    transform:
+      translateY(-3px)
+      scale(1.025);
+
+    filter:
+
+      brightness(1.08)
+
+      drop-shadow(
+        0 0 15px
+        rgba(255, 119, 184, 0.65)
+      )
+
+      drop-shadow(
+        0 10px 10px
+        rgba(73, 23, 45, 0.2)
+      );
+
+  }
+
+}
+
+
+/* لحظة فتح الباب */
+
+.exit-gate.opening #gateImage {
+
+  animation:
+
+    gateOpenPop
+    0.55s
+    ease
+    forwards;
+
+}
+
+
+@keyframes gateOpenPop {
+
+  0% {
+
+    transform:
+      scale(1);
+
+  }
+
+  45% {
+
+    transform:
+      scale(1.09)
+      translateY(-4px);
+
+  }
+
+  100% {
+
+    transform:
+      scale(1);
+
+  }
+
+}
+
+
+/* =====================================================
+   HUD
+===================================================== */
+
+.game-hud {
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+
+  z-index: 3000;
+
+  padding:
+
+    max(
+      8px,
+      env(safe-area-inset-top)
+    )
+
+    max(
+      14px,
+      env(safe-area-inset-right)
+    )
+
+    0
+
+    max(
+      14px,
+      env(safe-area-inset-left)
+    );
+
+  pointer-events: none;
+}
+
+
+.hud-row {
+
+  width:
+    min(
+      860px,
+      94vw
+    );
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+
+    1fr
+    1.05fr
+    1.15fr;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+/* LEVEL */
+
+.hud-level {
+
+  position: relative;
+
+  height: 82px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+}
+
+
+.hud-level-image {
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  filter:
+
+    drop-shadow(
+      0 7px 8px
+      rgba(77, 26, 48, 0.2)
+    );
+}
+
+
+/* HEALTH */
+
+.hud-health {
+
+  position: relative;
+
+  height: 74px;
+
+  min-width: 230px;
+
+  padding:
+    8px
+    22px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 28px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(126, 41, 84, 0.98),
+      rgba(82, 27, 59, 0.98)
+    );
+
+  border:
+
+    3px solid
+    rgba(255, 215, 232, 0.88);
+
+  box-shadow:
+
+    0 7px 0
+    rgba(90, 27, 59, 0.42),
+
+    0 12px 19px
+    rgba(71, 25, 49, 0.18),
+
+    inset 0 2px 0
+    rgba(255, 255, 255, 0.25),
+
+    inset 0 -7px 12px
+    rgba(38, 12, 27, 0.16);
+}
+
+
+.health-content {
+
+  position: relative;
+
+  z-index: 2;
+
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+
+.hud-heart {
+
+  width: 52px;
+  height: 52px;
+
+  display: block;
+
+  object-fit: contain;
+
+  user-select: none;
+
+  pointer-events: none;
+
+  -webkit-user-drag: none;
+
+  filter:
+
+    drop-shadow(
+      0 4px 5px
+      rgba(53, 15, 34, 0.25)
+    );
+}
+
+
+.hud-heart.lost {
+
+  opacity: 0.92;
+
+  transform:
+    scale(0.93);
+}
+
+
+/* TREAT HUD */
+
+.hud-treats {
+
+  position: relative;
+
+  height: 82px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+}
+
+
+.treat-counter-image {
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  filter:
+
+    drop-shadow(
+      0 7px 8px
+      rgba(77, 26, 48, 0.2)
+    );
+}
+
+
+.hud-treats.pulse {
+
+  animation:
+
+    treatCounterPulse
+    0.25s
+    ease;
+}
+
+
+@keyframes treatCounterPulse {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+
+}
+
+
+.hud-treats.complete {
+
+  animation:
+
+    treatComplete
+    0.8s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+@keyframes treatComplete {
+
+  from {
+
+    transform:
+      scale(1);
+
+  }
+
+  to {
+
+    transform:
+      scale(1.05);
+
+    filter:
+
+      brightness(1.12)
+
+      drop-shadow(
+        0 0 12px
+        rgba(255, 215, 68, 0.7)
+      );
+
+  }
+
+}
+
+
+/* MESSAGE */
+
+.message-box {
+
+  width:
+    min(
+      470px,
+      70vw
+    );
+
+  margin:
+    8px auto
+    0;
+
+  padding:
+    9px
+    18px;
+
+  text-align: center;
+
+  color: #923a67;
+
+  font-size: 14px;
+
+  font-weight: 900;
+
+  border-radius: 22px;
+
+  border:
+
+    1px solid
+    rgba(255, 255, 255, 0.95);
+
+  background:
+
+    rgba(
+      255,
+      250,
+      253,
+      0.93
+    );
+
+  box-shadow:
+
+    0 7px 15px
+    rgba(97, 37, 68, 0.12);
+}
+
+
+/* =====================================================
+   CONTROLS
+===================================================== */
+
+.mobile-controls {
+
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+
+  z-index: 4000;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-end;
+
+  padding:
+
+    0
+
+    max(
+      18px,
+      env(safe-area-inset-right)
+    )
+
+    max(
+      13px,
+      env(safe-area-inset-bottom)
+    )
+
+    max(
+      18px,
+      env(safe-area-inset-left)
+    );
+
+  pointer-events: none;
+}
+
+
+.movement-controls {
+
+  display: flex;
+
+  gap: 10px;
+
+  align-items: flex-end;
+
+  pointer-events: auto;
+}
+
+
+.jump-control {
+
+  pointer-events: auto;
+}
+
+
+.control-image-button {
+
+  width: 84px;
+  height: 84px;
+
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+  outline: none;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  touch-action: none;
+
+  user-select: none;
+
+  pointer-events: auto;
+}
+
+
+.control-image-button img {
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+
+  filter:
+
+    drop-shadow(
+      0 7px 7px
+      rgba(77, 24, 53, 0.24)
+    );
+}
+
+
+.jump-image-button {
+
+  width: 96px;
+  height: 96px;
+}
+
+
+.control-image-button.pressed,
+.control-image-button:active {
+
+  transform:
+
+    translateY(4px)
+    scale(0.91);
+
+}
+
+
+/* =====================================================
+   OVERLAYS
+===================================================== */
+
+.overlay-screen {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 10000;
+
+  display: none;
+
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+
+  background:
+
+    rgba(
+      80,
+      20,
+      51,
+      0.58
+    );
+
+  backdrop-filter: blur(8px);
+}
+
+
+.overlay-screen.show {
+
+  display: flex;
+}
+
+
+.overlay-card {
+
+  width:
+    min(
+      430px,
+      92vw
+    );
+
+  padding:
+    30px
+    27px;
+
+  text-align: center;
+
+  border-radius: 30px;
+
+  color: #842d5c;
+
+  border:
+    3px solid white;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      #fff8fc,
+      #ffe0ed
+    );
+
+  box-shadow:
+
+    0 20px 50px
+    rgba(65, 15, 43, 0.3);
+}
+
+
+.overlay-emoji {
+
+  font-size: 48px;
+}
+
+
+.overlay-card h1 {
+
+  margin:
+    8px 0
+    10px;
+}
+
+
+.overlay-card p {
+
+  color: #7d4862;
+
+  font-weight: 800;
+}
+
+
+.overlay-card button {
+
+  margin-top: 10px;
+
+  padding:
+    14px
+    24px;
+
+  border: none;
+
+  border-radius: 20px;
+
+  color: white;
+
+  font-size: 16px;
+
+  font-weight: 900;
+
+  cursor: pointer;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      #ba5082,
+      #8f2c60
+    );
+
+  box-shadow:
+
+    0 6px 0
+    #64183f;
+}
+
+
+/* =====================================================
+   ROTATE
+===================================================== */
+
+.rotate-screen {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 20000;
+
+  display: none;
+
+  justify-content: center;
+  align-items: center;
+
+  padding: 25px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      #8a2d5c,
+      #b44d82
+    );
+}
+
+
+.rotate-card {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 9px;
+
+  text-align: center;
+
+  color: white;
+}
+
+
+.rotate-icon {
+
+  font-size: 60px;
+}
+
+
+.rotate-card strong {
+
+  font-size: 24px;
+}
+
+
+.rotate-card span {
+
+  color: #ffe1ee;
+}
+
+
+/* =====================================================
+   LANDSCAPE PHONE
+===================================================== */
+
+@media
+(
+  orientation: landscape
+)
+and
+(
+  max-height: 600px
+) {
+
+  .game-hud {
+
+    padding-top: 5px;
+
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+
+  .hud-row {
+
+    width:
+      min(
+        640px,
+        89vw
+      );
+
+    gap: 7px;
+  }
+
+
+  .hud-level,
+  .hud-treats {
+
+    height: 54px;
+  }
+
+
+  .hud-health {
+
+    min-width: 160px;
+
+    height: 50px;
+
+    padding:
+      4px
+      10px;
+
+    border-radius: 20px;
+
+    border-width: 2px;
+  }
+
+
+  .health-content {
+
+    gap: 4px;
+  }
+
+
+  .hud-heart {
+
+    width: 34px;
+    height: 34px;
+  }
+
+
+  .message-box {
+
+    width:
+      min(
+        370px,
+        66vw
+      );
+
+    margin-top: 4px;
+
+    padding:
+      6px
+      10px;
+
+    font-size: 11px;
+  }
+
+
+  .exit-gate {
+
+    width: 120px;
+    height: 145px;
+
+    bottom: 90px;
+  }
+
+
+  .control-image-button {
+
+    width: 67px;
+    height: 67px;
+  }
+
+
+  .jump-image-button {
+
+    width: 77px;
+    height: 77px;
+  }
+
+}
+
+
+/* =====================================================
+   VERY SHORT PHONE
+===================================================== */
+
+@media
+(
+  orientation: landscape
+)
+and
+(
+  max-height: 430px
+) {
+
+  .message-box {
+
+    display: none;
+  }
+
+
+  .hud-level,
+  .hud-treats {
+
+    height: 46px;
+  }
+
+
+  .hud-health {
+
+    height: 43px;
+
+    min-width: 145px;
+  }
+
+
+  .hud-heart {
+
+    width: 28px;
+    height: 28px;
+  }
+
+
+  .exit-gate {
+
+    width: 105px;
+    height: 130px;
+  }
+
+
+  .control-image-button {
+
+    width: 58px;
+    height: 58px;
+  }
+
+
+  .jump-image-button {
+
+    width: 67px;
+    height: 67px;
+  }
+
+}
+
+
+/* =====================================================
+   PORTRAIT
+===================================================== */
+
+@media
+(
+  orientation: portrait
+)
+and
+(
+  max-width: 900px
+) {
+
+  .rotate-screen {
+
+    display: flex;
+  }
+
+}

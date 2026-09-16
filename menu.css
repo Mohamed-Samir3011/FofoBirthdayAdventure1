@@ -1,0 +1,2065 @@
+@import url("https://fonts.googleapis.com/css2?family=BenchNine:wght@300;400;700&display=swap");
+
+
+/* =========================================================
+   FOFO BIRTHDAY ADVENTURE
+   MAIN MENU - DARK BURGUNDY BIRTHDAY THEME
+========================================================= */
+
+.menu-root {
+  position: fixed;
+  inset: 0;
+
+  z-index: 50000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  font-family:
+    "BenchNine",
+    Arial,
+    sans-serif;
+
+  color: white;
+
+  background:
+
+    radial-gradient(
+      circle at 50% 35%,
+      #7b1c43 0%,
+      #57102f 32%,
+      #3c091f 65%,
+      #220511 100%
+    );
+}
+
+
+.menu-root.hidden {
+  display: none;
+}
+
+
+/* =========================================================
+   BACKGROUND LIGHT
+========================================================= */
+
+.menu-root::before {
+  content: "";
+
+  position: absolute;
+
+  width: 75vw;
+  height: 75vw;
+
+  max-width: 800px;
+  max-height: 800px;
+
+  left: 50%;
+  top: 42%;
+
+  transform:
+    translate(-50%, -50%);
+
+  border-radius: 50%;
+
+  background:
+
+    radial-gradient(
+      circle,
+      rgba(255, 221, 156, 0.14) 0%,
+      rgba(255, 160, 195, 0.08) 38%,
+      transparent 72%
+    );
+
+  filter: blur(20px);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   BIRTHDAY DECORATION STRIP
+========================================================= */
+
+.menu-root::after {
+  content: "🎈  ✨  🎁  🎂  💖  🎉  🎊";
+
+  position: absolute;
+
+  left: 50%;
+  bottom: 2.5%;
+
+  transform:
+    translateX(-50%);
+
+  width: 100%;
+
+  text-align: center;
+
+  font-size:
+    clamp(
+      17px,
+      2.2vw,
+      29px
+    );
+
+  letter-spacing: 10px;
+
+  opacity: 0.78;
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(
+      0 5px 7px
+      rgba(0,0,0,0.22)
+    );
+}
+
+
+/* =========================================================
+   VIEWS
+========================================================= */
+
+.menu-view {
+  position: absolute;
+
+  inset: 0;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  z-index: 10;
+
+  padding: 22px;
+}
+
+
+.menu-view.active {
+  display: flex;
+
+  animation:
+    menuViewIn
+    0.42s
+    ease
+    both;
+}
+
+
+@keyframes menuViewIn {
+
+  from {
+    opacity: 0;
+
+    transform:
+      scale(0.965)
+      translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      scale(1)
+      translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   HEARTS
+========================================================= */
+
+.menu-decoration,
+.menu-confetti {
+  position: absolute;
+
+  pointer-events: none;
+
+  user-select: none;
+}
+
+
+.deco-heart {
+  filter:
+    drop-shadow(
+      0 6px 8px
+      rgba(0,0,0,0.2)
+    );
+
+  animation:
+    floatingHeart
+    5s
+    ease-in-out
+    infinite;
+}
+
+
+.heart-1 {
+  left: 7%;
+  top: 16%;
+
+  color: #ff8fbd;
+
+  font-size: 48px;
+}
+
+
+.heart-2 {
+  right: 8%;
+  top: 19%;
+
+  color: #ffd978;
+
+  font-size: 33px;
+
+  animation-delay: -2s;
+}
+
+
+.heart-3 {
+  right: 13%;
+  bottom: 12%;
+
+  color: #ff6f91;
+
+  font-size: 57px;
+
+  animation-delay: -3.3s;
+}
+
+
+@keyframes floatingHeart {
+
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(-7deg);
+  }
+
+  50% {
+    transform:
+      translateY(-17px)
+      rotate(7deg);
+  }
+
+}
+
+
+/* =========================================================
+   COLORFUL BALLOONS
+========================================================= */
+
+.balloon {
+  position: absolute;
+
+  font-size: 115px;
+
+  line-height: 1;
+
+  animation:
+    balloonFloat
+    6s
+    ease-in-out
+    infinite;
+
+  filter:
+    drop-shadow(
+      0 13px 13px
+      rgba(0,0,0,0.18)
+    );
+}
+
+
+.balloon::after {
+  content: "";
+
+  position: absolute;
+
+  width: 1px;
+  height: 110px;
+
+  left: 50%;
+  top: 75%;
+
+  background:
+    rgba(255,255,255,0.38);
+}
+
+
+.balloon-1 {
+  left: 2%;
+  bottom: 10%;
+
+  color: #ff5f8f;
+}
+
+
+.balloon-2 {
+  right: 2%;
+  top: 5%;
+
+  color: #ffd84f;
+
+  font-size: 92px;
+
+  animation-delay: -2.2s;
+}
+
+
+.balloon-3 {
+  right: 14%;
+  bottom: 5%;
+
+  color: #5bc7ff;
+
+  font-size: 72px;
+
+  animation-delay: -4s;
+}
+
+
+@keyframes balloonFloat {
+
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(-2deg);
+  }
+
+  50% {
+    transform:
+      translateY(-17px)
+      rotate(3deg);
+  }
+
+}
+
+
+/* =========================================================
+   COLORFUL CONFETTI
+========================================================= */
+
+.menu-confetti {
+  width: 8px;
+  height: 23px;
+
+  border-radius: 5px;
+
+  opacity: 0.92;
+
+  animation:
+    confettiFloat
+    4.5s
+    ease-in-out
+    infinite;
+}
+
+
+.confetti-1 {
+  left: 18%;
+  top: 8%;
+
+  background: #ffd84f;
+
+  transform:
+    rotate(25deg);
+}
+
+
+.confetti-2 {
+  left: 28%;
+  bottom: 13%;
+
+  background: #5cc9ff;
+
+  transform:
+    rotate(-40deg);
+}
+
+
+.confetti-3 {
+  right: 26%;
+  top: 11%;
+
+  background: #ff739f;
+
+  transform:
+    rotate(60deg);
+}
+
+
+.confetti-4 {
+  right: 12%;
+  top: 50%;
+
+  background: #7be495;
+
+  transform:
+    rotate(15deg);
+}
+
+
+.confetti-5 {
+  left: 10%;
+  top: 54%;
+
+  background: #b88cff;
+
+  transform:
+    rotate(75deg);
+}
+
+
+.confetti-6 {
+  right: 35%;
+  bottom: 7%;
+
+  background: #ff9f43;
+
+  transform:
+    rotate(-25deg);
+}
+
+
+@keyframes confettiFloat {
+
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -12px;
+  }
+
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.main-menu-content {
+  position: relative;
+
+  width:
+    min(
+      600px,
+      92vw
+    );
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  text-align: center;
+}
+
+
+/* =========================================================
+   BIRTHDAY BADGE
+========================================================= */
+
+.birthday-badge {
+  padding:
+    7px
+    22px;
+
+  border:
+
+    1px solid
+    rgba(255, 222, 159, 0.56);
+
+  border-radius: 999px;
+
+  color: #ffdda3;
+
+  background:
+    rgba(32, 2, 16, 0.33);
+
+  backdrop-filter:
+    blur(8px);
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  letter-spacing: 2.5px;
+
+  box-shadow:
+
+    inset 0 1px 0
+    rgba(255,255,255,0.15),
+
+    0 9px 18px
+    rgba(0,0,0,0.16);
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.menu-logo {
+  position: relative;
+
+  margin-top: 10px;
+}
+
+
+.menu-logo-small {
+  color: #ffd873;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  letter-spacing: 3px;
+
+  text-shadow:
+    0 3px 9px
+    rgba(0,0,0,0.25);
+}
+
+
+.menu-logo h1 {
+  margin:
+    4px 0 0;
+
+  color: #fff8f9;
+
+  font-family:
+    "BenchNine",
+    sans-serif;
+
+  font-size:
+
+    clamp(
+      48px,
+      7vw,
+      82px
+    );
+
+  font-weight: 700;
+
+  line-height: 0.87;
+
+  letter-spacing: 1px;
+
+  text-shadow:
+
+    0 4px 0
+    rgba(103, 22, 56, 0.55),
+
+    0 10px 24px
+    rgba(0,0,0,0.3);
+}
+
+
+.menu-logo h1 span {
+  display: block;
+
+  margin-top: 9px;
+
+  color: #ffbed5;
+
+  font-size: 0.72em;
+
+  letter-spacing: 1px;
+}
+
+
+.logo-heart {
+  position: absolute;
+
+  right: -27px;
+  top: 12px;
+
+  color: #ffd753;
+
+  font-size: 31px;
+
+  animation:
+    heartPulse
+    1.35s
+    ease-in-out
+    infinite;
+}
+
+
+@keyframes heartPulse {
+
+  0%,
+  100% {
+    transform:
+      scale(1)
+      rotate(15deg);
+  }
+
+  50% {
+    transform:
+      scale(1.19)
+      rotate(15deg);
+  }
+
+}
+
+
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.menu-description {
+  max-width: 420px;
+
+  margin:
+    15px 0 17px;
+
+  color:
+    rgba(255,244,248,0.9);
+
+  font-size: 19px;
+
+  line-height: 1.25;
+
+  font-weight: 400;
+
+  letter-spacing: 0.4px;
+}
+
+
+/* =========================================================
+   MAIN BUTTONS
+========================================================= */
+
+.main-menu-buttons {
+  width:
+    min(
+      315px,
+      77vw
+    );
+
+  display: grid;
+
+  gap: 9px;
+}
+
+
+.menu-button {
+  position: relative;
+
+  min-height: 52px;
+
+  padding:
+    8px
+    21px;
+
+  border:
+
+    1.5px solid
+    rgba(255, 213, 228, 0.52);
+
+  border-radius: 15px;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      rgba(133, 35, 75, 0.94),
+      rgba(86, 14, 47, 0.96)
+    );
+
+  color: #fff8fa;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 11px;
+
+  font-family:
+    "BenchNine",
+    sans-serif;
+
+  font-size: 21px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  cursor: pointer;
+
+  box-shadow:
+
+    inset 0 1px 0
+    rgba(255,255,255,0.18),
+
+    0 5px 0
+    #2b0718,
+
+    0 10px 18px
+    rgba(0,0,0,0.22);
+
+  transition:
+    transform 0.14s ease,
+    filter 0.14s ease,
+    opacity 0.14s ease;
+}
+
+
+.menu-button:hover:not(:disabled) {
+  transform:
+    translateY(-2px);
+
+  filter:
+    brightness(1.14);
+}
+
+
+.menu-button:active:not(:disabled) {
+  transform:
+    translateY(4px);
+
+  box-shadow:
+
+    inset 0 1px 0
+    rgba(255,255,255,0.15),
+
+    0 1px 0
+    #2b0718,
+
+    0 5px 11px
+    rgba(0,0,0,0.18);
+}
+
+
+/* PLAY */
+
+.primary-menu-button {
+  min-height: 61px;
+
+  color: #fff9f3;
+
+  border-color:
+    rgba(255, 221, 153, 0.8);
+
+  background:
+
+    linear-gradient(
+      180deg,
+      #a82f64,
+      #72163f
+    );
+
+  font-size: 25px;
+
+  box-shadow:
+
+    inset 0 2px 0
+    rgba(255,255,255,0.25),
+
+    0 6px 0
+    #3d0a23,
+
+    0 13px 23px
+    rgba(0,0,0,0.3);
+}
+
+
+.menu-button-icon {
+  width: 25px;
+
+  color: #ffda73;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   DISABLED CONTINUE
+========================================================= */
+
+#continueMenuButton:disabled,
+.menu-button.menu-button-disabled {
+  cursor: not-allowed;
+
+  color:
+    rgba(255,255,255,0.48);
+
+  border-color:
+    rgba(255,255,255,0.12);
+
+  background:
+
+    linear-gradient(
+      180deg,
+      #555057,
+      #39353a
+    );
+
+  box-shadow:
+
+    inset 0 1px 0
+    rgba(255,255,255,0.07),
+
+    0 4px 0
+    #211e22,
+
+    0 8px 13px
+    rgba(0,0,0,0.22);
+
+  filter:
+    grayscale(1);
+
+  opacity: 0.72;
+}
+
+
+#continueMenuButton:disabled
+.menu-button-icon {
+  color:
+    rgba(255,255,255,0.38);
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.menu-footer {
+  margin-top: 14px;
+
+  color:
+    rgba(255,221,232,0.74);
+
+  font-size: 15px;
+
+  font-weight: 400;
+
+  letter-spacing: 1.4px;
+}
+
+
+/* =========================================================
+   LEVEL SELECT
+========================================================= */
+
+.level-select-wrapper {
+  width:
+    min(
+      940px,
+      95vw
+    );
+
+  max-height: 94vh;
+
+  overflow-y: auto;
+
+  padding:
+    20px 24px 24px;
+
+  border:
+
+    1px solid
+    rgba(255, 203, 222, 0.35);
+
+  border-radius: 26px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(104, 23, 59, 0.92),
+      rgba(45, 5, 25, 0.94)
+    );
+
+  backdrop-filter:
+    blur(18px);
+
+  box-shadow:
+
+    inset 0 1px 0
+    rgba(255,255,255,0.14),
+
+    0 22px 50px
+    rgba(0,0,0,0.35);
+
+  scrollbar-width: none;
+}
+
+
+.level-select-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* =========================================================
+   HEADINGS
+========================================================= */
+
+.level-select-heading,
+.settings-heading {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  margin-bottom: 17px;
+}
+
+
+.section-mini-title {
+  color: #ffd76c;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  letter-spacing: 2.5px;
+}
+
+
+.level-select-heading h2,
+.settings-heading h2 {
+  margin:
+    2px 0 0;
+
+  color: white;
+
+  font-family:
+    "BenchNine",
+    sans-serif;
+
+  font-size:
+    clamp(
+      31px,
+      4vw,
+      44px
+    );
+
+  letter-spacing: 1px;
+}
+
+
+.round-back-button {
+  flex: 0 0 auto;
+
+  width: 44px;
+  height: 44px;
+
+  border:
+
+    1px solid
+    rgba(255,255,255,0.35);
+
+  border-radius: 50%;
+
+  color: white;
+
+  background:
+    #7d214c;
+
+  font-family:
+    "BenchNine",
+    sans-serif;
+
+  font-size: 35px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 0
+    #33091f;
+}
+
+
+/* =========================================================
+   LEVEL GRID
+========================================================= */
+
+.level-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0,1fr)
+    );
+
+  gap: 15px;
+}
+
+
+/* =========================================================
+   LEVEL CARD
+========================================================= */
+
+.level-card {
+  padding: 0;
+
+  overflow: hidden;
+
+  border:
+
+    1.5px solid
+    rgba(255,255,255,0.33);
+
+  border-radius: 20px;
+
+  background:
+    #57132f;
+
+  color: white;
+
+  text-align: left;
+
+  font-family:
+    "BenchNine",
+    sans-serif;
+
+  cursor: pointer;
+
+  box-shadow:
+
+    inset 0 1px 0
+    rgba(255,255,255,0.16),
+
+    0 12px 23px
+    rgba(0,0,0,0.27);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.level-card:not(.locked):hover {
+  transform:
+    translateY(-5px)
+    scale(1.01);
+
+  box-shadow:
+    0 18px 30px
+    rgba(0,0,0,0.35);
+}
+
+
+/* =========================================================
+   LEVEL IMAGE
+========================================================= */
+
+.level-card-image {
+  position: relative;
+
+  height: 170px;
+
+  overflow: hidden;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+.level-one-art {
+  background-image:
+
+    linear-gradient(
+      rgba(58, 9, 33, 0.04),
+      rgba(58, 9, 33, 0.18)
+    ),
+
+    url(
+      "assets/fofo_gift_level1_assets/luxurious_valentine_snack_gift_box.png"
+    ),
+
+    linear-gradient(
+      135deg,
+      #ffd6e6,
+      #8e315d
+    );
+
+  background-size:
+    cover,
+    contain,
+    cover;
+}
+
+
+.level-two-art {
+  background-image:
+
+    url(
+      "assets/menu/level_02.png"
+    ),
+
+    linear-gradient(
+      135deg,
+      #8160af,
+      #e78fac
+    );
+}
+
+
+.level-three-art {
+  background-image:
+
+    url(
+      "assets/menu/level_03.png"
+    ),
+
+    linear-gradient(
+      135deg,
+      #475c9c,
+      #bf85ba
+    );
+}
+
+
+.level-four-art {
+  background-image:
+
+    url(
+      "assets/menu/level_04.png"
+    ),
+
+    linear-gradient(
+      135deg,
+      #f0b96f,
+      #a94a61 55%,
+      #52233f
+    );
+}
+
+
+/* =========================================================
+   FALLBACK ART
+========================================================= */
+
+.level-art-fallback {
+  position: relative;
+
+  z-index: 1;
+
+  font-size: 65px;
+
+  filter:
+    drop-shadow(
+      0 9px 12px
+      rgba(0,0,0,0.25)
+    );
+}
+
+
+.level-one-fallback {
+  opacity: 0;
+}
+
+
+.level-one-fallback span {
+  font-size: 42px;
+}
+
+
+.level-four-fallback {
+  display: flex;
+
+  gap: 10px;
+
+  align-items: center;
+
+  font-size: 48px;
+}
+
+
+.level-four-fallback span {
+  color: #ffe1eb;
+
+  font-size: 35px;
+}
+
+
+/* =========================================================
+   NUMBER BADGE
+========================================================= */
+
+.level-number-badge {
+  position: absolute;
+
+  z-index: 4;
+
+  left: 13px;
+  top: 12px;
+
+  padding:
+    5px 11px;
+
+  border:
+
+    1px solid
+    rgba(255,255,255,0.45);
+
+  border-radius: 10px;
+
+  background:
+    rgba(58, 7, 31, 0.75);
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   SHINE
+========================================================= */
+
+.level-card-shine {
+  position: absolute;
+
+  z-index: 2;
+
+  width: 70px;
+  height: 200%;
+
+  top: -50%;
+  left: -120px;
+
+  transform:
+    rotate(20deg);
+
+  background:
+
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,0.25),
+      transparent
+    );
+
+  transition:
+    left 0.65s ease;
+}
+
+
+.level-card:not(.locked):hover
+.level-card-shine {
+  left: 120%;
+}
+
+
+/* =========================================================
+   LEVEL INFO
+========================================================= */
+
+.level-card-info {
+  min-height: 92px;
+
+  padding:
+    12px 15px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+
+.level-label {
+  color: #ffd56d;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.6px;
+}
+
+
+.level-card-info h3 {
+  margin:
+    2px 0;
+
+  color: white;
+
+  font-size: 25px;
+
+  line-height: 1;
+}
+
+
+.level-card-info p {
+  margin: 0;
+
+  color:
+    rgba(255,238,244,0.72);
+
+  font-size: 15px;
+
+  font-weight: 400;
+}
+
+
+.level-status {
+  flex: 0 0 auto;
+
+  width: 37px;
+  height: 37px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(255,255,255,0.1);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.25);
+
+  font-size: 16px;
+}
+
+
+.level-play-icon {
+  color: #ffd972;
+}
+
+
+/* =========================================================
+   LOCKS
+========================================================= */
+
+.level-card.locked {
+  cursor: not-allowed;
+}
+
+
+.level-card.locked
+.level-card-image {
+  filter:
+    saturate(0.38)
+    brightness(0.66);
+}
+
+
+.level-lock-overlay {
+  position: absolute;
+
+  z-index: 5;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(28,4,16,0.36);
+}
+
+
+.level-card:not(.locked)
+.level-lock-overlay {
+  display: none;
+}
+
+
+.lock-icon {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(56,7,31,0.8);
+
+  border:
+    1px solid
+    rgba(255,255,255,0.35);
+
+  font-size: 21px;
+}
+
+
+.level-select-note {
+  margin-top: 16px;
+
+  text-align: center;
+
+  color:
+    rgba(255,228,238,0.73);
+
+  font-size: 15px;
+
+  letter-spacing: 0.7px;
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+.settings-card {
+  width:
+    min(
+      520px,
+      92vw
+    );
+
+  padding: 24px;
+
+  border:
+
+    1px solid
+    rgba(255,205,224,0.33);
+
+  border-radius: 26px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(105,24,60,0.97),
+      rgba(44,5,24,0.97)
+    );
+
+  box-shadow:
+    0 25px 50px
+    rgba(0,0,0,0.37);
+}
+
+
+.settings-list {
+  display: grid;
+
+  gap: 11px;
+}
+
+
+.settings-row {
+  min-height: 61px;
+
+  padding:
+    10px 13px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border:
+
+    1px solid
+    rgba(255,255,255,0.18);
+
+  border-radius: 15px;
+
+  background:
+    rgba(255,255,255,0.06);
+}
+
+
+.settings-row-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+.settings-icon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background:
+    #7b214b;
+
+  color: #ffdb72;
+
+  font-size: 19px;
+}
+
+
+.settings-row strong {
+  display: block;
+
+  color: white;
+
+  font-size: 21px;
+
+  line-height: 1;
+}
+
+
+.settings-row-info span {
+  display: block;
+
+  margin-top: 3px;
+
+  color:
+    rgba(255,232,240,0.65);
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   SWITCH
+========================================================= */
+
+.switch {
+  position: relative;
+
+  width: 49px;
+  height: 28px;
+}
+
+
+.switch input {
+  opacity: 0;
+
+  width: 0;
+  height: 0;
+}
+
+
+.switch-slider {
+  position: absolute;
+
+  inset: 0;
+
+  cursor: pointer;
+
+  border-radius: 30px;
+
+  background:
+    #342d32;
+
+  border:
+    1px solid
+    rgba(255,255,255,0.25);
+
+  transition: 0.2s;
+}
+
+
+.switch-slider::before {
+  content: "";
+
+  position: absolute;
+
+  width: 20px;
+  height: 20px;
+
+  left: 3px;
+  top: 3px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  transition: 0.2s;
+}
+
+
+.switch input:checked
++
+.switch-slider {
+  background:
+    #b63b70;
+}
+
+
+.switch input:checked
++
+.switch-slider::before {
+  transform:
+    translateX(21px);
+}
+
+
+/* =========================================================
+   VOLUME
+========================================================= */
+
+.volume-row {
+  padding:
+    4px 8px 8px;
+
+  display: grid;
+
+  grid-template-columns:
+    100px 1fr 42px;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color:
+    rgba(255,240,245,0.82);
+
+  font-size: 16px;
+
+  font-weight: 700;
+}
+
+
+.volume-row input[type="range"] {
+  width: 100%;
+
+  accent-color:
+    #d34e83;
+}
+
+
+.volume-row strong {
+  text-align: right;
+
+  color: #ffda72;
+
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   FULLSCREEN
+========================================================= */
+
+.settings-action-button {
+  min-height: 47px;
+
+  margin-top: 3px;
+
+  border:
+
+    1.5px solid
+    rgba(255,215,230,0.45);
+
+  border-radius: 15px;
+
+  color: white;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      #9e2c5c,
+      #66153c
+    );
+
+  font-family:
+    "BenchNine",
+    sans-serif;
+
+  font-size: 19px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 0
+    #31091e;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.menu-toast {
+  position: fixed;
+
+  z-index: 100;
+
+  left: 50%;
+  bottom: 25px;
+
+  transform:
+    translateX(-50%)
+    translateY(30px);
+
+  max-width: 80vw;
+
+  padding:
+    9px 18px;
+
+  border:
+
+    1px solid
+    rgba(255,255,255,0.3);
+
+  border-radius: 17px;
+
+  background:
+    rgba(48,5,27,0.96);
+
+  color: white;
+
+  font-family:
+    "BenchNine",
+    sans-serif;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.7px;
+
+  text-align: center;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition:
+    0.25s ease;
+}
+
+
+.menu-toast.show {
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    translateY(0);
+}
+
+
+/* =========================================================
+   MOBILE LANDSCAPE
+========================================================= */
+
+@media
+(
+  orientation: landscape
+)
+and
+(
+  max-height: 650px
+) {
+
+  .menu-view {
+    padding:
+      7px 15px;
+  }
+
+
+  .birthday-badge {
+    padding:
+      4px
+      13px;
+
+    font-size: 11px;
+  }
+
+
+  .menu-logo {
+    margin-top: 3px;
+  }
+
+
+  .menu-logo-small {
+    font-size: 12px;
+  }
+
+
+  .menu-logo h1 {
+    font-size:
+      clamp(
+        38px,
+        9vh,
+        55px
+      );
+  }
+
+
+  .menu-description {
+    margin:
+      6px 0
+      9px;
+
+    font-size: 14px;
+
+    line-height: 1.1;
+  }
+
+
+  .main-menu-buttons {
+    width:
+      min(
+        255px,
+        56vw
+      );
+
+    gap: 5px;
+  }
+
+
+  .menu-button {
+    min-height: 35px;
+
+    border-radius: 11px;
+
+    padding:
+      4px
+      14px;
+
+    font-size: 16px;
+  }
+
+
+  .primary-menu-button {
+    min-height: 41px;
+
+    font-size: 19px;
+  }
+
+
+  .menu-footer {
+    margin-top: 5px;
+
+    font-size: 10px;
+  }
+
+
+  .menu-root::after {
+    font-size: 15px;
+
+    bottom: 1%;
+
+    letter-spacing: 5px;
+  }
+
+
+  /* LEVELS */
+
+  .level-select-wrapper {
+    width:
+      min(
+        930px,
+        96vw
+      );
+
+    max-height: 96vh;
+
+    padding:
+      10px 15px 12px;
+
+    border-radius: 19px;
+  }
+
+
+  .level-select-heading,
+  .settings-heading {
+    margin-bottom: 7px;
+  }
+
+
+  .round-back-button {
+    width: 33px;
+    height: 33px;
+
+    font-size: 25px;
+  }
+
+
+  .section-mini-title {
+    font-size: 9px;
+  }
+
+
+  .level-select-heading h2,
+  .settings-heading h2 {
+    font-size: 25px;
+  }
+
+
+  .level-grid {
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(0,1fr)
+      );
+
+    gap: 8px;
+  }
+
+
+  .level-card {
+    border-radius: 14px;
+  }
+
+
+  .level-card-image {
+    height: 112px;
+  }
+
+
+  .level-art-fallback {
+    font-size: 39px;
+  }
+
+
+  .level-card-info {
+    min-height: 65px;
+
+    padding:
+      6px
+      8px;
+  }
+
+
+  .level-label {
+    font-size: 9px;
+  }
+
+
+  .level-card-info h3 {
+    margin:
+      1px 0;
+
+    font-size: 17px;
+  }
+
+
+  .level-card-info p {
+    font-size: 10px;
+  }
+
+
+  .level-status {
+    width: 26px;
+    height: 26px;
+
+    font-size: 10px;
+  }
+
+
+  .level-number-badge {
+    left: 7px;
+    top: 7px;
+
+    padding:
+      3px 7px;
+
+    font-size: 10px;
+  }
+
+
+  .level-select-note {
+    margin-top: 6px;
+
+    font-size: 10px;
+  }
+
+
+  /* SETTINGS */
+
+  .settings-card {
+    width:
+      min(
+        500px,
+        80vw
+      );
+
+    padding: 12px;
+  }
+
+
+  .settings-list {
+    gap: 5px;
+  }
+
+
+  .settings-row {
+    min-height: 44px;
+
+    padding:
+      5px 9px;
+  }
+
+
+  .settings-icon {
+    width: 30px;
+    height: 30px;
+
+    font-size: 14px;
+  }
+
+
+  .settings-row strong {
+    font-size: 16px;
+  }
+
+
+  .settings-row-info span {
+    font-size: 10px;
+  }
+
+
+  .volume-row {
+    padding:
+      0 6px
+      3px;
+
+    grid-template-columns:
+      80px 1fr 35px;
+
+    font-size: 11px;
+  }
+
+
+  .settings-action-button {
+    min-height: 33px;
+
+    font-size: 13px;
+  }
+
+}

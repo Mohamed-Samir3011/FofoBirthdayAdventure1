@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Level 3 — Moonlight Echo</title>
+  <link rel="stylesheet" href="level3.css">
+</head>
+<body>
+
+  <main id="game" aria-label="Level 3 Moonlight Echo">
+<div id="world">
+      <img id="moonBackdrop" class="moon-img" src="assets/level3_world/moon.png" alt="Crescent moon">
+    </div>
+
+    <div id="hud">
+      <img id="levelBadge" class="level-badge-img" src="assets/level3_ui/level3_badge.png" alt="Level 3">
+
+      <div id="heartsHud" class="hearts-hud">
+        <img id="heart1" src="assets/level3_ui/heart_empty.png" alt="">
+        <img id="heart2" src="assets/level3_ui/heart_empty.png" alt="">
+        <img id="heart3" src="assets/level3_ui/heart_empty.png" alt="">
+      </div>
+
+      <img id="counterImage" class="counter-img" src="assets/level3_ui/counter_0.png" alt="0 of 11">
+    </div>
+
+    <div id="messageBox" class="message-box hidden"></div>
+
+    <div id="controls">
+      <div class="movement-controls">
+        <button id="btnLeft" class="image-control" aria-label="Move left">
+          <img src="assets/level3_ui/button_left.png" alt="">
+        </button>
+
+        <button id="btnRight" class="image-control mirrored-control" aria-label="Move right">
+          <img src="assets/level3_ui/button_left.png" alt="">
+        </button>
+      </div>
+
+      <button id="btnJump" class="image-control jump-control" aria-label="Jump">
+        <img src="assets/level3_ui/button_jump.png" alt="">
+      </button>
+    </div>
+  </main>
+
+  <section id="finaleOverlay" class="finale-overlay hidden">
+
+    <div id="finaleIntro" class="finale-page">
+      <div class="finale-wave" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+
+      <p class="finale-kicker">YOU SAID IT ONCE. I REMEMBERED.</p>
+      <h1>Some words are too important to forget.</h1>
+      <p class="finale-copy">And anything that makes you more comfortable will always matter to me.</p>
+
+      <button id="revealGiftButton" class="finale-image-button reveal-image-button" aria-label="Reveal your gift">
+        <img src="assets/level3_ui/reveal_your_gift_button.png" alt="Reveal Your Gift">
+      </button>
+    </div>
+
+    <div id="giftPage" class="finale-page hidden">
+      <p class="finale-kicker">YOUR THIRD BIRTHDAY GIFT</p>
+      <h2>JBL Tune 530BT</h2>
+      <p class="gift-black">BLACK</p>
+
+      <div class="product-gallery">
+        <button id="productPrev" class="gallery-arrow" aria-label="Previous view">‹</button>
+
+        <div class="product-stage">
+          <div class="product-aura"></div>
+          <img id="productImage" src="assets/level3_product/jbl_black_view_1.png" alt="Black JBL Tune 530BT">
+          <div id="productDots" class="product-dots"></div>
+        </div>
+
+        <button id="productNext" class="gallery-arrow" aria-label="Next view">›</button>
+      </div>
+
+      <p class="gift-message">
+        Because even the smallest thing you say stays with me. ♡
+      </p>
+
+      <button id="giftStoryButton" class="finale-image-button gift-story-image-button" aria-label="Gift Story">
+        <img src="assets/level3_ui/gift_story_button.png" alt="Gift Story">
+      </button>
+    </div>
+
+    <div id="storyPage" class="finale-page story-page hidden">
+      <img class="story-letter-image" src="assets/level3_ui/gift_story_letter.png" alt="Gift Story letter">
+
+      <div class="story-buttons">
+        <button id="backToGiftButton" class="story-image-button" aria-label="Back to my gift">
+          <img src="assets/level3_ui/back_to_my_gift_button.png" alt="Back to my gift">
+        </button>
+        <button id="continueButton" class="story-image-button" aria-label="Continue">
+          <img src="assets/level3_ui/continue_button.png" alt="Continue">
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <script src="level3.js"></script>
+</body>
+</html>

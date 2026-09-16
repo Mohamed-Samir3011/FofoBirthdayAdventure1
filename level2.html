@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Fofo Birthday Adventure - Level 2</title>
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=BenchNine:wght@400;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="level2.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div id="game">
+
+
+    <!-- ========================= -->
+    <!-- HUD -->
+    <!-- ========================= -->
+
+    <div id="hud">
+
+
+        <img
+            id="level2Badge"
+            class="level-badge"
+            src="assets/hud/level2_badge.png"
+            alt="Level 2"
+        >
+
+
+        <div id="heartsHud">
+
+            <img
+                id="heart1"
+                class="heart-image"
+                src="assets/hud/heart_full.png"
+                alt=""
+            >
+
+            <img
+                id="heart2"
+                class="heart-image"
+                src="assets/hud/heart_full.png"
+                alt=""
+            >
+
+            <img
+                id="heart3"
+                class="heart-image"
+                src="assets/hud/heart_full.png"
+                alt=""
+            >
+
+        </div>
+
+
+        <img
+            id="counterImage"
+            class="counter-image"
+            src="assets/hud/counter_0.png"
+            alt="0 / 6"
+        >
+
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- MESSAGE -->
+    <!-- ========================= -->
+
+    <div
+        id="messageBox"
+        class="message-box"
+    >
+        Collect 6 Baby Blooms 🌼
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- WORLD -->
+    <!-- ========================= -->
+
+    <div id="world"></div>
+
+
+
+    <!-- ========================= -->
+    <!-- CONTROLS -->
+    <!-- ========================= -->
+
+    <div id="controls">
+
+
+        <div class="left-controls">
+
+
+            <button
+                id="btnLeft"
+                class="game-control"
+                type="button"
+            >
+
+                <img
+                    src="assets/controls/btn_left.png"
+                    alt="Left"
+                    draggable="false"
+                >
+
+            </button>
+
+
+
+            <button
+                id="btnRight"
+                class="game-control"
+                type="button"
+            >
+
+                <img
+                    src="assets/controls/btn_right.png"
+                    alt="Right"
+                    draggable="false"
+                >
+
+            </button>
+
+
+        </div>
+
+
+
+        <button
+            id="btnJump"
+            class="game-control jump-control"
+            type="button"
+        >
+
+            <img
+                src="assets/controls/btn_jump.png"
+                alt="Jump"
+                draggable="false"
+            >
+
+        </button>
+
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- FINALE -->
+    <!-- ========================= -->
+
+    <div
+        id="finaleOverlay"
+        class="finale-overlay hidden"
+    >
+
+
+        <!-- PLANT -->
+
+        <section
+            id="plantScreen"
+            class="finale-screen"
+        >
+
+
+            <h1>
+                A Little Surprise Is Waiting...
+            </h1>
+
+
+            <p>
+                Plant your gift and watch it bloom.
+            </p>
+
+
+            <div class="plant-area">
+
+
+                <img
+                    class="soil-image"
+                    src="assets/level2_finale/soil_mound.png"
+                    alt=""
+                    draggable="false"
+                >
+
+
+                <div
+                    id="plantSmoke"
+                    class="plant-smoke"
+                ></div>
+
+
+            </div>
+
+
+            <button
+                id="plantGiftButton"
+                class="finale-image-button plant-button"
+                type="button"
+            >
+
+                <img
+                    src="assets/level2_finale/plant_your_gift_button.png"
+                    alt="Plant Your Gift"
+                    draggable="false"
+                >
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- GIFT -->
+
+        <section
+            id="giftScreen"
+            class="finale-screen hidden"
+        >
+
+
+            <div class="gift-light"></div>
+
+
+            <img
+                id="floatingGift"
+                class="floating-gift"
+                src="assets/level2_finale/bouquet_float.png"
+                alt="The Flower That Never Wilts"
+                draggable="false"
+            >
+
+
+            <h2>
+                THE FLOWER THAT NEVER WILTS
+            </h2>
+
+
+            <p>
+                A little flower, for a forever you.
+            </p>
+
+
+            <button
+                id="giftStoryButton"
+                class="finale-image-button gift-story-button"
+                type="button"
+            >
+
+                <img
+                    src="assets/level2_finale/gift_story_button.png"
+                    alt="Gift Story"
+                    draggable="false"
+                >
+
+            </button>
+
+
+        </section>
+
+
+
+        <!-- STORY -->
+
+        <section
+            id="storyScreen"
+            class="finale-screen story-screen hidden"
+        >
+
+
+            <img
+                class="story-letter"
+                src="assets/story/gift_story_letter.png"
+                alt="Gift Story"
+                draggable="false"
+            >
+
+
+            <div class="story-button-area">
+
+
+                <button
+                    id="backToGiftButton"
+                    class="finale-image-button story-footer-button"
+                    type="button"
+                >
+
+                    <img
+                        src="assets/level2_finale/back_to_my_gift.png"
+                        alt="Back To My Gift"
+                        draggable="false"
+                    >
+
+                </button>
+
+
+
+                <button
+                    id="continueButton"
+                    class="finale-image-button story-footer-button"
+                    type="button"
+                >
+
+                    <img
+                        src="assets/level2_finale/continue.png"
+                        alt="Continue"
+                        draggable="false"
+                    >
+
+                </button>
+
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+</div>
+
+
+<script src="level2.js"></script>
+
+
+</body>
+
+</html>

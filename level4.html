@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Level 4 — Brighter Horizons</title>
+  <link rel="stylesheet" href="level4.css">
+</head>
+<body>
+
+<main id="game">
+  <div id="world"></div>
+
+  <div id="hud">
+    <img class="level-badge" src="assets/level4/ui/level4_badge.png" alt="Level 4">
+
+    <div class="hearts">
+      <img id="heart1" src="assets/level4/ui/heart_full.png" alt="">
+      <img id="heart2" src="assets/level4/ui/heart_full.png" alt="">
+      <img id="heart3" src="assets/level4/ui/heart_full.png" alt="">
+    </div>
+
+    <img id="counterImage" class="counter-image" src="assets/level4/ui/counter_0.png" alt="0 of 25">
+  </div>
+
+  <div id="messageBox" class="message hidden"></div>
+
+  <div id="controls">
+    <div class="move-controls">
+      <button id="btnLeft" class="control"><img src="assets/level4/ui/btn_left.png" alt="Left"></button>
+      <button id="btnRight" class="control"><img src="assets/level4/ui/btn_right.png" alt="Right"></button>
+    </div>
+
+    <button id="btnJump" class="control jump-control"><img src="assets/level4/ui/btn_jump.png" alt="Jump"></button>
+  </div>
+</main>
+
+<section id="finale" class="finale hidden">
+
+  <div id="revealPage" class="reveal-page">
+    <img class="reveal-background" src="assets/level4/world/reveal_background.png" alt="A romantic evening by the pyramids">
+
+    <button id="revealDateButton" class="final-image-button reveal-date-art" aria-label="Reveal Our Date">
+      <img src="assets/level4/ui/reveal_date_button.png" alt="Reveal Our Date">
+    </button>
+  </div>
+
+  <div id="datePage" class="date-page hidden">
+    <img class="date-background" src="assets/level4/world/date_fullscreen.png" alt="Breadfast By The Pyramids — 18 Sep 8:00 PM">
+
+    <button id="giftStoryButton" class="final-image-button date-gift-story" aria-label="Gift Story">
+      <img src="assets/level4/ui/gift_story_button.png" alt="Gift Story">
+    </button>
+  </div>
+
+  <div id="storyPage" class="story-page hidden">
+    <div class="story-scroll">
+      <img class="story-image" src="assets/level4/world/gift_story_letter_clean.png" alt="Gift Story">
+      <button id="continueButton" class="final-image-button story-continue" aria-label="Continue">
+        <img src="assets/level4/ui/continue_button.png" alt="Continue">
+      </button>
+    </div>
+  </div>
+
+</section>
+
+<script src="level4.js"></script>
+</body>
+</html>

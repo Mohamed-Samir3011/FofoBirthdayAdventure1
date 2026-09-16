@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  >
+
+  <title>Fofo's Birthday Adventure</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="gift.css">
+  <link rel="stylesheet" href="menu.css">
+
+</head>
+
+
+<body>
+
+
+  <!-- =====================================================
+       GAME
+  ====================================================== -->
+
+  <div id="gameViewport">
+
+    <div
+      id="gameArea"
+      class="game-area"
+    >
+
+      <div
+        id="world"
+        class="world"
+      >
+
+        <img
+          id="fofo"
+          src="assets/fofo_idle.png"
+          alt="Fofo"
+          draggable="false"
+        >
+
+        <div class="ground"></div>
+
+
+        <div
+          id="exitGate"
+          class="exit-gate"
+        >
+
+          <img
+            id="gateImage"
+            src="assets/gate/gate_locked.png"
+            alt="Exit Gate"
+            draggable="false"
+          >
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           HUD
+      ================================================== -->
+
+      <div class="game-hud">
+
+        <div class="hud-row">
+
+
+          <div class="hud-level">
+
+            <img
+              src="assets/hud/hud_level_1.png"
+              alt="Level 1"
+              class="hud-level-image"
+              draggable="false"
+            >
+
+          </div>
+
+
+          <div class="hud-health">
+
+            <div
+              id="healthDisplay"
+              class="health-content"
+            ></div>
+
+          </div>
+
+
+          <div
+            id="treatHud"
+            class="hud-treats"
+          >
+
+            <img
+              id="treatCounterImage"
+              src="assets/hud/treat_0.png"
+              alt="0 / 12"
+              class="treat-counter-image"
+              draggable="false"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="message"
+          class="message-box"
+        >
+          Collect all treats and reach the gate! 💖
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           MOBILE CONTROLS
+      ================================================== -->
+
+      <div class="mobile-controls">
+
+        <div class="movement-controls">
+
+          <button
+            id="btnLeft"
+            class="control-image-button"
+            aria-label="Move Left"
+          >
+
+            <img
+              src="assets/controls/btn_left.png"
+              alt="Left"
+              draggable="false"
+            >
+
+          </button>
+
+
+          <button
+            id="btnRight"
+            class="control-image-button"
+            aria-label="Move Right"
+          >
+
+            <img
+              src="assets/controls/btn_right.png"
+              alt="Right"
+              draggable="false"
+            >
+
+          </button>
+
+        </div>
+
+
+        <div class="jump-control">
+
+          <button
+            id="btnJump"
+            class="control-image-button jump-image-button"
+            aria-label="Jump"
+          >
+
+            <img
+              src="assets/controls/btn_jump.png"
+              alt="Jump"
+              draggable="false"
+            >
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       ROTATE PHONE
+  ====================================================== -->
+
+  <div class="rotate-screen">
+
+    <div class="rotate-card">
+
+      <div class="rotate-icon">
+        📱↻
+      </div>
+
+      <strong>
+        Rotate your phone
+      </strong>
+
+      <span>
+        Fofo's adventure is best in landscape 💖
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       LEVEL COMPLETE
+  ====================================================== -->
+
+  <div
+    id="finishScreen"
+    class="overlay-screen"
+  >
+
+    <div class="overlay-card">
+
+      <div class="overlay-emoji">
+        🎉
+      </div>
+
+      <h1>
+        You Did It, Fofo!
+      </h1>
+
+      <p>
+        Level 1 Complete 💖
+      </p>
+
+      <button id="giftButton">
+        Discover the 1st Gift 🎁
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       GAME OVER
+  ====================================================== -->
+
+  <div
+    id="gameOverScreen"
+    class="overlay-screen"
+  >
+
+    <div class="overlay-card">
+
+      <div class="overlay-emoji">
+        💗
+      </div>
+
+      <h1>
+        Try Again
+      </h1>
+
+      <p>
+        You can do it, Fofo!
+      </p>
+
+      <button id="retryButton">
+        Retry
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       LEVEL 1 GIFT
+  ====================================================== -->
+
+  <section
+    id="giftRevealScreen"
+    class="gift-reveal-screen"
+    aria-hidden="true"
+  >
+
+    <div class="gift-reveal-bg-glow"></div>
+
+    <div
+      id="giftParticles"
+      class="gift-particles"
+    ></div>
+
+
+    <div class="gift-stage">
+
+      <div class="gift-reward-pill">
+        LEVEL 1 REWARD ✨
+      </div>
+
+
+      <h1>
+        Something Sweet For You, Fofo 💖
+      </h1>
+
+
+      <p
+        id="giftHint"
+        class="gift-hint"
+      >
+        Tap the box to reveal your first gift.
+      </p>
+
+
+      <button
+        id="giftBoxButton"
+        class="gift-box-button"
+        type="button"
+        aria-label="Open Gift"
+      >
+
+        <img
+          id="giftBoxImage"
+          src="assets/fofo_gift_level1_assets/glossy_valentine_birthday_gift_box.png"
+          alt="Birthday Gift Box"
+          draggable="false"
+        >
+
+      </button>
+
+
+      <button
+        id="openGiftButton"
+        class="open-gift-button"
+        type="button"
+      >
+        OPEN GIFT ✨
+      </button>
+
+
+      <button
+        id="giftStoryButton"
+        class="gift-story-button"
+        type="button"
+        aria-label="Gift Story"
+      >
+
+        <img
+          src="assets/fofo_gift_level1_assets/luxury_valentine_gift_story_button.png"
+          alt="Gift Story"
+          draggable="false"
+        >
+
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       GIFT STORY
+  ====================================================== -->
+
+  <section
+    id="giftStoryScreen"
+    class="gift-story-screen"
+    aria-hidden="true"
+  >
+
+    <div class="story-shell">
+
+      <button
+        id="closeStoryButton"
+        class="story-close"
+        type="button"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+
+      <img
+        class="story-scroll-art"
+        src="assets/fofo_gift_level1_assets/chocolate_hearts_gift_story.png"
+        alt="Our First Gift Story"
+        draggable="false"
+      >
+
+
+      <button
+        id="backToGiftButton"
+        class="back-to-gift-button"
+        type="button"
+      >
+        BACK TO MY GIFT 🎁
+      </button>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       MAIN MENU
+  ====================================================== -->
+
+  <div
+    id="menuRoot"
+    class="menu-root"
+  >
+
+
+    <!-- BACKGROUND DECORATIONS -->
+
+    <div class="menu-decoration deco-heart heart-1">
+      ♥
+    </div>
+
+    <div class="menu-decoration deco-heart heart-2">
+      ♥
+    </div>
+
+    <div class="menu-decoration deco-heart heart-3">
+      ♥
+    </div>
+
+    <div class="menu-decoration balloon balloon-1">
+      ●
+    </div>
+
+    <div class="menu-decoration balloon balloon-2">
+      ●
+    </div>
+
+    <div class="menu-decoration balloon balloon-3">
+      ●
+    </div>
+
+
+    <div class="menu-confetti confetti-1"></div>
+    <div class="menu-confetti confetti-2"></div>
+    <div class="menu-confetti confetti-3"></div>
+    <div class="menu-confetti confetti-4"></div>
+    <div class="menu-confetti confetti-5"></div>
+    <div class="menu-confetti confetti-6"></div>
+
+
+
+    <!-- =================================================
+         MAIN VIEW
+    ================================================== -->
+
+    <section
+      id="mainMenuView"
+      class="menu-view active"
+    >
+
+      <div class="main-menu-content">
+
+
+        <div class="birthday-badge">
+          A LITTLE BIRTHDAY ADVENTURE
+        </div>
+
+
+        <div class="menu-logo">
+
+          <div class="menu-logo-small">
+            ✨ HAPPY BIRTHDAY ✨
+          </div>
+
+          <h1>
+            Fofo's
+            <span>
+              Birthday Adventure
+            </span>
+          </h1>
+
+          <div class="logo-heart">
+            ♥
+          </div>
+
+        </div>
+
+
+        <p class="menu-description">
+          Four little adventures.
+          Four special surprises.
+          One story made just for you.
+        </p>
+
+
+        <div class="main-menu-buttons">
+
+
+          <button
+            id="playMenuButton"
+            class="menu-button primary-menu-button"
+            type="button"
+          >
+
+            <span class="menu-button-icon">
+              ▶
+            </span>
+
+            <span>
+              PLAY
+            </span>
+
+          </button>
+
+
+          <button
+            id="continueMenuButton"
+            class="menu-button"
+            type="button"
+          >
+
+            <span class="menu-button-icon">
+              ✦
+            </span>
+
+            <span>
+              CONTINUE
+            </span>
+
+          </button>
+
+
+          <button
+            id="newGameMenuButton"
+            class="menu-button"
+            type="button"
+          >
+
+            <span class="menu-button-icon">
+              ↻
+            </span>
+
+            <span>
+              NEW GAME
+            </span>
+
+          </button>
+
+
+          <button
+            id="settingsMenuButton"
+            class="menu-button"
+            type="button"
+          >
+
+            <span class="menu-button-icon">
+              ⚙
+            </span>
+
+            <span>
+              SETTINGS
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <div class="menu-footer">
+          Made with ♥ for Fofo
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         LEVEL SELECT
+    ================================================== -->
+
+    <section
+      id="levelSelectView"
+      class="menu-view"
+    >
+
+      <div class="level-select-wrapper">
+
+
+        <div class="level-select-heading">
+
+          <button
+            id="levelBackButton"
+            class="round-back-button"
+            type="button"
+          >
+            ‹
+          </button>
+
+
+          <div>
+
+            <div class="section-mini-title">
+              YOUR BIRTHDAY JOURNEY
+            </div>
+
+            <h2>
+              Choose Your Adventure
+            </h2>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="level-grid">
+
+
+          <!-- ==========================
+               LEVEL 1
+          =========================== -->
+
+          <button
+            class="level-card"
+            data-level="1"
+            type="button"
+          >
+
+            <div class="level-card-image level-one-art">
+
+              <div class="level-number-badge">
+                01
+              </div>
+
+              <div class="level-art-fallback level-one-fallback">
+                🍫
+                <span>🍬</span>
+                🍜
+              </div>
+
+              <div class="level-card-shine"></div>
+
+            </div>
+
+
+            <div class="level-card-info">
+
+              <div>
+
+                <span class="level-label">
+                  LEVEL 1
+                </span>
+
+                <h3>
+                  Sweet Surprise
+                </h3>
+
+                <p>
+                  A candy-filled first adventure.
+                </p>
+
+              </div>
+
+
+              <div class="level-status level-play-icon">
+                ▶
+              </div>
+
+            </div>
+
+          </button>
+
+
+
+          <!-- ==========================
+               LEVEL 2
+          =========================== -->
+
+          <button
+            class="level-card"
+            data-level="2"
+            type="button"
+          >
+
+            <div class="level-card-image level-two-art">
+
+              <div class="level-number-badge">
+                02
+              </div>
+
+              <div class="level-art-fallback">
+                🎁
+              </div>
+
+              <div class="level-card-shine"></div>
+
+              <div class="level-lock-overlay">
+
+                <div class="lock-icon">
+                  🔒
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="level-card-info">
+
+              <div>
+
+                <span class="level-label">
+                  LEVEL 2
+                </span>
+
+                <h3>
+                  Secret Chapter
+                </h3>
+
+                <p>
+                  Another surprise is waiting.
+                </p>
+
+              </div>
+
+
+              <div class="level-status">
+                🔒
+              </div>
+
+            </div>
+
+          </button>
+
+
+
+          <!-- ==========================
+               LEVEL 3
+          =========================== -->
+
+          <button
+            class="level-card"
+            data-level="3"
+            type="button"
+          >
+
+            <div class="level-card-image level-three-art">
+
+              <div class="level-number-badge">
+                03
+              </div>
+
+              <div class="level-art-fallback">
+                🎧
+              </div>
+
+              <div class="level-card-shine"></div>
+
+              <div class="level-lock-overlay">
+
+                <div class="lock-icon">
+                  🔒
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="level-card-info">
+
+              <div>
+
+                <span class="level-label">
+                  LEVEL 3
+                </span>
+
+                <h3>
+                  A Special Gift
+                </h3>
+
+                <p>
+                  One more piece of the story.
+                </p>
+
+              </div>
+
+
+              <div class="level-status">
+                🔒
+              </div>
+
+            </div>
+
+          </button>
+
+
+
+          <!-- ==========================
+               LEVEL 4
+          =========================== -->
+
+          <button
+            class="level-card"
+            data-level="4"
+            type="button"
+          >
+
+            <div class="level-card-image level-four-art">
+
+              <div class="level-number-badge">
+                04
+              </div>
+
+              <div class="level-art-fallback level-four-fallback">
+                ☀️
+                <span>♥</span>
+                △
+              </div>
+
+              <div class="level-card-shine"></div>
+
+              <div class="level-lock-overlay">
+
+                <div class="lock-icon">
+                  🔒
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="level-card-info">
+
+              <div>
+
+                <span class="level-label">
+                  FINAL LEVEL
+                </span>
+
+                <h3>
+                  Our Special Date
+                </h3>
+
+                <p>
+                  The final birthday surprise.
+                </p>
+
+              </div>
+
+
+              <div class="level-status">
+                🔒
+              </div>
+
+            </div>
+
+          </button>
+
+
+        </div>
+
+
+        <div class="level-select-note">
+          Complete each adventure to unlock the next one ✨
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         SETTINGS
+    ================================================== -->
+
+    <section
+      id="settingsView"
+      class="menu-view"
+    >
+
+      <div class="settings-card">
+
+
+        <div class="settings-heading">
+
+          <button
+            id="settingsBackButton"
+            class="round-back-button"
+            type="button"
+          >
+            ‹
+          </button>
+
+
+          <div>
+
+            <div class="section-mini-title">
+              GAME OPTIONS
+            </div>
+
+            <h2>
+              Settings
+            </h2>
+
+          </div>
+
+        </div>
+
+
+
+        <div class="settings-list">
+
+
+          <!-- MUSIC -->
+
+          <div class="settings-row">
+
+            <div class="settings-row-info">
+
+              <div class="settings-icon">
+                ♪
+              </div>
+
+              <div>
+
+                <strong>
+                  Music
+                </strong>
+
+                <span>
+                  Background music
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <label class="switch">
+
+              <input
+                id="musicToggle"
+                type="checkbox"
+                checked
+              >
+
+              <span class="switch-slider"></span>
+
+            </label>
+
+          </div>
+
+
+
+          <div class="volume-row">
+
+            <span>
+              Music Volume
+            </span>
+
+            <input
+              id="musicVolumeSlider"
+              type="range"
+              min="0"
+              max="100"
+              value="100"
+            >
+
+            <strong id="musicVolumeText">
+              100%
+            </strong>
+
+          </div>
+
+
+
+          <!-- SFX -->
+
+          <div class="settings-row">
+
+            <div class="settings-row-info">
+
+              <div class="settings-icon">
+                ✦
+              </div>
+
+              <div>
+
+                <strong>
+                  Sound Effects
+                </strong>
+
+                <span>
+                  Jump and enemy sounds
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <label class="switch">
+
+              <input
+                id="sfxToggle"
+                type="checkbox"
+                checked
+              >
+
+              <span class="switch-slider"></span>
+
+            </label>
+
+          </div>
+
+
+
+          <div class="volume-row">
+
+            <span>
+              SFX Volume
+            </span>
+
+            <input
+              id="sfxVolumeSlider"
+              type="range"
+              min="0"
+              max="100"
+              value="100"
+            >
+
+            <strong id="sfxVolumeText">
+              100%
+            </strong>
+
+          </div>
+
+
+
+          <!-- FULLSCREEN -->
+
+          <button
+            id="fullscreenButton"
+            class="settings-action-button"
+            type="button"
+          >
+            ⛶ &nbsp; FULLSCREEN
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         SMALL MESSAGE
+    ================================================== -->
+
+    <div
+      id="menuToast"
+      class="menu-toast"
+    ></div>
+
+
+  </div>
+
+
+
+  <!-- =====================================================
+       SCRIPTS
+  ====================================================== -->
+
+<script src="game.js"></script>
+<script src="controls.js"></script>
+<script src="level1_audio.js"></script>
+<script src="gift.js"></script>
+<script src="menu.js"></script>
+
+</body>
+
+</html>
