@@ -4149,3 +4149,139 @@ initialize();
 requestAnimationFrame(
     gameLoop
 );
+
+// =====================================================
+// MOBILE CONTROL IMAGE / LONG-PRESS PROTECTION
+// =====================================================
+
+(function protectFofoGameControls() {
+
+  const CONTROL_SELECTOR = [
+    "#btnLeft",
+    "#btnRight",
+    "#btnJump",
+    ".control-image-button",
+    ".game-control",
+    ".image-control",
+    "#controls button",
+    ".mobile-controls button"
+  ].join(",");
+
+
+  function setupControls() {
+
+    document
+      .querySelectorAll(
+        CONTROL_SELECTOR
+      )
+      .forEach(
+        control => {
+
+          control.setAttribute(
+            "draggable",
+            "false"
+          );
+
+
+          control
+            .querySelectorAll(
+              "img"
+            )
+            .forEach(
+              img => {
+
+                img.draggable =
+                  false;
+
+                img.setAttribute(
+                  "draggable",
+                  "false"
+                );
+
+              }
+            );
+
+        }
+      );
+
+  }
+
+
+  function isGameControl(
+    target
+  ) {
+
+    if (
+      !target ||
+      !target.closest
+    ) {
+
+      return false;
+    }
+
+
+    return Boolean(
+      target.closest(
+        CONTROL_SELECTOR
+      )
+    );
+  }
+
+
+  /*
+    Chrome/Android treats a long press on an <img> like a normal image
+    and can show the image/download menu. Block that only on game controls.
+  */
+  [
+    "contextmenu",
+    "dragstart",
+    "selectstart"
+  ].forEach(
+    eventName => {
+
+      document.addEventListener(
+        eventName,
+        event => {
+
+          if (
+            isGameControl(
+              event.target
+            )
+          ) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+          }
+
+        },
+        {
+          capture:true
+        }
+      );
+
+    }
+  );
+
+
+  if (
+    document.readyState ===
+    "loading"
+  ) {
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      setupControls,
+      {
+        once:true
+      }
+    );
+
+  }
+  else {
+
+    setupControls();
+
+  }
+
+})();

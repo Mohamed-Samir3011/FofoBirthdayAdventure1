@@ -1142,3 +1142,47 @@ button {
   }
 
 }
+
+
+/* =========================================================
+   MOBILE CONTROL LONG-PRESS FIX
+   Treat control artwork as part of the button, not as an image.
+========================================================= */
+
+.control-image-button,
+.game-control,
+.image-control,
+#controls .control,
+#controls button,
+.mobile-controls button {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+
+  -webkit-touch-callout: none !important;
+
+  touch-action: none !important;
+
+  -webkit-tap-highlight-color: transparent !important;
+
+  -webkit-user-drag: none !important;
+}
+
+.control-image-button img,
+.game-control img,
+.image-control img,
+#controls .control img,
+#controls button img,
+.mobile-controls button img {
+  pointer-events: none !important;
+
+  -webkit-user-select: none !important;
+  user-select: none !important;
+
+  -webkit-touch-callout: none !important;
+
+  -webkit-user-drag: none !important;
+
+  user-drag: none !important;
+
+  draggable: false;
+}
