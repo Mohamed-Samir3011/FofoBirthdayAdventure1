@@ -542,7 +542,7 @@
 
 
   async function showLoader(
-    minDuration=950
+    minDuration=560
   ) {
 
     loader.classList.remove(
@@ -553,6 +553,31 @@
     setLoaderProgress(
       5
     );
+
+
+    if (
+      window.FofoSmooth?.smartPreload
+    ) {
+
+      await window.FofoSmooth.smartPreload({
+        minDuration,
+        onProgress:setLoaderProgress
+      });
+
+      await new Promise(
+        resolve =>
+          setTimeout(
+            resolve,
+            90
+          )
+      );
+
+      loader.classList.add(
+        "fofo-hide"
+      );
+
+      return;
+    }
 
 
     const startTime =
@@ -845,7 +870,7 @@
       resolve =>
         setTimeout(
           resolve,
-          2750
+          1950
         )
     );
 
@@ -1161,8 +1186,19 @@
       performanceButton
     ) {
 
-      performanceButton.textContent =
-        `PERFORMANCE: ${performance ? "ON" : "AUTO"}`;
+      if (
+        window.FofoSmooth
+      ) {
+
+        window.FofoSmooth.updateQualityButton();
+
+      }
+      else {
+
+        performanceButton.textContent =
+          `PERFORMANCE: ${performance ? "ON" : "AUTO"}`;
+
+      }
 
     }
 
@@ -1491,16 +1527,29 @@
         action === "performance"
       ) {
 
-        const currentlyOn =
-          document.body.classList.contains(
-            "fofo-performance-mode"
+        if (
+          window.FofoSmooth
+        ) {
+
+          window.FofoSmooth.cycleQualityMode();
+          window.FofoSmooth.updateQualityButton();
+
+        }
+        else {
+
+          const currentlyOn =
+            document.body.classList.contains(
+              "fofo-performance-mode"
+            );
+
+          setPerformanceMode(
+            !currentlyOn,
+            true
           );
 
+        }
 
-        setPerformanceMode(
-          !currentlyOn,
-          true
-        );
+        return;
 
       }
 
@@ -1728,7 +1777,7 @@
 
   async function navigate(
     url,
-    delay=560
+    delay=390
   ) {
 
     if (
@@ -1889,8 +1938,8 @@
 
       await showLoader(
         options.fast
-          ? 600
-          : 1050
+          ? 420
+          : 620
       );
 
     }

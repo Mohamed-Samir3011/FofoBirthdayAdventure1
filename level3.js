@@ -2899,12 +2899,20 @@ function renderPlayer() {
 function startJump() {
 
   if (
-    gameFinished ||
-    jumping
+    gameFinished
   ) {
 
     return;
+  }
 
+
+  if (
+    jumping &&
+    !window.FofoSmooth?.canCoyoteJump?.()
+  ) {
+
+    window.FofoSmooth?.bufferJump?.();
+    return;
   }
 
 
@@ -2922,6 +2930,9 @@ function startJump() {
 
   jumping =
     true;
+
+
+  window.FofoSmooth?.markJumped?.();
 
 
   jumpHoldFrames =
@@ -3144,7 +3155,20 @@ function bindButton(
 
   button.addEventListener(
     "pointerdown",
-    press
+    event => {
+
+      try {
+        button.setPointerCapture(
+          event.pointerId
+        );
+      }
+      catch (_) {}
+
+      press(
+        event
+      );
+
+    }
   );
 
 
@@ -3161,7 +3185,7 @@ function bindButton(
 
 
   button.addEventListener(
-    "pointerleave",
+    "lostpointercapture",
     release
   );
 
@@ -3873,6 +3897,26 @@ function updateGroundEnemies() {
     enemy => {
 
       if (
+        window.FofoSmooth &&
+        !window.FofoSmooth.isNearX(
+          enemy.x,
+          playerX
+        )
+      ) {
+
+        enemy.element?.classList.add(
+          "fofo-logic-culled"
+        );
+
+        return;
+      }
+
+
+      enemy.element?.classList.remove(
+        "fofo-logic-culled"
+      );
+
+      if (
         enemy.dead
       ) {
 
@@ -3943,6 +3987,26 @@ function updateFlyingEnemies(
 
   flyingEnemies.forEach(
     enemy => {
+
+      if (
+        window.FofoSmooth &&
+        !window.FofoSmooth.isNearX(
+          enemy.x,
+          playerX
+        )
+      ) {
+
+        enemy.element?.classList.add(
+          "fofo-logic-culled"
+        );
+
+        return;
+      }
+
+
+      enemy.element?.classList.remove(
+        "fofo-logic-culled"
+      );
 
       if (
         enemy.dead
@@ -5030,24 +5094,54 @@ function updateCamera() {
     game.clientWidth;
 
 
-  let cameraX =
-    playerX -
-    viewportWidth *
-    0.34;
+  const cameraDirection =
+    keys.right
+      ? 1
+      : keys.left
+        ? -1
+        : facingRight
+          ? 1
+          : -1;
 
 
-  cameraX =
-    Math.max(
-      0,
-      Math.min(
-        Math.max(
-          0,
-          WORLD_WIDTH -
-          viewportWidth
-        ),
-        cameraX
-      )
-    );
+  let cameraX;
+
+
+  if (
+    window.FofoSmooth?.smoothCameraX
+  ) {
+
+    cameraX =
+      window.FofoSmooth.smoothCameraX({
+        playerX,
+        viewportWidth,
+        worldWidth:WORLD_WIDTH,
+        direction:cameraDirection,
+        frameFactor
+      });
+
+  }
+  else {
+
+    cameraX =
+      playerX -
+      viewportWidth *
+      0.34;
+
+    cameraX =
+      Math.max(
+        0,
+        Math.min(
+          Math.max(
+            0,
+            WORLD_WIDTH -
+            viewportWidth
+          ),
+          cameraX
+        )
+      );
+
+  }
 
 
   const cameraY =
@@ -5060,12 +5154,6 @@ function updateCamera() {
     "left bottom";
 
 
-  /*
-    IMPORTANT:
-    No horizontal scaling on mobile.
-    Previous uniform zoom made the character LOOK slower.
-    We now preserve 1:1 X scale and only pan vertically when needed.
-  */
   world.style.transform =
     `translate3d(${-cameraX}px, ${cameraY}px, 0)`;
 
@@ -5148,6 +5236,12 @@ function gameLoop(
 
 
     updateVertical();
+
+
+  window.FofoSmooth?.updateGroundState(
+    !jumping,
+    () => startJump()
+  );
 
 
     updatePlayerAnimation(

@@ -1,0 +1,131 @@
+/* =========================================================
+   FOFO BIRTHDAY ADVENTURE — SMOOTH ENGINE CSS
+========================================================= */
+
+/* 2 + 4: offscreen render culling / lazy animation */
+.fofo-culled{
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+.fofo-culled,
+.fofo-culled *{
+  animation-play-state:paused!important;
+  transition:none!important;
+}
+
+/* 6: keep HUD/control layers on their own compositor layer */
+.fofo-gpu-hud{
+  transform:translateZ(0);
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  will-change:transform;
+  contain:layout style paint;
+}
+
+/* World/player transforms are the hottest paths. */
+#world,.world,#fofo,.fofo,.player{
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+#world,.world{
+  will-change:transform;
+  transform-style:flat;
+}
+
+/* 5 + 11: adaptive visual quality */
+body.fofo-quality-medium .ambient-glow,
+body.fofo-quality-medium .spark,
+body.fofo-quality-medium .decorative-particle{
+  filter:none!important;
+}
+
+body.fofo-quality-medium .enemy,
+body.fofo-quality-medium .collectible,
+body.fofo-quality-medium .shard,
+body.fofo-quality-medium .note,
+body.fofo-quality-medium .bloom,
+body.fofo-quality-medium .treat{
+  filter:none!important;
+}
+
+body.fofo-quality-low .ambient-glow,
+body.fofo-quality-low .spark,
+body.fofo-quality-low .decorative-particle,
+body.fofo-quality-low .floating-particle,
+body.fofo-quality-low .dust,
+body.fofo-quality-low .mist,
+body.fofo-quality-low .fog-particle{
+  display:none!important;
+}
+
+body.fofo-quality-low .enemy,
+body.fofo-quality-low .collectible,
+body.fofo-quality-low .shard,
+body.fofo-quality-low .note,
+body.fofo-quality-low .bloom,
+body.fofo-quality-low .treat,
+body.fofo-quality-low .platform{
+  filter:none!important;
+  box-shadow:none!important;
+}
+
+body.fofo-quality-low #world,
+body.fofo-quality-low .world{
+  filter:none!important;
+}
+
+body.fofo-quality-low .background,
+body.fofo-quality-low .menu-background,
+body.fofo-quality-low .ambient-layer{
+  animation:none!important;
+}
+
+/* 9: touch controls */
+#btnLeft,#btnRight,#btnJump,
+.control-image-button,.game-control,.image-control,
+#controls button,.mobile-controls button{
+  touch-action:none!important;
+  -webkit-touch-callout:none!important;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+
+#btnLeft img,#btnRight img,#btnJump img,
+.control-image-button img,.game-control img,.image-control img,
+#controls button img,.mobile-controls button img{
+  pointer-events:none!important;
+  -webkit-user-drag:none!important;
+  -webkit-touch-callout:none!important;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+}
+
+/* 12: faster, cleaner transitions / loader */
+.fofo-loading{
+  transition:opacity .32s ease,visibility .32s ease!important;
+}
+
+.fofo-transition-curtain.fofo-enter{
+  animation-duration:.46s!important;
+}
+
+.fofo-transition-curtain.fofo-leave{
+  animation-duration:.38s!important;
+}
+
+.fofo-intro.fofo-show,
+.fofo-intro.fofo-show .fofo-intro-card{
+  animation-duration:1.95s!important;
+}
+
+.fofo-scene-reveal{
+  animation-duration:.42s!important;
+}
+
+/* Don't let the browser synthesize delayed tap behavior. */
+button,a,[role="button"]{
+  touch-action:manipulation;
+}

@@ -432,9 +432,9 @@ function openLevel(level) {
   if (level === 2) {
     localStorage.setItem(STORAGE.lastLevel, "2");
     if (window.FofoPolish) {
-      window.FofoPolish.navigate("level2.html?v=level34-loading-pause-fix-v2");
+      window.FofoPolish.navigate("level2.html?v=smooth-all-v1");
     } else {
-      window.location.href = "level2.html?v=level34-loading-pause-fix-v2";
+      window.location.href = "level2.html?v=smooth-all-v1";
     }
     return;
   }
@@ -442,9 +442,9 @@ function openLevel(level) {
   if (level === 3) {
     localStorage.setItem(STORAGE.lastLevel, "3");
     if (window.FofoPolish) {
-      window.FofoPolish.navigate("level3.html?v=level34-loading-pause-fix-v2");
+      window.FofoPolish.navigate("level3.html?v=smooth-all-v1");
     } else {
-      window.location.href = "level3.html?v=level34-loading-pause-fix-v2";
+      window.location.href = "level3.html?v=smooth-all-v1";
     }
     return;
   }
@@ -452,9 +452,9 @@ function openLevel(level) {
   if (level === 4) {
     localStorage.setItem(STORAGE.lastLevel, "4");
     if (window.FofoPolish) {
-      window.FofoPolish.navigate("level4.html?v=level34-loading-pause-fix-v2");
+      window.FofoPolish.navigate("level4.html?v=smooth-all-v1");
     } else {
-      window.location.href = "level4.html?v=level34-loading-pause-fix-v2";
+      window.location.href = "level4.html?v=smooth-all-v1";
     }
     return;
   }
